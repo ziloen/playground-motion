@@ -57,7 +57,8 @@
       "project": "./tsconfig.json"
     },
     "ignorePatterns": [
-      "*.html"
+      "*.html",
+      "dist"
     ]
   }
 }
