@@ -30,7 +30,7 @@ jobs:
 
     strategy:
       matrix:
-        node_version: ['lts/*']
+        node_version: [18.x]
         os: [ubuntu-latest]
       fail-fast: false
 
