@@ -57,6 +57,10 @@ export default defineConfig({
     }
   },
 
+  optimizeDeps: {
+    include: ['framer-motion']
+  },
+
   // https://github.com/vitest-dev/vitest
   test: {
     environment: 'jsdom'

@@ -1,48 +1,29 @@
-import { Counter } from '~/components/Counter'
-
+import { NavLink, RouteObject } from 'react-router-dom'
+import routes from '~react-pages'
 
 export default function Index() {
-  const name = useRef<HTMLInputElement>(null)
+  // const routes = useRoutes()
 
-  const navigate = useNavigate()
-  function go() {
-    if (name.current)
-      navigate(`/hi/${encodeURIComponent(name.current.value)}`)
-  }
+  const flattenedRoutes = useMemo(() => {
+    return routes
+      .reduce<RouteObject[]>((acc, route) => {
+        if (route.children) {
+          acc.push(...route.children)
+        } else {
+          acc.push(route)
+        }
+        return acc
+      }, [])
+      .map(route => route.path!)
+  }, [])
 
   return (
     <div>
-      <div className="i-carbon-campsite text-4xl inline-block" />
-      <p>
-        <a rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
-          Vitesse Lite
-        </a>
-      </p>
-      <p>
-        <em className="text-sm op75">Opinionated Vite Starter Template</em>
-      </p>
-
-      <div className="py-4" />
-
-      <Counter />
-
-      <input
-        ref={name}
-        id="input"
-        placeholder="What's your name?"
-        type="text"
-        className="px-4 py-2 w-250px text-center bg-transparent outline-none outline-active:none border border-rounded border-gray-200 border-dark:gray-700"
-        onKeyDown={({ key }) => key === 'Enter' && go()}
-      />
-
-      <div>
-        <button
-          className="m-3 text-sm btn"
-          disabled={!name}
-          onClick={go}
-        >
-          Go
-        </button>
+      <h1 className="text-2xl font-bold">Routes</h1>
+      <div className="flex flex-col items-start">
+        {flattenedRoutes.map(route =>
+          <NavLink key={route} to={route}>{route}</NavLink>
+        )}
       </div>
     </div>
   )
