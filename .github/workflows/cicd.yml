@@ -36,9 +36,6 @@ jobs:
       - name: Install
         run: pnpm i
 
-      - name: Build
-        run: pnpm run build
-
       - name: Test
         run: pnpm run test
 
@@ -47,3 +44,11 @@ jobs:
 
       - name: TypeCheck
         run: pnpm run typecheck
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.2
+        with:
+          folder: dist
