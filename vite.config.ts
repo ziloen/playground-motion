@@ -8,8 +8,8 @@ import { defineConfig } from 'vite'
 import Pages from 'vite-plugin-pages'
 
 
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/playground-framer-motion/' : undefined,
+export default defineConfig(({ command }) => (console.log(command), {
+  base: '/playground-framer-motion/',
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`
@@ -24,7 +24,9 @@ export default defineConfig(({ command }) => ({
     react(),
 
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages(),
+    Pages({
+      dirs: 'src/pages',
+    }),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
