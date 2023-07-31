@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom'
 import { ResizablePanel } from '~/components/ResizablePanel'
 
 const tabNames = [
@@ -12,12 +13,14 @@ export default function TabView() {
   const [index, setIndex] = useState(0)
   const currentTabName = tabNames[index]
 
-
   return (
     <div>
+      <NavLink to='/'>Home</NavLink>
+
       <div className='grid auto-flow-col gap-2' style={{
         gridAutoColumns: 'max-content',
       }}>
+        {/* or layoutId + "absolute inset-0" */}
         <motion.div
           layout
           className='bg-gray h-full'
@@ -32,10 +35,7 @@ export default function TabView() {
           <div
             key={tabName}
             className='flex cursor-pointer z-0 px-2 py-1'
-            style={{
-              gridColumn: i + 1,
-              gridRow: 1,
-            }}
+            style={{ gridColumn: i + 1, gridRow: 1 }}
             onClick={() => index !== i && setIndex(i)}
           >
             <div className={tabName}></div>
