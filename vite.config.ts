@@ -9,7 +9,7 @@ import Pages from 'vite-plugin-pages'
 
 
 export default defineConfig(({ command }) => ({
-  base: command === 'build' ? './playground-framer-motion/' : undefined,
+  base: command === 'build' ? './' : undefined,
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`
