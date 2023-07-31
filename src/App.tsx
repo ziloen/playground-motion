@@ -1,6 +1,6 @@
 import { MotionConfig } from 'framer-motion'
 import { Suspense } from 'react'
-import { BrowserRouter as Router, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import routes from '~react-pages'
 
 const router = createBrowserRouter(routes, {
@@ -10,15 +10,9 @@ const router = createBrowserRouter(routes, {
 export default function App() {
   return (
     <MotionConfig transition={{ type: 'tween' }}>
-      <RouterProvider router={router} />
+      <Suspense fallback={<p>Loading...</p>}>
+        <RouterProvider router={router} />
+      </Suspense>
     </MotionConfig>
-  )
-}
-
-function Routes() {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      {useRoutes(routes)}
-    </Suspense>
   )
 }
