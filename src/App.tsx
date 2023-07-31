@@ -4,7 +4,7 @@ import { RouterProvider, createHashRouter } from 'react-router-dom'
 import routes from '~react-pages'
 
 const router = createHashRouter(routes, {
-  basename: import.meta.env.BASE_URL,
+  // basename: import.meta.env.BASE_URL,
 })
 
 export default function App() {
