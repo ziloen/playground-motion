@@ -6,7 +6,7 @@ export function ResizablePanel({ children }: PropsWithChildren) {
   const size = useSize(ref)
 
   return (
-    <motion.div animate={{ height: size?.height }}>
+    <motion.div animate={{ height: size?.height }} transition={{ type: 'tween', duration: 0.2 }}>
       <div ref={ref}>{children}</div>
     </motion.div>
   )

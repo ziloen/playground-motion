@@ -15,12 +15,14 @@ export default function TabView() {
 
   return (
     <div>
+      {/* Back to home */}
       <NavLink to='/'>Home</NavLink>
 
       <div className='grid auto-flow-col gap-2' style={{
         gridAutoColumns: 'max-content',
       }}>
-        {/* or layoutId + "absolute inset-0" */}
+        {/* Active indicator */}
+        {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
           layout
           className='bg-gray h-full'
@@ -31,6 +33,7 @@ export default function TabView() {
           }}
         />
 
+        {/* Tab labels */}
         {tabNames.map((tabName, i) =>
           <div
             key={tabName}
@@ -49,20 +52,12 @@ export default function TabView() {
         <ResizablePanel>
           <AnimatePresence mode='popLayout' initial={false}>
             <motion.div
+              // set key to force remount trigger animation
               key={index}
               className='flex-center flex-col gap-2 py-4 bg-blue/40'
-              initial={{
-                opacity: 0,
-                y: 200,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                y: -200,
-              }}
+              initial={{ opacity: 0, y: 200 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
               <div className='write-vertical-left'>{currentTabName}</div>
