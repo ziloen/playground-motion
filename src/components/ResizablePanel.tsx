@@ -1,13 +1,26 @@
-import { useSize } from 'ahooks'
 import { PropsWithChildren } from 'react'
+import useMeasure from 'react-use-measure'
 
-export function ResizablePanel({ children }: PropsWithChildren) {
-  const ref = useRef<HTMLDivElement>(null)
-  const size = useSize(ref)
+type Props = PropsWithChildren<{
+  className?: string
+  innerClassName?: string
+}>
+
+export function ResizablePanel({ children, className, innerClassName }: Props) {
+  const [ref, size] = useMeasure()
 
   return (
-    <motion.div animate={{ height: size?.height }} transition={{ type: 'tween', duration: 0.2 }}>
-      <div ref={ref}>{children}</div>
+    <motion.div
+      animate={{ height: size.height || undefined }}
+      transition={{ type: 'tween', duration: 0.2 }}
+      className={className}
+    >
+      <div
+        ref={ref}
+        className={innerClassName}
+      >
+        {children}
+      </div>
     </motion.div>
   )
 }
