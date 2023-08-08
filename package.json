@@ -46,6 +46,7 @@
     "vitest": "^0.34.1"
   },
   "eslintConfig": {
+    "root": true,
     "extends": [
       "@ziloen",
       "@ziloen/eslint-config-format"
