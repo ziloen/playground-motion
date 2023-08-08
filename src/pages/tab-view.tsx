@@ -50,7 +50,7 @@ export default function TabView() {
       <div className='mt-2 bg-red'>
         {/* add relative to hidden overflow when exit anmation */}
         <ResizablePanel className='relative overflow-hidden'>
-          <AnimatePresence mode='popLayout' initial={false}>
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               // set key to force remount trigger animation
               key={index}
