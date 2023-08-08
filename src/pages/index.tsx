@@ -7,20 +7,17 @@ export default function Index() {
   const flattenedRoutes = useMemo(() => {
     return routes
       .reduce<RouteObject[]>((acc, route) => {
-        if (route.children) {
-          acc.push(...route.children)
-        } else {
-          acc.push(route)
-        }
+        acc.push(route)
         return acc
       }, [])
       .map(route => route.path!)
+      .filter(route => !['*', '/'].includes(route))
   }, [])
 
   return (
-    <div>
+    <div className='px-20px pt-40px'>
       <h1 className="text-2xl font-bold">Routes</h1>
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start gap-4px mt-12px">
         {flattenedRoutes.map(route =>
           <NavLink key={route} to={route}>{route}</NavLink>
         )}
