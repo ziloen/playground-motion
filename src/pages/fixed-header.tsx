@@ -1,14 +1,18 @@
 // WIP
 
+import { NavLink } from 'react-router-dom'
+
 
 export default function FixedHeader() {
 
   return (
     <div className='h-full overflow-auto'>
+
       <div>
         I Am Fixed Header
       </div>
 
+      <NavLink to='/'>Home</NavLink>
 
       <div className='max-w-900px mx-auto flex flex-col gap-4'>
         <p>
