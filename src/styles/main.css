@@ -7,6 +7,10 @@ body,
   overflow: hidden;
 }
 
+#root {
+  isolation: isolate;
+}
+
 html.dark {
   background: black;
   color: white;

@@ -5,7 +5,7 @@ export default function LayoutWithoutScale() {
   const [ref, { height, width }] = useMeasure()
 
   return (
-    <div>
+    <div className='isolate'>
       <NavLink to='/'>← Home</NavLink>
       <div
         className='resizable w-700px h-400px bg-neutral grid gap-12px'

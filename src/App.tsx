@@ -43,7 +43,7 @@ export default function App() {
       <AnimatePresence>
         {loading &&
           <motion.div
-            className='absolute inset-0 bg-blue'
+            className='absolute inset-0 bg-blue z-10 flex-center'
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
