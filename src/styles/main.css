@@ -7,7 +7,12 @@ body,
 }
 
 html.dark {
-  background: #121212;
+  background: black;
+  color: white;
+}
+
+html {
+  @apply font-sans;
 }
 
 /* range query express */

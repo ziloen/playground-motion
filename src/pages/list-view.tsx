@@ -6,7 +6,8 @@ export default function ListView() {
 
   return (
     <div>
-      WIP
+      <NavLink to='/'>← Home</NavLink>
+      <div>WIP</div>
     </div>
   )
 }

@@ -6,6 +6,7 @@
 export {}
 declare global {
   const AnimatePresence: typeof import('framer-motion')['AnimatePresence']
+  const NavLink: typeof import('react-router-dom')['NavLink']
   const Suspense: typeof import('react')['Suspense']
   const forwardRef: typeof import('react')['forwardRef']
   const motion: typeof import('framer-motion')['motion']

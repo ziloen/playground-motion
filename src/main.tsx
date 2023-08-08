@@ -5,4 +5,4 @@ import '@unocss/reset/tailwind.css'
 import 'uno.css'
 import './styles/main.css'
 
-createRoot(document.body).render(<App />)
+createRoot(document.querySelector('#root')!).render(<App />)

@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router-dom'
 import useMeasure from 'react-use-measure'
 
 export default function LayoutWithoutScale() {
@@ -7,7 +6,7 @@ export default function LayoutWithoutScale() {
 
   return (
     <div>
-      <NavLink to='/'>Home</NavLink>
+      <NavLink to='/'>← Home</NavLink>
       <div
         className='resizable w-700px h-400px bg-neutral grid gap-12px'
         style={{ gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gridTemplateRows: 'minmax(0, 1fr)' }}

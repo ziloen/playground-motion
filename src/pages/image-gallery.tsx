@@ -3,6 +3,11 @@ export default function ImageGallery() {
 
 
   return (
-    <div>WIP</div>
+    <div>
+      <NavLink to='/'>← Home</NavLink>
+      <div>
+        WIP
+      </div>
+    </div>
   )
 }

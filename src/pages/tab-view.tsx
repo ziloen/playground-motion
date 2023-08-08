@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router-dom'
 import { ResizablePanel } from '~/components/ResizablePanel'
 
 const tabNames = [
@@ -16,7 +15,7 @@ export default function TabView() {
   return (
     <div>
       {/* Back to home */}
-      <NavLink to='/'>Home</NavLink>
+      <NavLink to='/'>← Home</NavLink>
 
       <div className='grid auto-flow-col gap-2' style={{
         gridAutoColumns: 'max-content',

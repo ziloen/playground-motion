@@ -46,7 +46,8 @@ export default defineConfig(({ command }) => (console.log(command), {
         },
         { 'react-router-dom': ['useNavigate', 'useParams', 'useRoutes'] },
         { 'usehooks-ts': ['useCounter', 'useDarkMode'] },
-        { 'framer-motion': ['motion', 'AnimatePresence'] }
+        { 'framer-motion': ['motion', 'AnimatePresence'] },
+        { 'react-router-dom': ['NavLink'] }
       ],
       dts: 'src/types/auto-imports.d.ts'
     })

@@ -1,8 +1,3 @@
-// WIP
-
-import { NavLink } from 'react-router-dom'
-
-
 export default function FixedHeader() {
 
   return (
@@ -12,7 +7,7 @@ export default function FixedHeader() {
         I Am Fixed Header
       </div>
 
-      <NavLink to='/'>Home</NavLink>
+      <NavLink to='/'>← Home</NavLink>
 
       <div className='max-w-900px mx-auto flex flex-col gap-4'>
         <p>
