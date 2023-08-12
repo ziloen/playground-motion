@@ -17,16 +17,15 @@ export default function TabView() {
       {/* Back to home */}
       <NavLink to='/'>← Home</NavLink>
 
-      <div className='grid auto-flow-col gap-2' style={{
-        gridAutoColumns: 'max-content',
-      }}>
+      <div className='grid auto-flow-col gap-2 grid-auto-cols-max relative'>
         {/* Active indicator */}
         {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
           layout
-          className='bg-gray h-full'
+          layoutDependency={index}
+          className='bg-gray h-full absolute w-full'
           style={{
-            gridColumn: index + 1,
+            gridColumn: `${index + 1} / span 1`,
             gridRow: 1,
             borderRadius: 9999,
           }}
@@ -37,7 +36,6 @@ export default function TabView() {
           <div
             key={tabName}
             className='flex cursor-pointer z-0 px-2 py-1'
-            style={{ gridColumn: i + 1, gridRow: 1 }}
             onClick={() => index !== i && setIndex(i)}
           >
             <div className={tabName}></div>
