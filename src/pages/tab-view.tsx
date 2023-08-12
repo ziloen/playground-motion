@@ -1,4 +1,4 @@
-import { ResizablePanel } from '~/components/ResizablePanel'
+import { ResizablePanel } from '~/components'
 
 const tabNames = [
   'i-fluent-emoji:cat',

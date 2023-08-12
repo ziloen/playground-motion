@@ -1,6 +1,5 @@
-/// <reference types="vitest" />
 import react from '@vitejs/plugin-react-swc'
-import path from 'node:path'
+import { resolve as r } from 'node:path'
 import PostcssPresetEnv from 'postcss-preset-env'
 import Unocss from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -12,7 +11,7 @@ export default defineConfig(({ command }) => (console.log(command), {
   base: '/playground-framer-motion/',
   resolve: {
     alias: {
-      '~/': `${path.resolve(__dirname, 'src')}/`
+      '~': r('src')
     }
   },
 
@@ -42,17 +41,13 @@ export default defineConfig(({ command }) => (console.log(command), {
             'forwardRef',
             'useImperativeHandle',
             'Suspense'
-          ]
+          ],
+          'react-router-dom': ['useNavigate', 'useParams', 'NavLink', 'useRoutes'],
+          'framer-motion': ['motion', 'AnimatePresence'],
         },
-        { 'react-router-dom': ['useNavigate', 'useParams', 'useRoutes'] },
-        { 'usehooks-ts': ['useCounter', 'useDarkMode'] },
-        { 'framer-motion': ['motion', 'AnimatePresence'] },
-        { 'react-router-dom': ['NavLink'] }
       ],
       dts: 'src/types/auto-imports.d.ts'
     })
-
-    // Auto import react component?
   ],
 
   css: {
@@ -64,9 +59,4 @@ export default defineConfig(({ command }) => (console.log(command), {
   optimizeDeps: {
     include: ['framer-motion']
   },
-
-  // https://github.com/vitest-dev/vitest
-  test: {
-    environment: 'jsdom'
-  }
 }))

@@ -19,6 +19,3 @@ html.dark {
 html {
   @apply font-sans;
 }
-
-/* range query express */
-/* @media (width >= 700px) {} */
