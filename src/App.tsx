@@ -32,10 +32,15 @@ export default function App() {
 
   return (
     <MotionConfig transition={{ type: 'tween' }}>
-      <Suspense fallback={<LoadingPage
-        onLoading={onLoading}
-        onLoaded={onLoaded}
-      />}>
+      <Suspense
+        // FIXME: when fallback mounts, suspense component will be unmounted
+        fallback={
+          <LoadingPage
+            onLoading={onLoading}
+            onLoaded={onLoaded}
+          />
+        }
+      >
         <RouterProvider router={router} />
       </Suspense>
 
@@ -43,7 +48,7 @@ export default function App() {
       <AnimatePresence>
         {loading &&
           <motion.div
-            className='absolute inset-0 bg-blue z-10 flex-center'
+            className='absolute inset-0 bg-blueGray-7 z-10 flex-center'
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
