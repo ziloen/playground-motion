@@ -1,63 +1,40 @@
-import { MotionConfig, useAnimate, useAnimation } from 'framer-motion'
+import { MotionConfig } from 'framer-motion'
 import { Suspense } from 'react'
-import { RouterProvider, createHashRouter, useLocation } from 'react-router-dom'
+import {
+  Route,
+  Routes,
+  useLocation
+} from 'react-router-dom'
 import routes from '~react-pages'
 
-const router = createHashRouter(routes)
-
-function LoadingPage({ onLoaded, onLoading }: {
-  onLoading: () => void
-  onLoaded: () => void
-}) {
-  useEffect(() => {
-    onLoading()
-    return onLoaded
-  }, [])
-
-  return null
-}
+const routeElements = routes.map(route => (
+  <Route
+    key={route.path}
+    path={route.path}
+    element={route.element}
+  />
+))
 
 export default function App() {
-  const [loading, setLoading] = useState(false)
-  const delayPromise = useRef<Promise<void>>()
-
-  function onLoading() {
-    setLoading(true)
-    delayPromise.current = new Promise(resolve => setTimeout(resolve, 1000))
-  }
-
-  function onLoaded() {
-    delayPromise.current!.then(() => setLoading(false))
-  }
+  const location = useLocation()
 
   return (
     <MotionConfig transition={{ type: 'tween' }}>
-      <Suspense
-        // FIXME: when fallback mounts, suspense component will be unmounted
-        fallback={
-          <LoadingPage
-            onLoading={onLoading}
-            onLoaded={onLoaded}
-          />
-        }
-      >
-        <RouterProvider router={router} />
+      <Suspense fallback={
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 20 }}
+        >
+          Loading...
+        </motion.div>
+      }>
+        <AnimatePresence mode="wait" initial={false}>
+          <Routes location={location} key={location.pathname}>
+            {routeElements}
+          </Routes>
+        </AnimatePresence>
       </Suspense>
-
-      {/* Actual loading page */}
-      <AnimatePresence>
-        {loading &&
-          <motion.div
-            className='absolute inset-0 bg-blueGray-7 z-10 flex-center'
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-          >
-            <p>Loading...</p>
-          </motion.div>
-        }
-      </AnimatePresence>
-
     </MotionConfig>
   )
 }

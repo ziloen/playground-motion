@@ -14,20 +14,27 @@ export default function Index() {
   }, [])
 
   return (
-    <div className='px-20px pt-40px'>
+    <motion.div
+      className='px-20px pt-40px'
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0 }}
+    >
       <h1 className="text-2xl font-bold">Routes</h1>
       <div className="flex flex-col items-start gap-4px mt-12px">
-        {flattenedRoutes.map((route, i) =>
-          <motion.div
-            key={route}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * .08 }}
-          >
-            <NavLink key={route} to={route}>{route}</NavLink>
-          </motion.div>
-        )}
+        <AnimatePresence initial>
+          {flattenedRoutes.map((route, i) =>
+            <motion.div
+              key={route}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * .08 }}
+            >
+              <NavLink key={route} to={route}>{route}</NavLink>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   )
 }

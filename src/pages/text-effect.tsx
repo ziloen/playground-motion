@@ -6,7 +6,11 @@ export default function TextEffext() {
 
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+    >
       {/* Show up  */}
       {/* <div></div> */}
 
@@ -19,6 +23,6 @@ export default function TextEffext() {
       {/* Text Reveal */}
       <NavLink to='/'>← Home</NavLink>
       <div>WIP</div>
-    </div>
+    </motion.div>
   )
 }

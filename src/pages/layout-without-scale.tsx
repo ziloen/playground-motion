@@ -5,7 +5,12 @@ export default function LayoutWithoutScale() {
   const [ref, { height, width }] = useMeasure()
 
   return (
-    <div className='isolate'>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className='isolate'
+    >
       <NavLink to='/'>← Home</NavLink>
       <div
         className='resizable w-700px h-400px bg-neutral grid gap-12px'
@@ -57,6 +62,6 @@ export default function LayoutWithoutScale() {
         </AnimatePresence>
       </div>
       <button className='btn' onClick={() => setShow(s => !s)}>Toggle</button>
-    </div>
+    </motion.div>
   )
 }

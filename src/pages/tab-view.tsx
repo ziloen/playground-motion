@@ -29,7 +29,11 @@ export default function TabView() {
   }
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+    >
       {/* Back to home */}
       <NavLink to='/'>← Home</NavLink>
 
@@ -81,6 +85,6 @@ export default function TabView() {
           </AnimatePresence>
         </AutoHeightPanel>
       </div>
-    </div>
+    </motion.div>
   )
 }

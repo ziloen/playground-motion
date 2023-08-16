@@ -1,7 +1,12 @@
 export default function FixedHeader() {
 
   return (
-    <div className='h-full overflow-auto'>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className='h-full overflow-auto'
+    >
 
       <div>
         I Am Fixed Header
@@ -62,6 +67,6 @@ export default function FixedHeader() {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec non suscipit magna. Nam mattis, eros vitae auctor lobortis, augue eros ullamcorper orci, quis lacinia tortor metus vel lacus. Sed eu interdum sapien. Fusce sollicitudin quam non mi pretium, id finibus tortor ultricies. Proin gravida ullamcorper ligula, nec egestas nibh semper id. Suspendisse eget dolor non nibh tristique tempus ac ac enim. Vestibulum non aliquet urna. Sed elementum nisi ut eros bibendum pellentesque. Mauris vel ipsum a metus consectetur aliquam. Nam id lacinia purus. Integer condimentum egestas sem vitae malesuada. Morbi nec gravida enim. Pellentesque nulla diam, finibus vel metus sit amet, pretium accumsan mauris.
         </p>
       </div>
-    </div>
+    </motion.div>
   )
 }
