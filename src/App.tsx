@@ -20,15 +20,7 @@ export default function App() {
 
   return (
     <MotionConfig transition={{ type: 'tween' }}>
-      <Suspense fallback={
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 20 }}
-        >
-          Loading...
-        </motion.div>
-      }>
+      <Suspense>
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
             {routeElements}

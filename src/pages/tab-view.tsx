@@ -3,8 +3,8 @@ import { AutoHeightPanel } from '~/components'
 const tabNames = [
   'i-fluent-emoji:cat',
   'i-fluent-emoji:black-cat',
-  // 'i-fluent-emoji:cat-face',
-  // 'i-fluent-emoji:cat-with-wry-smile',
+  'i-fluent-emoji:cat-face',
+  'i-fluent-emoji:cat-with-wry-smile',
   'i-fluent-emoji:cat-with-tears-of-joy',
 ]
 
@@ -43,9 +43,9 @@ export default function TabView() {
         <motion.div
           layout
           layoutDependency={col}
-          className='bg-gray h-full absolute w-full'
+          className='bg-#005E5D h-full absolute w-full'
           onLayoutAnimationComplete={onAnimationEnd}
-          transition={{ type: 'tween', duration: .2 }}
+          transition={{ type: 'tween', duration: .15, ease: 'easeInOut' }}
           style={{
             gridColumn: col,
             gridRow: 1,
@@ -67,20 +67,20 @@ export default function TabView() {
       </div>
 
 
-      <div className='mt-2 bg-red'>
+      <div className='mt-2 bg-gradient-to-r bg-gradient-from-#9059FF bg-gradient-to-#0250BC '>
         {/* add relative to hidden overflow when exit anmation */}
         <AutoHeightPanel className='relative overflow-hidden'>
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               // set key to force remount trigger animation
               key={index}
-              className='flex-center flex-col gap-2 py-4 bg-blue/40'
+              className='flex-center flex-col gap-2 py-4 bg-black/25'
               initial={{ opacity: 0, y: 200 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
-              <div className='write-vertical-left'>{currentTabName}</div>
+              <div className='write-vertical-left whitespace-nowrap'>{currentTabName}</div>
             </motion.div>
           </AnimatePresence>
         </AutoHeightPanel>
