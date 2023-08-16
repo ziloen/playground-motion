@@ -6,7 +6,7 @@ type Props = PropsWithChildren<{
   innerClassName?: string
 }>
 
-export function ResizablePanel({ children, className, innerClassName }: Props) {
+export function AutoHeightPanel({ children, className, innerClassName }: Props) {
   const [ref, size] = useMeasure()
 
   return (

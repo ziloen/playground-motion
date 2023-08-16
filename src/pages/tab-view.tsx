@@ -1,4 +1,4 @@
-import { ResizablePanel } from '~/components'
+import { AutoHeightPanel } from '~/components'
 
 const tabNames = [
   'i-fluent-emoji:cat',
@@ -65,7 +65,7 @@ export default function TabView() {
 
       <div className='mt-2 bg-red'>
         {/* add relative to hidden overflow when exit anmation */}
-        <ResizablePanel className='relative overflow-hidden'>
+        <AutoHeightPanel className='relative overflow-hidden'>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               // set key to force remount trigger animation
@@ -79,7 +79,7 @@ export default function TabView() {
               <div className='write-vertical-left'>{currentTabName}</div>
             </motion.div>
           </AnimatePresence>
-        </ResizablePanel>
+        </AutoHeightPanel>
       </div>
     </div>
   )
