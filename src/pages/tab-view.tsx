@@ -11,6 +11,22 @@ const tabNames = [
 export default function TabView() {
   const [index, setIndex] = useState(0)
   const currentTabName = tabNames[index]
+  const [col, setCol] = useState(`${index + 1} / span 1`)
+  const [isAnimating, setIsAnimating] = useState(false)
+
+  function onChange(nextIndex: number) {
+    setIsAnimating(true)
+    const start = Math.min(nextIndex, index) + 1
+    const end = Math.max(nextIndex, index) + 2
+    setIndex(nextIndex)
+    setCol(`${start} / ${end}`)
+  }
+
+  function onAnimationEnd() {
+    if (!isAnimating) return
+    setIsAnimating(false)
+    setCol(`${index + 1} / span 1`)
+  }
 
   return (
     <div>
@@ -22,10 +38,12 @@ export default function TabView() {
         {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
           layout
-          layoutDependency={index}
+          layoutDependency={col}
           className='bg-gray h-full absolute w-full'
+          onLayoutAnimationComplete={onAnimationEnd}
+          transition={{ type: 'tween', duration: .2 }}
           style={{
-            gridColumn: `${index + 1} / span 1`,
+            gridColumn: col,
             gridRow: 1,
             borderRadius: 9999,
           }}
@@ -35,8 +53,8 @@ export default function TabView() {
         {tabNames.map((tabName, i) =>
           <div
             key={tabName}
-            className='flex cursor-pointer z-0 px-2 py-1'
-            onClick={() => index !== i && setIndex(i)}
+            className='flex cursor-pointer z-0 px-2 py-1 select-none'
+            onClick={() => index !== i && onChange(i)}
           >
             <div className={tabName}></div>
             <div>{tabName}</div>
