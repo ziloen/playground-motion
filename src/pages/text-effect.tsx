@@ -21,6 +21,9 @@ export default function TextEffext() {
       {/* <div></div> */}
 
       {/* Text Reveal */}
+
+      {/* Text follow Svg path animation  */}
+
       <NavLink to='/'>← Home</NavLink>
       <div>WIP</div>
     </motion.div>

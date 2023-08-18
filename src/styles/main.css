@@ -11,9 +11,11 @@ body,
   isolation: isolate;
 }
 
-html.dark {
-  background: black;
-  color: white;
+@media (prefers-color-scheme: dark) {
+  html {
+    background: black;
+    color: white;
+  }
 }
 
 html {

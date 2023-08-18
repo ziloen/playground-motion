@@ -4,7 +4,8 @@ import {
   presetIcons,
   presetUno,
   presetWebFonts,
-  transformerDirectives
+  transformerDirectives,
+  transformerVariantGroup
   // transformerVariantGroup,
 } from 'unocss'
 
@@ -16,8 +17,10 @@ export default defineConfig({
     ['resizable', 'resize overflow-hidden']
   ],
   presets: [
-    presetUno(),
-    // presetAttributify(),
+    presetUno({
+      dark: 'media'
+    }),
+
     presetIcons({
       scale: 1.2,
       warn: true,
@@ -34,7 +37,7 @@ export default defineConfig({
   ],
   transformers: [
     // support @apply
-    transformerDirectives()
-    // transformerVariantGroup(),
+    transformerDirectives(),
+    transformerVariantGroup(),
   ]
 })
