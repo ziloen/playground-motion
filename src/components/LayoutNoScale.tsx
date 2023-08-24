@@ -1,4 +1,4 @@
-import { useAnimation } from 'framer-motion'
+import { Box, useAnimation } from 'framer-motion'
 import { type PropsWithChildren } from 'react'
 import { useResizeObserver } from '~/hooks'
 
@@ -33,11 +33,23 @@ export function LayoutNoScale({
     })
   })
 
+  function onLayoutMeasure(box: Box, prevBox?: Box | undefined) {
+    const w = box.x.max - box.x.min
+    const h = box.y.max - box.y.min
+    console.log(w, h)
+
+    if (!prevBox) return
+    const pw = prevBox.x.max - prevBox.x.min
+    const ph = prevBox.y.max - prevBox.y.min
+    console.log(pw, ph)
+  }
+
   return (
     <motion.div
       // prevent size animation
       layout="position"
       layoutDependency={layoutDependency}
+      onLayoutMeasure={onLayoutMeasure}
       ref={ref}
       className="h-full h-full relative"
     >
