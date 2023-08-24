@@ -15,9 +15,11 @@ export function LayoutNoScale({
   children,
   layoutDependency
 }: Props) {
+  /** container element */
   const ref = useRef<HTMLDivElement>(null)
   const controls = useAnimation()
 
+  // animate child width and height when container size change
   useResizeObserver(ref, ([entry]) => {
     if (!entry) return
     const size = entry.contentBoxSize[0]
@@ -33,6 +35,7 @@ export function LayoutNoScale({
 
   return (
     <motion.div
+      // prevent size animation
       layout="position"
       layoutDependency={layoutDependency}
       ref={ref}
