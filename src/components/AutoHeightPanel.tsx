@@ -1,5 +1,6 @@
+import { useAnimation } from 'framer-motion'
 import { PropsWithChildren } from 'react'
-import useMeasure from 'react-use-measure'
+import { useResizeObserver } from '~/hooks'
 
 type Props = PropsWithChildren<{
   className?: string
@@ -7,11 +8,22 @@ type Props = PropsWithChildren<{
 }>
 
 export function AutoHeightPanel({ children, className, innerClassName }: Props) {
-  const [ref, size] = useMeasure()
+  const ref = useRef<HTMLDivElement>(null)
+  const controls = useAnimation()
+
+  useResizeObserver(ref, ([entry]) => {
+    if (!entry) return
+    const size = entry.contentBoxSize[0]
+    if (!size) return
+
+    controls.start({
+      height: size.blockSize,
+    })
+  })
 
   return (
     <motion.div
-      animate={{ height: size.height || undefined }}
+      animate={controls}
       transition={{ type: 'tween', duration: 0.2 }}
       className={className}
     >

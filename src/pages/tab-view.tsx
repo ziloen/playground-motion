@@ -12,10 +12,10 @@ export default function TabView() {
   const [index, setIndex] = useState(0)
   const currentTabName = tabNames[index]
   const [col, setCol] = useState(`${index + 1} / span 1`)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const isAnimatingRef = useRef(false)
 
   function onChange(nextIndex: number) {
-    setIsAnimating(true)
+    isAnimatingRef.current = true
     const start = Math.min(nextIndex, index) + 1
     const end = Math.max(nextIndex, index) + 2
     setIndex(nextIndex)
@@ -23,8 +23,8 @@ export default function TabView() {
   }
 
   function onAnimationEnd() {
-    if (!isAnimating) return
-    setIsAnimating(false)
+    if (!isAnimatingRef.current) return
+    isAnimatingRef.current = false
     setCol(`${index + 1} / span 1`)
   }
 

@@ -1,6 +1,11 @@
-import { stagger } from 'framer-motion'
+import { Variants, stagger } from 'framer-motion'
 import { NavLink, RouteObject } from 'react-router-dom'
 import routes from '~react-pages'
+
+const itemVariants: Variants = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+}
 
 export default function Index() {
   const flattenedRoutes = useMemo(() => {
@@ -21,20 +26,28 @@ export default function Index() {
       exit={{ opacity: 0 }}
     >
       <h1 className="text-2xl font-bold">Routes</h1>
-      <div className="flex flex-col items-start gap-4px mt-12px">
-        <AnimatePresence initial>
+      <AnimatePresence initial>
+        <motion.div
+          className="flex flex-col items-start gap-4px mt-12px"
+          transition={{ staggerChildren: 0.06 }}
+          initial="initial"
+          animate="animate"
+        >
           {flattenedRoutes.map((route, i) =>
             <motion.div
               key={route}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * .08 }}
+              variants={itemVariants}
+              transition={{
+                type: 'tween',
+                ease: 'easeInOut',
+                duration: 0.15,
+              }}
             >
               <NavLink key={route} to={route}>{route}</NavLink>
             </motion.div>
           )}
-        </AnimatePresence>
-      </div>
+        </motion.div>
+      </AnimatePresence>
     </motion.div>
   )
 }

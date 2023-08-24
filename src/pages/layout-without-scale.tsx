@@ -1,8 +1,19 @@
-import useMeasure from 'react-use-measure'
+import { useAnimation } from 'framer-motion'
+import { LayoutNoScale } from '~/components'
+import { useResizeObserver } from '~/hooks'
 
 export default function LayoutWithoutScale() {
   const [show, setShow] = useState(false)
-  const [ref, { height, width }] = useMeasure()
+  const ref = useRef<HTMLDivElement>(null)
+  const controls = useAnimation()
+
+  useResizeObserver(ref, ([entry]) => {
+    if (!entry) return
+    const { inlineSize, blockSize } = entry.contentBoxSize[0]!
+    controls.start({ width: inlineSize, height: blockSize })
+  })
+
+
 
   return (
     <motion.div
@@ -36,28 +47,17 @@ export default function LayoutWithoutScale() {
             layout
             key="2"
             layoutDependency={show}
-            className='bg-blue z-2'
+            className='bg-blue z-2 h-full w-full'
             style={{ gridColumn: show ? '2 / 3' : '1 / 3', gridRow: '1 / 2' }}
           >
             {/* Use layout="position" to revert scale from container */}
-            <motion.div
-              ref={ref}
-              layout="position"
-              layoutDependency={show}
-              className='h-full w-full'
-            >
-              <motion.div
-                initial={{ width: '100%', height: '100%' }}
-                animate={{ width: width || '100%', height: height || '100%' }}
-                transition={{ type: 'tween', duration: .3 }}
-              >
-                {/* This image will not be scaled during layout animation */}
-                <img
-                  src='https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80'
-                  className='h-full w-full object-contain object-center'
-                />
-              </motion.div>
-            </motion.div>
+            <LayoutNoScale layoutDependency={show}>
+              {/* This image will not be scaled during layout animation */}
+              <img
+                src='https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80'
+                className='h-full w-full object-contain object-center'
+              />
+            </LayoutNoScale>
           </motion.div>
         </AnimatePresence>
       </div>
