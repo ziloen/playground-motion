@@ -1,11 +1,11 @@
 import { useMemoizedFn } from 'ahooks'
 import { BasicTarget, getTargetElement } from 'ahooks/lib/utils/domTarget'
-import useIsomorphicLayoutEffectWithTarget from 'ahooks/lib/utils/useIsomorphicLayoutEffectWithTarget'
+import useEffectWithTarget from 'ahooks/lib/utils/useEffectWithTarget'
 
 export function useResizeObserver(target: BasicTarget, callback: ResizeObserverCallback, options?: ResizeObserverOptions) {
   const callbackRef = useMemoizedFn(callback)
 
-  useIsomorphicLayoutEffectWithTarget(() => {
+  useEffectWithTarget(() => {
     const el = getTargetElement(target)
     if (!el) return
 
