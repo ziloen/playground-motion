@@ -1,5 +1,5 @@
 import { CSSProperties, Children, PropsWithChildren, cloneElement, isValidElement } from 'react'
-import useMeasure from 'react-use-measure'
+import { useElementSize } from '~/hooks'
 
 
 type Props = PropsWithChildren<{
@@ -23,8 +23,8 @@ export const AspectRatio = forwardRef<HTMLDivElement, Props>(({
   ratio,
   className
 }: Props, ref) => {
-  // const innerRef = useRef<HTMLDivElement | null>(null)
-  const [innerRef, { width, height }] = useMeasure()
+  const containerRef = useRef<HTMLElement | null>(null)
+  const { width, height } = useElementSize(containerRef)
 
   const [w, h] = useMemo(() => {
     if (width === 0 || height === 0) return [0, 0]
@@ -37,7 +37,7 @@ export const AspectRatio = forwardRef<HTMLDivElement, Props>(({
   return (
     <div
       ref={el => {
-        innerRef(el)
+        containerRef.current = el
         if (typeof ref === 'function') ref(el)
         else if (ref) ref.current = el
       }}

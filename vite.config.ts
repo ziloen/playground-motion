@@ -57,6 +57,11 @@ export default defineConfig(({ command }) => (console.log(command), {
   },
 
   optimizeDeps: {
-    include: ['framer-motion']
+    include: [
+      'framer-motion',
+      'ahooks',
+      'ahooks/lib/utils/domTarget',
+      'ahooks/lib/utils/useEffectWithTarget'
+    ]
   },
 }))

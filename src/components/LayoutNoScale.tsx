@@ -33,15 +33,33 @@ export function LayoutNoScale({
     })
   })
 
+  const cb = useRef<{ w: number; h: number }>()
+  const pb = useRef<{ w: number; h: number }>()
   function onLayoutMeasure(box: Box, prevBox?: Box | undefined) {
     const w = box.x.max - box.x.min
     const h = box.y.max - box.y.min
-    console.log(w, h)
+    const pw = prevBox ? (prevBox.x.max - prevBox.x.min) : undefined
+    const ph = prevBox ? (prevBox.y.max - prevBox.y.min) : undefined
 
-    if (!prevBox) return
-    const pw = prevBox.x.max - prevBox.x.min
-    const ph = prevBox.y.max - prevBox.y.min
-    console.log(pw, ph)
+    if (w === pw && h === ph) return
+
+    pb.current = cb.current
+    cb.current = { w, h }
+
+
+    console.log('box:', w, h, 'prevBox:', pw, ph)
+  }
+
+  function onLayoutAnimationStart() {
+    console.log('onLayoutAnimationStart')
+  }
+
+  function onLayoutAnimationComplete() {
+    console.log('onLayoutAnimationComplete')
+  }
+
+  function onBeforeLayoutMeasure(box: Box) {
+    console.log('onBeforeLayoutMeasure', box && box.x.max - box.x.min, box && box.y.max - box.y.min)
   }
 
   return (
@@ -50,6 +68,9 @@ export function LayoutNoScale({
       layout="position"
       layoutDependency={layoutDependency}
       onLayoutMeasure={onLayoutMeasure}
+      onLayoutAnimationStart={onLayoutAnimationStart}
+      onLayoutAnimationComplete={onLayoutAnimationComplete}
+      onBeforeLayoutMeasure={onBeforeLayoutMeasure}
       ref={ref}
       className="h-full h-full relative"
     >
