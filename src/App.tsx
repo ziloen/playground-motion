@@ -1,6 +1,7 @@
 import { MotionConfig } from 'framer-motion'
 import { Suspense } from 'react'
 import {
+  HashRouter,
   Route,
   Routes,
   useLocation
@@ -15,7 +16,7 @@ const routeElements = routes.map(route => (
   />
 ))
 
-export default function App() {
+function App() {
   const location = useLocation()
 
   return (
@@ -28,5 +29,14 @@ export default function App() {
         </AnimatePresence>
       </Suspense>
     </MotionConfig>
+  )
+}
+
+
+export default function AppWithRouter() {
+  return (
+    <HashRouter>
+      <App />
+    </HashRouter>
   )
 }

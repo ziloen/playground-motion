@@ -1,5 +1,5 @@
-import { Variants, stagger } from 'framer-motion'
-import { NavLink, RouteObject } from 'react-router-dom'
+import { Variants } from 'framer-motion'
+import { NavLink } from 'react-router-dom'
 import routes from '~react-pages'
 
 const itemVariants: Variants = {
@@ -10,12 +10,8 @@ const itemVariants: Variants = {
 export default function Index() {
   const flattenedRoutes = useMemo(() => {
     return routes
-      .reduce<RouteObject[]>((acc, route) => {
-        acc.push(route)
-        return acc
-      }, [])
       .map(route => route.path!)
-      .filter(route => !['*', '/'].includes(route))
+      .filter(route => !['*', '/', ':'].includes(route[0]))
   }, [])
 
   return (
