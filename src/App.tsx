@@ -23,12 +23,3 @@ export default function App() {
     </HashRouter>
   )
 }
-
-
-// export default function AppWithRouter() {
-//   return (
-//     <HashRouter>
-//       <App />
-//     </HashRouter>
-//   )
-// }
