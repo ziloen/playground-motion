@@ -35,7 +35,7 @@ export default function Index() {
               variants={itemVariants}
               transition={{
                 type: 'tween',
-                ease: 'easeInOut',
+                ease: 'easeOut',
                 duration: 0.15,
               }}
             >
