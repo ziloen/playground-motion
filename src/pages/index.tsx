@@ -1,4 +1,4 @@
-import { Variants } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
 import routes from '~react-pages'
 
