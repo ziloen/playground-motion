@@ -1,5 +1,5 @@
 import { useAnimation } from 'framer-motion'
-import { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { useResizeObserver } from '~/hooks'
 
 type Props = PropsWithChildren<{
@@ -12,6 +12,7 @@ export function AutoHeightPanel({ children, className, innerClassName }: Props) 
   const controls = useAnimation()
 
   useResizeObserver(ref, ([entry]) => {
+    if (!ref.current) return
     if (!entry) return
     const size = entry.contentBoxSize[0]
     if (!size) return

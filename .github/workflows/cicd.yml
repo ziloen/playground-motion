@@ -49,9 +49,8 @@ jobs:
       - name: Install
         run: pnpm i
 
-      # lint is broken
-      # - name: Lint
-      #   run: pnpm run lint
+      - name: Lint
+        run: pnpm run lint
 
       - name: TypeCheck
         run: pnpm run typecheck

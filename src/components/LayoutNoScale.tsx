@@ -1,4 +1,5 @@
-import { Box, useAnimation } from 'framer-motion'
+import type { Box } from 'framer-motion'
+import { useAnimation } from 'framer-motion'
 import { type PropsWithChildren } from 'react'
 import { useResizeObserver } from '~/hooks'
 
@@ -21,6 +22,7 @@ export function LayoutNoScale({
 
   // animate child width and height when container size change
   useResizeObserver(ref, ([entry]) => {
+    if (!ref.current) return
     if (!entry) return
     const size = entry.contentBoxSize[0]
     if (!size) return
