@@ -24,7 +24,7 @@ export default function LayoutWithoutScale() {
     >
       <NavLink to='/'>← Home</NavLink>
       <div
-        className='resizable w-700px h-400px bg-neutral grid gap-12px'
+        className='resizable w-[700px] h-[400px] bg-neutral grid gap-[12px]'
         style={{ gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gridTemplateRows: 'minmax(0, 1fr)' }}
       >
         <AnimatePresence>
@@ -63,7 +63,7 @@ export default function LayoutWithoutScale() {
       <button className='btn' onClick={() => setShow(s => !s)}>Toggle</button>
 
       <div
-        className='resizable w-700px h-400px bg-neutral grid gap-12px relative'
+        className='resizable w-[700px] h-[400px] bg-neutral grid gap-[12px] relative'
         style={{ gridTemplateColumns: 'minmax(0, 1fr)', gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr)' }}
       >
         <AnimatePresence>

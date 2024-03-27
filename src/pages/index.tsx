@@ -16,7 +16,7 @@ export default function Index() {
 
   return (
     <motion.div
-      className='px-20px pt-40px'
+      className='px-[20px] pt-[40px]'
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0 }}
@@ -24,7 +24,7 @@ export default function Index() {
       <h1 className="text-2xl font-bold">Routes</h1>
       <AnimatePresence initial>
         <motion.div
-          className="flex flex-col items-start gap-4px mt-12px"
+          className="flex flex-col items-start gap-[4px] mt-[12px]"
           transition={{ staggerChildren: 0.06 }}
           initial="initial"
           animate="animate"

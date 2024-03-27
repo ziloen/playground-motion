@@ -14,7 +14,7 @@ export default function FixedHeader() {
 
       <NavLink to='/'>← Home</NavLink>
 
-      <div className='max-w-900px mx-auto flex flex-col gap-4'>
+      <div className='max-w-[900px] mx-auto flex flex-col gap-4'>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non magna sit amet nisi ullamcorper interdum vitae ac lectus. Morbi ut molestie elit. Ut nulla risus, dignissim eu ex in, porta laoreet diam. Donec vitae sodales lectus. In elit lorem, venenatis et libero at, pharetra vestibulum risus. Sed pulvinar rhoncus dolor. Curabitur mollis metus ut venenatis facilisis. Pellentesque elementum, lacus quis scelerisque lobortis, nulla lectus feugiat odio, sit amet gravida elit neque at turpis. Fusce commodo quam id leo elementum, eget hendrerit tellus scelerisque. Morbi cursus lectus libero, et faucibus urna aliquam vitae. Cras auctor pretium ultricies. Etiam volutpat eu enim eu lobortis. Phasellus vitae gravida massa.
         </p>

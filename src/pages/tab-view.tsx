@@ -43,7 +43,7 @@ export default function TabView() {
         <motion.div
           layout
           layoutDependency={col}
-          className='bg-#005E5D h-full absolute w-full'
+          className='bg-[#005E5D] h-full absolute w-full'
           onLayoutAnimationComplete={onAnimationEnd}
           transition={{ type: 'tween', duration: .15, ease: 'easeInOut' }}
           style={{
@@ -67,7 +67,7 @@ export default function TabView() {
       </div>
 
 
-      <div className='mt-2 bg-gradient-to-r bg-gradient-from-#9059FF bg-gradient-to-#0250BC '>
+      <div className='mt-2 bg-gradient-to-r bg-gradient-from-[#9059FF] bg-gradient-to-[#0250BC] '>
         {/* add relative to hidden overflow when exit anmation */}
         <AutoHeightPanel className='relative overflow-hidden'>
           <AnimatePresence mode="popLayout" initial={false}>
