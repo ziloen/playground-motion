@@ -1,6 +1,5 @@
 import { useAnimation } from 'framer-motion'
 import type { PropsWithChildren } from 'react'
-import { useResizeObserver } from '~/hooks'
 
 type Props = PropsWithChildren<{
   layoutDependency?: unknown
@@ -16,24 +15,27 @@ export function LayoutNoScale({
   layoutDependency
 }: Props) {
   /** container element */
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null!)
   const controls = useAnimation()
 
   // animate child width and height when container size change
-  useResizeObserver(ref, ([entry]) => {
-    if (!ref.current) return
-    if (!entry) return
-    const size = entry.contentBoxSize[0]
-    if (!size) return
+  useEffect(() => {
+    const ro = new ResizeObserver(([entry]) => {
+      const size = entry.contentBoxSize[0]
+      if (!size) return
 
-    const { inlineSize, blockSize } = size
+      const { inlineSize, blockSize } = size
 
-    controls.start({
-      width: inlineSize,
-      height: blockSize,
+      controls.start({
+        width: inlineSize,
+        height: blockSize,
+      })
     })
-  })
 
+    ro.observe(ref.current)
+
+    return () => ro.disconnect()
+  }, [])
 
   return (
     <motion.div
