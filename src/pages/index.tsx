@@ -3,8 +3,16 @@ import { NavLink } from 'react-router-dom'
 import routes from '~react-pages'
 
 const itemVariants: Variants = {
-  initial: { opacity: 0, x: -20 },
-  animate: { opacity: 1, x: 0 },
+  initial: {
+    opacity: 0,
+    x: -20,
+    filter: 'blur(5px) grayscale(1)',
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    filter: 'blur(0)'
+  },
 }
 
 export default function Index() {
