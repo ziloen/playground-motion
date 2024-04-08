@@ -6,6 +6,6 @@
 **/*.yml
 **/*.md
 
-dits/
+dist/
 public/
 src/types/auto-imports.d.ts
