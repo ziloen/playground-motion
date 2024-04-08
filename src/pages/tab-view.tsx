@@ -35,17 +35,17 @@ export default function TabView() {
       exit={{ opacity: 0, x: 20 }}
     >
       {/* Back to home */}
-      <NavLink to='/'>← Home</NavLink>
+      <NavLink to="/">← Home</NavLink>
 
-      <div className='grid auto-flow-col gap-2 grid-auto-cols-max relative'>
+      <div className="auto-flow-col grid-auto-cols-max relative grid gap-2">
         {/* Active indicator */}
         {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
           layout
           layoutDependency={col}
-          className='bg-[#005E5D] h-full absolute w-full'
+          className="absolute h-full w-full bg-[#005E5D]"
           onLayoutAnimationComplete={onAnimationEnd}
-          transition={{ type: 'tween', duration: .15, ease: 'easeInOut' }}
+          transition={{ type: 'tween', duration: 0.15, ease: 'easeInOut' }}
           style={{
             gridColumn: col,
             gridRow: 1,
@@ -54,33 +54,32 @@ export default function TabView() {
         />
 
         {/* Tab labels */}
-        {tabNames.map((tabName, i) =>
+        {tabNames.map((tabName, i) => (
           <div
             key={tabName}
-            className='flex cursor-pointer z-0 px-2 py-1 select-none'
+            className="z-0 flex cursor-pointer select-none px-2 py-1"
             onClick={() => index !== i && onChange(i)}
           >
             <div className={tabName}></div>
             <div>{tabName}</div>
           </div>
-        )}
+        ))}
       </div>
 
-
-      <div className='mt-2 bg-gradient-to-r bg-gradient-from-[#9059FF] bg-gradient-to-[#0250BC] '>
+      <div className="bg-gradient-from-[#9059FF] bg-gradient-to-[#0250BC] mt-2 bg-gradient-to-r ">
         {/* add relative to hidden overflow when exit anmation */}
-        <AutoHeightPanel className='relative overflow-hidden'>
+        <AutoHeightPanel className="relative overflow-hidden">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               // set key to force remount trigger animation
               key={index}
-              className='flex-center flex-col gap-2 py-4 bg-black/25'
+              className="flex-center flex-col gap-2 bg-black/25 py-4"
               initial={{ opacity: 0, y: 200 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
-              <div className='write-vertical-left whitespace-nowrap'>{currentTabName}</div>
+              <div className="write-vertical-left whitespace-nowrap">{currentTabName}</div>
             </motion.div>
           </AnimatePresence>
         </AutoHeightPanel>

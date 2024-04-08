@@ -1,10 +1,7 @@
 import { MotionConfig } from 'framer-motion'
 import { Suspense } from 'react'
-import {
-  HashRouter
-} from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import routes from '~react-pages'
-
 
 function Routes() {
   return useRoutes(routes)

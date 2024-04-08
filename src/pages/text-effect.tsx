@@ -1,18 +1,13 @@
 import { ulid } from 'ulid'
 
-
-
 export default function TextEffext() {
-
-
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
     >
-      <NavLink to='/'>← Home</NavLink>
+      <NavLink to="/">← Home</NavLink>
       <div>WIP</div>
 
       {/* Show up  */}
@@ -28,21 +23,18 @@ export default function TextEffext() {
       <Text />
 
       {/* Text follow Svg path animation  */}
-
-
     </motion.div>
   )
 }
 
-
 const t1 = 'Hello'.split('').map(l => ({
   id: ulid(),
-  letter: l
+  letter: l,
 }))
 
 const t2 = 'World'.split('').map(l => ({
   id: ulid(),
-  letter: l
+  letter: l,
 }))
 
 function Text() {
@@ -56,7 +48,7 @@ function Text() {
   }
 
   return (
-    <div onClick={onClick} className='relative'>
+    <div onClick={onClick} className="relative">
       <AnimatePresence mode="popLayout">
         {show &&
           t1.map(({ id, letter }, index) => (
@@ -65,12 +57,11 @@ function Text() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ delay: index * .1 }}
+              transition={{ delay: index * 0.1 }}
             >
               {letter}
             </motion.span>
-          ))
-        }
+          ))}
         {!show &&
           t2.map(({ id, letter }, index) => (
             <motion.span
@@ -78,13 +69,11 @@ function Text() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ delay: index * .1 }}
+              transition={{ delay: index * 0.1 }}
             >
               {letter}
             </motion.span>
-          ))
-
-        }
+          ))}
       </AnimatePresence>
     </div>
   )

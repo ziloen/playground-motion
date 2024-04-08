@@ -8,16 +8,17 @@ export default function LayoutWithoutScale() {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className='isolate overflow-auto h-full'
+      className="isolate h-full overflow-auto"
     >
-      <NavLink to='/'>← Home</NavLink>
+      <NavLink to="/">← Home</NavLink>
       <div
-        className='resizable w-[700px] h-[400px] bg-neutral grid gap-[12px]'
-        style={{ gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gridTemplateRows: 'minmax(0, 1fr)' }}
+        className="resizable bg-neutral grid h-[400px] w-[700px] gap-[12px]"
+        style={{
+          gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+          gridTemplateRows: 'minmax(0, 1fr)',
+        }}
       >
-        <AnimatePresence
-          initial={false}
-        >
+        <AnimatePresence initial={false}>
           {show && (
             <motion.img
               layout
@@ -25,8 +26,8 @@ export default function LayoutWithoutScale() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='bg-emerald z-1 object-contain object-center w-full h-full'
-              src='https://images.unsplash.com/photo-1691250993170-4c9919194aa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=794&q=80'
+              className="bg-emerald z-1 h-full w-full object-contain object-center"
+              src="https://images.unsplash.com/photo-1691250993170-4c9919194aa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=794&q=80"
               style={{ gridColumn: '1 / 2', gridRow: '1/2' }}
             />
           )}
@@ -36,25 +37,30 @@ export default function LayoutWithoutScale() {
             key="2"
             layout
             layoutDependency={show}
-            className='bg-blue z-2 h-full w-full'
+            className="bg-blue z-2 h-full w-full"
             style={{ gridColumn: show ? '2 / 3' : '1 / 3', gridRow: '1 / 2' }}
           >
             <LayoutNoScale layoutDependency={show}>
               {/* This image will not be scaled during layout animation */}
               <img
-                src='https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80'
-                className='h-full w-full object-contain object-center'
+                src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+                className="h-full w-full object-contain object-center"
               />
             </LayoutNoScale>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      <button className='btn' onClick={() => setShow(s => !s)}>Toggle</button>
+      <button className="btn" onClick={() => setShow(s => !s)}>
+        Toggle
+      </button>
 
       <div
-        className='resizable w-[700px] h-[400px] bg-neutral grid gap-[12px] relative'
-        style={{ gridTemplateColumns: 'minmax(0, 1fr)', gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr)' }}
+        className="resizable bg-neutral relative grid h-[400px] w-[700px] gap-[12px]"
+        style={{
+          gridTemplateColumns: 'minmax(0, 1fr)',
+          gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr)',
+        }}
       >
         <AnimatePresence>
           {show && (
@@ -64,10 +70,13 @@ export default function LayoutWithoutScale() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='bg-emerald z-1'
+              className="bg-emerald z-1"
               style={{ gridColumn: '1/2', gridRow: '2/3' }}
             >
-              <img src='https://images.unsplash.com/photo-1691250993170-4c9919194aa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=794&q=80' className='w-full h-full object-contain object-center' />
+              <img
+                src="https://images.unsplash.com/photo-1691250993170-4c9919194aa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=794&q=80"
+                className="h-full w-full object-contain object-center"
+              />
             </motion.div>
           )}
 
@@ -76,14 +85,14 @@ export default function LayoutWithoutScale() {
             layout
             key="2"
             layoutDependency={show}
-            className='bg-blue z-2 h-full w-full'
+            className="bg-blue z-2 h-full w-full"
             style={{ gridRow: show ? '1 / 2' : '1 / 3', gridColumn: '1 / 2' }}
           >
             <LayoutNoScale layoutDependency={show}>
               {/* This image will not be scaled during layout animation */}
               <img
-                src='https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80'
-                className='h-full w-full object-contain object-center'
+                src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+                className="h-full w-full object-contain object-center"
               />
             </LayoutNoScale>
           </motion.div>

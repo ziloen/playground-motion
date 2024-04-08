@@ -13,5 +13,4 @@ declare namespace React {
   interface CSSProperties {
     [CSSCutomProperties: `--${string}`]: string | number | undefined
   }
-
 }

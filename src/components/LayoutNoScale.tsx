@@ -7,13 +7,10 @@ type Props = PropsWithChildren<{
 
 /**
  * Prevents scale of children during layout animation
- * 
+ *
  * TODO: Only animate width and height when laout animation is triggered
  */
-export function LayoutNoScale({
-  children,
-  layoutDependency
-}: Props) {
+export function LayoutNoScale({ children, layoutDependency }: Props) {
   /** container element */
   const ref = useRef<HTMLDivElement>(null!)
   const controls = useAnimation()
@@ -43,10 +40,10 @@ export function LayoutNoScale({
       layout="position"
       layoutDependency={layoutDependency}
       ref={ref}
-      className="h-full h-full relative"
+      className="relative h-full h-full"
     >
       <motion.div
-        className='absolute h-full w-full'
+        className="absolute h-full w-full"
         // animate width and height instead of scale
         animate={controls}
       >
