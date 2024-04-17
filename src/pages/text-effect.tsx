@@ -1,4 +1,3 @@
-import { ulid } from 'ulid'
 
 export default function TextEffext() {
   return (
@@ -28,12 +27,12 @@ export default function TextEffext() {
 }
 
 const t1 = 'Hello'.split('').map(l => ({
-  id: ulid(),
+  id: crypto.randomUUID(),
   letter: l,
 }))
 
 const t2 = 'World'.split('').map(l => ({
-  id: ulid(),
+  id: crypto.randomUUID(),
   letter: l,
 }))
 

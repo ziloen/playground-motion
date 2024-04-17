@@ -56,7 +56,7 @@ export default function LayoutWithoutScale() {
       </button>
 
       <div
-        className="resizable bg-neutral relative grid h-[400px] w-[700px] gap-[12px]"
+        className="resizable bg-dark-gray-50 relative grid h-[400px] w-[700px] gap-[12px]"
         style={{
           gridTemplateColumns: 'minmax(0, 1fr)',
           gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr)',
@@ -70,7 +70,7 @@ export default function LayoutWithoutScale() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="bg-emerald z-1"
+              className="z-1 bg-violet-700"
               style={{ gridColumn: '1/2', gridRow: '2/3' }}
             >
               <img
@@ -85,7 +85,7 @@ export default function LayoutWithoutScale() {
             layout
             key="2"
             layoutDependency={show}
-            className="bg-blue z-2 h-full w-full"
+            className="bg-blue-600 z-2 h-full w-full"
             style={{ gridRow: show ? '1 / 2' : '1 / 3', gridColumn: '1 / 2' }}
           >
             <LayoutNoScale layoutDependency={show}>

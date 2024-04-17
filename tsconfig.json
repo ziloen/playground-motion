@@ -30,7 +30,8 @@
     "types": [
       "vite/client",
       "vite-plugin-pages/client-react",
-      "ts-lib-enhance"
+      "ts-lib-enhance",
+      "unplugin-icons/types/react"
     ],
     "paths": {
       "~/*": [

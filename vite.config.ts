@@ -1,8 +1,9 @@
 import react from '@vitejs/plugin-react-swc'
 import { resolve as r } from 'node:path'
 import PostcssPresetEnv from 'postcss-preset-env'
-import Unocss from 'unocss/vite'
+import tailwindcss from 'tailwindcss'
 import AutoImport from 'unplugin-auto-import/vite'
+import Icons from 'unplugin-icons/vite'
 import { defineConfig } from 'vite'
 import Pages from 'vite-plugin-pages'
 
@@ -18,11 +19,14 @@ export default defineConfig(
       },
 
       plugins: [
-        // https://github.com/antfu/unocss
-        // see unocss.config.ts for config
-        Unocss(),
-
         react(),
+
+        Icons({
+          /* options */
+          jsx: 'react',
+          compiler: 'jsx',
+          autoInstall: true
+        }),
 
         // https://github.com/hannoeru/vite-plugin-pages
         Pages({
@@ -54,7 +58,7 @@ export default defineConfig(
 
       css: {
         postcss: {
-          plugins: [PostcssPresetEnv({ stage: 0 })],
+          plugins: [PostcssPresetEnv({ stage: 0 }), tailwindcss()],
         },
       },
 
