@@ -49,7 +49,7 @@ export default function TabView() {
         <motion.div
           layout
           layoutDependency={col}
-          className="absolute size-full bg-[#005E5D]"
+          className="absolute size-full bg-dark-gray-300"
           onLayoutAnimationComplete={onAnimationEnd}
           transition={{ type: 'tween', duration: 0.15, ease: 'easeInOut' }}
           style={{
@@ -67,8 +67,8 @@ export default function TabView() {
             <div
               key={tabName}
               className={clsx(
-                'z-0 flex cursor-pointer select-none transition-colors px-2 py-1',
-                !isActive && 'hover:text-violet-100'
+                'z-0 flex cursor-pointer select-none px-2 py-1 transition-colors',
+                isActive ? 'text-violet-100' : 'hover:text-violet-100'
               )}
               onClick={() => !isActive && onChange(i)}
             >
@@ -79,7 +79,7 @@ export default function TabView() {
         })}
       </div>
 
-      <div className="mt-2 bg-gradient-to-r from-[#9059FF] to-[#0250BC]">
+      <div className="mt-2 bg-gradient-to-r from-violet-400 to-blue-500">
         {/* add relative to hidden overflow when exit anmation */}
         <AutoHeightPanel className="relative overflow-hidden">
           <AnimatePresence mode="popLayout" initial={false}>
