@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { AutoHeightPanel } from '~/components'
 import EmojiBlackCat from '~icons/fluent-emoji/black-cat'
 import EmojiCat from '~icons/fluent-emoji/cat'
@@ -42,7 +43,7 @@ export default function TabView() {
       {/* Back to home */}
       <NavLink to="/">← Home</NavLink>
 
-      <div className="grid-flow-col auto-cols-max relative grid gap-2">
+      <div className="relative grid auto-cols-max grid-flow-col gap-2">
         {/* Active indicator */}
         {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
@@ -59,16 +60,23 @@ export default function TabView() {
         />
 
         {/* Tab labels */}
-        {tabNames.map(([tabName, Comp], i) => (
-          <div
-            key={tabName}
-            className="z-0 flex cursor-pointer select-none px-2 py-1"
-            onClick={() => index !== i && onChange(i)}
-          >
-            <Comp />
-            <div>{tabName}</div>
-          </div>
-        ))}
+        {tabNames.map(([tabName, Comp], i) => {
+          const isActive = i === index
+
+          return (
+            <div
+              key={tabName}
+              className={clsx(
+                'z-0 flex cursor-pointer select-none transition-colors px-2 py-1',
+                !isActive && 'hover:text-violet-100'
+              )}
+              onClick={() => !isActive && onChange(i)}
+            >
+              <Comp />
+              <div>{tabName}</div>
+            </div>
+          )
+        })}
       </div>
 
       <div className="mt-2 bg-gradient-to-r from-[#9059FF] to-[#0250BC]">
@@ -84,7 +92,7 @@ export default function TabView() {
               exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
-              <div className="writing-vertical-lr whitespace-nowrap">{currentTabName}</div>
+              <div className="whitespace-nowrap writing-vertical-lr">{currentTabName}</div>
             </motion.div>
           </AnimatePresence>
         </AutoHeightPanel>
