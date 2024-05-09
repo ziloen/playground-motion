@@ -6,13 +6,16 @@
 export {}
 declare global {
   const AnimatePresence: typeof import('framer-motion')['AnimatePresence']
+  const Fragment: typeof import('react')['Fragment']
   const NavLink: typeof import('react-router-dom')['NavLink']
   const Suspense: typeof import('react')['Suspense']
   const forwardRef: typeof import('react')['forwardRef']
   const motion: typeof import('framer-motion')['motion']
   const useCallback: typeof import('react')['useCallback']
   const useEffect: typeof import('react')['useEffect']
+  const useId: typeof import('react')['useId']
   const useImperativeHandle: typeof import('react')['useImperativeHandle']
+  const useInsertionEffect: typeof import('react')['useInsertionEffect']
   const useLayoutEffect: typeof import('react')['useLayoutEffect']
   const useMemo: typeof import('react')['useMemo']
   const useNavigate: typeof import('react-router-dom')['useNavigate']

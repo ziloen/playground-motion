@@ -1,4 +1,4 @@
-import { LayoutNoScale } from '~/components'
+import { LayoutNoScale, LayoutNoScale2 } from '~/components'
 
 export default function LayoutWithoutScale() {
   const [show, setShow] = useState(false)
@@ -88,13 +88,13 @@ export default function LayoutWithoutScale() {
             className="bg-blue-600 z-2 h-full w-full"
             style={{ gridRow: show ? '1 / 2' : '1 / 3', gridColumn: '1 / 2' }}
           >
-            <LayoutNoScale layoutDependency={show}>
+            <LayoutNoScale2 layoutDependency={show}>
               {/* This image will not be scaled during layout animation */}
               <img
                 src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
                 className="h-full w-full object-contain object-center"
               />
-            </LayoutNoScale>
+            </LayoutNoScale2>
           </motion.div>
         </AnimatePresence>
       </div>

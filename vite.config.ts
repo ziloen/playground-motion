@@ -25,7 +25,7 @@ export default defineConfig(
           /* options */
           jsx: 'react',
           compiler: 'jsx',
-          autoInstall: true
+          autoInstall: true,
         }),
 
         // https://github.com/hannoeru/vite-plugin-pages
@@ -38,15 +38,18 @@ export default defineConfig(
           imports: [
             {
               react: [
-                'useState',
-                'useEffect',
-                'useMemo',
-                'useLayoutEffect',
-                'useCallback',
-                'useRef',
-                'forwardRef',
-                'useImperativeHandle',
+                'Fragment',
                 'Suspense',
+                'forwardRef',
+                'useCallback',
+                'useEffect',
+                'useId',
+                'useImperativeHandle',
+                'useInsertionEffect',
+                'useLayoutEffect',
+                'useMemo',
+                'useRef',
+                'useState',
               ],
               'react-router-dom': ['useNavigate', 'useParams', 'NavLink', 'useRoutes'],
               'framer-motion': ['motion', 'AnimatePresence'],
