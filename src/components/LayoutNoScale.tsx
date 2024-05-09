@@ -40,10 +40,10 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
       layout="position"
       layoutDependency={layoutDependency}
       ref={ref}
-      className="relative h-full h-full"
+      className="relative size-full"
     >
       <motion.div
-        className="absolute h-full w-full"
+        className="absolute size-full"
         // animate width and height instead of scale
         animate={controls}
       >
