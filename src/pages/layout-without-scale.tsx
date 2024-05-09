@@ -1,4 +1,4 @@
-import { LayoutNoScale, LayoutNoScale2 } from '~/components'
+import { LayoutNoScale } from '~/components'
 
 export default function LayoutWithoutScale() {
   const [show, setShow] = useState(false)
@@ -12,7 +12,7 @@ export default function LayoutWithoutScale() {
     >
       <NavLink to="/">← Home</NavLink>
       <div
-        className="resizable bg-neutral grid h-[400px] w-[700px] gap-[12px]"
+        className="bg-dark-gray-300 grid h-[400px] w-[700px] gap-[12px] resizable"
         style={{
           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
           gridTemplateRows: 'minmax(0, 1fr)',
@@ -37,7 +37,7 @@ export default function LayoutWithoutScale() {
             key="2"
             layout
             layoutDependency={show}
-            className="bg-blue z-2 h-full w-full"
+            className="bg-blue-800 z-2 h-full w-full"
             style={{ gridColumn: show ? '2 / 3' : '1 / 3', gridRow: '1 / 2' }}
           >
             <LayoutNoScale layoutDependency={show}>
@@ -56,7 +56,7 @@ export default function LayoutWithoutScale() {
       </button>
 
       <div
-        className="resizable bg-dark-gray-50 relative grid h-[400px] w-[700px] gap-[12px]"
+        className="relative grid h-[400px] w-[700px] gap-[12px] bg-dark-gray-50 resizable"
         style={{
           gridTemplateColumns: 'minmax(0, 1fr)',
           gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr)',
@@ -85,16 +85,16 @@ export default function LayoutWithoutScale() {
             layout
             key="2"
             layoutDependency={show}
-            className="bg-blue-600 z-2 h-full w-full"
+            className="z-2 h-full w-full bg-blue-600"
             style={{ gridRow: show ? '1 / 2' : '1 / 3', gridColumn: '1 / 2' }}
           >
-            <LayoutNoScale2 layoutDependency={show}>
+            <LayoutNoScale layoutDependency={show}>
               {/* This image will not be scaled during layout animation */}
               <img
                 src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
                 className="h-full w-full object-contain object-center"
               />
-            </LayoutNoScale2>
+            </LayoutNoScale>
           </motion.div>
         </AnimatePresence>
       </div>

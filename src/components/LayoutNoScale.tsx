@@ -7,32 +7,51 @@ type Props = PropsWithChildren<{
 
 /**
  * Prevents scale of children during layout animation
- *
- * TODO: Only animate width and height when laout animation is triggered
  */
 export function LayoutNoScale({ children, layoutDependency }: Props) {
   /** container element */
   const ref = useRef<HTMLDivElement>(null!)
   const controls = useAnimation()
+  const size = useRef<{ width: number; height: number } | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
-  // animate child width and height when container size change
-  useEffect(() => {
-    const ro = new ResizeObserver(([entry]) => {
-      const size = entry.contentBoxSize[0]
-      if (!size) return
+  useInsertionEffect(() => {
+    if (!ref.current) return
+    size.current = {
+      width: ref.current.offsetWidth,
+      height: ref.current.offsetHeight,
+    }
+  }, [layoutDependency])
 
-      const { inlineSize, blockSize } = size
+  useLayoutEffect(() => {
+    const newHeight = ref.current.offsetHeight
+    const newWidth = ref.current.offsetWidth
 
-      controls.start({
-        width: inlineSize,
-        height: blockSize,
+    if (size.current) {
+      const animating = abortControllerRef.current
+      const ac = new AbortController()
+
+      if (animating) {
+        animating.abort()
+        controls.stop()
+      } else {
+        controls.set(size.current)
+      }
+
+      abortControllerRef.current = ac
+
+      controls.start({ width: newWidth, height: newHeight }).then(() => {
+        if (ac.signal.aborted) return
+        abortControllerRef.current = null
+        controls.set({ width: '100%', height: '100%' })
       })
-    })
+    }
 
-    ro.observe(ref.current)
-
-    return () => ro.disconnect()
-  }, [])
+    size.current = {
+      width: newWidth,
+      height: newHeight,
+    }
+  }, [layoutDependency])
 
   return (
     <motion.div
@@ -55,38 +74,32 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
 
 /**
  * Another implementation of LayoutNoScale
+ *
+ * issue: layout animation trigged when resize
  */
-export function LayoutNoScale2({ children, layoutDependency }: Props) {
+function LayoutNoScale2({ children, layoutDependency }: Props) {
   /** container element */
   const ref = useRef<HTMLDivElement>(null!)
   const controls = useAnimation()
-  const size = useRef<{ width: number; height: number } | null>(null)
 
-  useInsertionEffect(() => {
-    if (!ref.current) return
-    size.current = {
-      width: ref.current.offsetWidth,
-      height: ref.current.offsetHeight,
-    }
-  }, [layoutDependency])
+  // animate child width and height when container size change
+  useEffect(() => {
+    const ro = new ResizeObserver(([entry]) => {
+      const size = entry.contentBoxSize[0]
+      if (!size) return
 
-  useLayoutEffect(() => {
-    const newHeight = ref.current.offsetHeight
-    const newWidth = ref.current.offsetWidth
+      const { inlineSize, blockSize } = size
 
-    if (size.current) {
-      controls.stop()
-      controls.set(size.current)
-      controls.start({ width: newWidth, height: newHeight }).then(() => {
-        controls.set({ width: '100%', height: '100%' })
+      controls.start({
+        width: inlineSize,
+        height: blockSize,
       })
-    }
+    })
 
-    size.current = {
-      width: newWidth,
-      height: newHeight,
-    }
-  }, [layoutDependency])
+    ro.observe(ref.current)
+
+    return () => ro.disconnect()
+  }, [])
 
   return (
     <motion.div
