@@ -17,7 +17,13 @@ const itemVariants: Variants = {
 
 export default function Index() {
   const flattenedRoutes = useMemo(() => {
-    return routes.map(route => route.path!).filter(route => !['*', '/', ':'].includes(route[0]))
+    return (
+      routes
+        .map(route => route.path!)
+        .filter(route => !['*', '/', ':'].includes(route[0]))
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        .toSorted(new Intl.Collator('en').compare)
+    )
   }, [])
 
   return (
