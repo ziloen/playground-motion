@@ -1,6 +1,6 @@
 import { MotionConfig } from 'framer-motion'
 import { Suspense } from 'react'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import routes from '~react-pages'
 
 function Routes() {
@@ -9,7 +9,7 @@ function Routes() {
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter basename='/playground-framer-motion'>
       <MotionConfig transition={{ type: 'tween' }}>
         <Suspense>
           <AnimatePresence mode="wait" initial={false}>
@@ -17,6 +17,6 @@ export default function App() {
           </AnimatePresence>
         </Suspense>
       </MotionConfig>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
