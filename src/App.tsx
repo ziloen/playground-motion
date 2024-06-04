@@ -9,7 +9,7 @@ function Routes() {
 
 export default function App() {
   return (
-    <BrowserRouter basename='/playground-framer-motion'>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <MotionConfig transition={{ type: 'tween' }}>
         <Suspense>
           <AnimatePresence mode="wait" initial={false}>
