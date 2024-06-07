@@ -4,6 +4,16 @@
     {
       "name": "@apply",
       "description": "@apply tailwindcss classes"
+    },
+    {
+      "name": "@tailwind",
+      "description": "tailwind directives",
+      "references": [
+        {
+          "name": "tailwind doc",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#tailwind"
+        }
+      ]
     }
   ]
 }
