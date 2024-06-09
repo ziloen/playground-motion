@@ -5,13 +5,11 @@ import routes from '~react-pages'
 const itemVariants: Variants = {
   initial: {
     opacity: 0,
-    x: -20,
-    filter: 'blur(5px) grayscale(1)',
+    z: '-3em',
   },
   animate: {
     opacity: 1,
-    x: 0,
-    filter: 'blur(0)',
+    z: 0,
   },
 }
 
@@ -37,7 +35,11 @@ export default function Index() {
       <AnimatePresence initial>
         <motion.div
           className="mt-[12px] flex flex-col items-start gap-[4px]"
-          transition={{ staggerChildren: 0.06 }}
+          style={{
+            perspective: '1000px',
+            perspectiveOrigin: 'center 50%',
+          }}
+          transition={{ staggerChildren: 0.1 }}
           initial="initial"
           animate="animate"
         >
@@ -45,10 +47,16 @@ export default function Index() {
             <motion.div
               key={route}
               variants={itemVariants}
+              style={{ transformOrigin: 'center bottom' }}
               transition={{
                 type: 'tween',
-                ease: 'easeOut',
-                duration: 0.15,
+                ease: 'easeInOut',
+                opacity: {
+                  duration: 0.4,
+                },
+                z: {
+                  duration: 0.5,
+                },
               }}
             >
               <NavLink key={route} to={route}>
