@@ -1,4 +1,5 @@
 import type { Variants } from 'framer-motion'
+import type { RouteObject } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 import routes from '~react-pages'
 
@@ -16,8 +17,7 @@ const itemVariants: Variants = {
 export default function Index() {
   const flattenedRoutes = useMemo(() => {
     return (
-      routes
-        .map(route => route.path!)
+      flatRoutes(routes)
         .filter(route => !['*', '/', ':'].includes(route[0]))
         // eslint-disable-next-line @typescript-eslint/unbound-method
         .toSorted(new Intl.Collator('en').compare)
@@ -68,4 +68,13 @@ export default function Index() {
       </AnimatePresence>
     </motion.div>
   )
+}
+
+function flatRoutes(routes: RouteObject[], parentPath: string = ''): string[] {
+  return routes.flatMap(route => {
+    if (typeof route.path !== 'string') return []
+    const path = parentPath ? `${parentPath}/${route.path}` : route.path
+
+    return route.children ? flatRoutes(route.children, path) : path
+  })
 }
