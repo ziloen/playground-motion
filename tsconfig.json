@@ -39,9 +39,17 @@
       ]
     }
   },
+  "include": [
+    "src"
+  ],
   "exclude": [
     "dist",
     "node_modules",
     "public"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
