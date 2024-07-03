@@ -10,8 +10,15 @@ import Pages from 'vite-plugin-pages'
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
 
+  let base = env.VITE_BASE_URL
+
+  if (process.env.GITHUB_REPOSITORY) {
+    const slashIndex = process.env.GITHUB_REPOSITORY.indexOf('/')
+    base = process.env.GITHUB_REPOSITORY.slice(slashIndex)
+  }
+
   return {
-    base: env.VITE_BASE_URL,
+    base,
     resolve: {
       alias: {
         '~': r('src'),
