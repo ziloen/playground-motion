@@ -7,7 +7,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "build": "vite build",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@wai-ri/core": "^0.0.101",
@@ -18,12 +19,12 @@
     "framer-motion": "11.0.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.24.0"
+    "react-router-dom": "^6.24.1"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.36",
     "@iconify-json/fluent-emoji": "^1.1.18",
-    "@iconify/json": "2.2.224",
+    "@iconify/json": "2.2.225",
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "@types/react": "^18.3.3",
@@ -32,6 +33,7 @@
     "@ziloen/eslint-config": "^0.1.38",
     "@ziloen/tailwind-config": "1.1.13",
     "eslint": "9.6.0",
+    "patch-package": "8.0.0",
     "postcss": "^8.4.39",
     "postcss-preset-env": "^9.5.15",
     "prettier": "3.3.2",
