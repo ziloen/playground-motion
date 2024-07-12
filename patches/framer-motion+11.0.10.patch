@@ -1,0 +1,27 @@
+diff --git a/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs b/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs
+index c111f36..35f9009 100644
+--- a/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs
++++ b/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs
+@@ -161,6 +161,7 @@ const AnimatePresence = ({ children, custom, initial = true, onExitComplete, exi
+         childrenToRender.length > 1) {
+         console.warn(`You're attempting to animate multiple children within AnimatePresence, but its mode is set to "wait". This will lead to odd visual behaviour.`);
+     }
++    childrenToRender = childrenToRender.filter(child => child.props.isPresent !== undefined)
+     return (React.createElement(React.Fragment, null, exitingChildren.size
+         ? childrenToRender
+         : childrenToRender.map((child) => cloneElement(child))));
+diff --git a/node_modules/framer-motion/dist/es/projection/node/HTMLProjectionNode.mjs b/node_modules/framer-motion/dist/es/projection/node/HTMLProjectionNode.mjs
+index 95f8646..cb62533 100644
+--- a/node_modules/framer-motion/dist/es/projection/node/HTMLProjectionNode.mjs
++++ b/node_modules/framer-motion/dist/es/projection/node/HTMLProjectionNode.mjs
+@@ -12,7 +12,9 @@ const HTMLProjectionNode = createProjectionNode({
+     defaultParent: () => {
+         if (!rootProjectionNode.current) {
+             const documentNode = new DocumentProjectionNode({});
+-            documentNode.mount(window);
++            if (typeof window !== "undefined") {
++              documentNode.mount(window);
++            }
+             documentNode.setOptions({ layoutScroll: true });
+             rootProjectionNode.current = documentNode;
+         }
