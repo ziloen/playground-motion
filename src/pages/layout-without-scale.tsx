@@ -12,7 +12,7 @@ export default function LayoutWithoutScale() {
     >
       <NavLink to="/">← Home</NavLink>
       <div
-        className="bg-dark-gray-300 grid h-[400px] w-[700px] gap-[12px] resizable"
+        className="grid h-[400px] w-[700px] gap-[12px] bg-dark-gray-300 resizable"
         style={{
           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
           gridTemplateRows: 'minmax(0, 1fr)',
@@ -31,24 +31,24 @@ export default function LayoutWithoutScale() {
               style={{ gridColumn: '1 / 2', gridRow: '1/2' }}
             />
           )}
-
-          {/* Out container will be scaled cause layout change */}
-          <motion.div
-            key="2"
-            layout
-            layoutDependency={show}
-            className="bg-blue-800 z-2 h-full w-full"
-            style={{ gridColumn: show ? '2 / 3' : '1 / 3', gridRow: '1 / 2' }}
-          >
-            <LayoutNoScale layoutDependency={show}>
-              {/* This image will not be scaled during layout animation */}
-              <img
-                src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
-                className="h-full w-full object-contain object-center"
-              />
-            </LayoutNoScale>
-          </motion.div>
         </AnimatePresence>
+
+        {/* Out container will be scaled cause layout change */}
+        <motion.div
+          key="2"
+          layout
+          layoutDependency={show}
+          className="z-2 h-full w-full bg-blue-800"
+          style={{ gridColumn: show ? '2 / 3' : '1 / 3', gridRow: '1 / 2' }}
+        >
+          <LayoutNoScale layoutDependency={show}>
+            {/* This image will not be scaled during layout animation */}
+            <img
+              src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+              className="h-full w-full object-contain object-center"
+            />
+          </LayoutNoScale>
+        </motion.div>
       </div>
 
       <button className="btn" onClick={() => setShow(s => !s)}>
@@ -79,24 +79,24 @@ export default function LayoutWithoutScale() {
               />
             </motion.div>
           )}
-
-          {/* Out container will be scaled cause layout change */}
-          <motion.div
-            layout
-            key="2"
-            layoutDependency={show}
-            className="z-2 h-full w-full bg-blue-600"
-            style={{ gridRow: show ? '1 / 2' : '1 / 3', gridColumn: '1 / 2' }}
-          >
-            <LayoutNoScale layoutDependency={show}>
-              {/* This image will not be scaled during layout animation */}
-              <img
-                src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
-                className="h-full w-full object-contain object-center"
-              />
-            </LayoutNoScale>
-          </motion.div>
         </AnimatePresence>
+
+        {/* Out container will be scaled cause layout change */}
+        <motion.div
+          layout
+          key="2"
+          layoutDependency={show}
+          className="z-2 h-full w-full bg-blue-600"
+          style={{ gridRow: show ? '1 / 2' : '1 / 3', gridColumn: '1 / 2' }}
+        >
+          <LayoutNoScale layoutDependency={show}>
+            {/* This image will not be scaled during layout animation */}
+            <img
+              src="https://images.unsplash.com/photo-1547628641-ec2098bb5812?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+              className="h-full w-full object-contain object-center"
+            />
+          </LayoutNoScale>
+        </motion.div>
       </div>
     </motion.div>
   )
