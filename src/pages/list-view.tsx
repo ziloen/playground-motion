@@ -1,21 +1,30 @@
-import { getPostListApi, Post } from '~/api/post'
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { Post } from '~/api/post'
+import { getPostListApi } from '~/api/post'
 
 export default function ListView() {
   const [searchVal, setSearchVal] = useState()
-  const [postList, setPostList] = useState<Post[]>([])
   const [page, setPage] = useState(1)
   const [listKey, setListKey] = useState('')
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    getPostListApi({ page: page, pageSize: 10 }).then(res => {
-      console.log(res)
-      setPostList(res)
+  const { data = [], isFetching } = useQuery({
+    queryKey: ['postList', { page }],
+    queryFn: () => getPostListApi({ page: page, pageSize: 10 }),
+    placeholderData: keepPreviousData,
+    staleTime: Infinity,
+  })
+
+  useLayoutEffect(() => {
+    if (!isFetching) {
       setListKey(crypto.randomUUID())
-    })
-  }, [page])
+    }
+  }, [isFetching])
 
   function deletePost(id: number) {
-    setPostList(postList.filter(post => post.id !== id))
+    queryClient.setQueryData(['postList', { page }], (data: Post[] | undefined) =>
+      data?.filter(post => post.id !== id)
+    )
   }
 
   return (
@@ -29,7 +38,7 @@ export default function ListView() {
 
       <div className="flex h-full flex-col overflow-y-auto overflow-x-hidden" key={listKey}>
         <AnimatePresence initial={false}>
-          {postList.map(post => (
+          {data.map(post => (
             <motion.div
               key={post.id}
               layout
@@ -50,6 +59,7 @@ export default function ListView() {
       </div>
 
       <div className="flex gap-2">
+        {page}
         <button
           onClick={() => {
             setPage(page === 1 ? 1 : page - 1)
