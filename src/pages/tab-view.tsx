@@ -43,19 +43,22 @@ export default function TabView() {
       {/* Back to home */}
       <NavLink to="/">← Home</NavLink>
 
-      <div className="relative grid auto-cols-max grid-flow-col gap-2">
+      <div className="relative grid w-fit auto-cols-max grid-flow-col gap-2 rounded-full bg-dark-gray-500 p-1">
         {/* Active indicator */}
         {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
           layout
           layoutDependency={col}
-          className="absolute size-full bg-dark-gray-300"
+          className="absolute size-full bg-dark-gray-50"
           onLayoutAnimationComplete={onAnimationEnd}
           transition={{ type: 'tween', duration: 0.15, ease: 'easeInOut' }}
           style={{
             gridColumn: col,
-            gridRow: 1,
+            gridRow: '1 / span 1',
             borderRadius: 9999,
+            // https://github.com/framer/motion/issues/1972
+            // fix layout animation bug
+            originY: '0px',
           }}
         />
 
@@ -67,7 +70,7 @@ export default function TabView() {
             <div
               key={tabName}
               className={clsx(
-                'z-0 flex cursor-pointer select-none px-2 py-1 transition-colors',
+                'z-0 flex cursor-pointer select-none items-center gap-1 px-2 py-1 transition-colors',
                 isActive ? 'text-violet-100' : 'hover:text-violet-100'
               )}
               onClick={() => !isActive && onChange(i)}
