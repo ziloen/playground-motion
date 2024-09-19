@@ -58,7 +58,12 @@ export default defineConfig(({ command, mode }) => {
               'useRef',
               'useState',
             ],
-            'react-router-dom': ['useNavigate', 'useParams', 'NavLink', 'useRoutes'],
+            'react-router-dom': [
+              'useNavigate',
+              'useParams',
+              'NavLink',
+              'useRoutes',
+            ],
             'framer-motion': ['motion', 'AnimatePresence'],
           },
         ],
@@ -68,7 +73,19 @@ export default defineConfig(({ command, mode }) => {
 
     css: {
       postcss: {
-        plugins: [PostcssPresetEnv({ stage: 0 }), tailwindcss()],
+        plugins: [
+          PostcssPresetEnv({
+            stage: 0,
+            features: {
+              // do not transform logical properties
+              'float-clear-logical-values': false,
+              'logical-overflow': false,
+              'logical-overscroll-behavior': false,
+              'logical-properties-and-values': false,
+            },
+          }),
+          tailwindcss(),
+        ],
       },
     },
 

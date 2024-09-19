@@ -34,6 +34,28 @@ export default function TabView() {
     setCol(`${index + 1} / span 1`)
   }
 
+  function onScroll(e: React.WheelEvent<HTMLDivElement>) {
+    const isVertical = !e.shiftKey && e.deltaY !== 0
+
+    if (!isVertical) return
+
+    const target = e.currentTarget
+
+    if (
+      (target.scrollLeft >= target.scrollWidth && e.deltaY > 0) ||
+      (target.scrollLeft <= 0 && e.deltaY < 0)
+    ) {
+      return
+    }
+
+    const delta = e.deltaY
+
+    e.preventDefault()
+
+    // FIXME: scroll not smooth like native
+    target.scrollLeft += delta
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -43,7 +65,12 @@ export default function TabView() {
       {/* Back to home */}
       <NavLink to="/">← Home</NavLink>
 
-      <div className="relative grid w-fit auto-cols-max grid-flow-col gap-2 rounded-full bg-dark-gray-500 p-1">
+      <div
+        className="relative grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full bg-dark-gray-500 p-1 scrollbar-none"
+        // change vertical scroll to horizontal scroll
+        onWheel={onScroll}
+        // TODO: add drag to scroll x axis
+      >
         {/* Active indicator */}
         {/* or use layoutId + classsName="absolute inset-0" */}
         <motion.div
@@ -95,7 +122,9 @@ export default function TabView() {
               exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
-              <div className="whitespace-nowrap writing-vertical-lr">{currentTabName}</div>
+              <div className="whitespace-nowrap writing-vertical-lr">
+                {currentTabName}
+              </div>
             </motion.div>
           </AnimatePresence>
         </AutoHeightPanel>
