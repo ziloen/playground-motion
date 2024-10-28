@@ -20,8 +20,6 @@
   "emmet.extensionsPath": [
     ".vscode/emmet"
   ],
-  // due to this issue https://github.com/microsoft/vscode/issues/179355, we need to set this to top
-  // "editor.snippetSuggestions": "top",
   "eslint.format.enable": false,
   "prettier.enable": true
 }
