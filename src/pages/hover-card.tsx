@@ -11,21 +11,20 @@ export default function HoverCard() {
   const dy = useSpring(dyMV, { damping: 15 })
 
   return (
-    <div>
+    <div className="px-8 pt-8">
       <motion.div
         ref={ref}
         onMouseEnter={(e) => {
-          enterX.current = e.clientX
-          enterY.current = e.clientY
+          enterX.current = e.nativeEvent.x
+          enterY.current = e.nativeEvent.y
         }}
         onMouseMove={(e) => {
           if (!ref.current) return
           const dx = e.clientX - enterX.current
           const dy = e.clientY - enterY.current
-          const { left, top } = ref.current.getBoundingClientRect()
-          const factor = -0.125
-          const x = left + dx * factor
-          const y = top + dy * factor * 1.2
+          const factor = -0.15
+          const x = dx * factor
+          const y = dy * factor * 1.2
 
           dxMV.set(x)
           dyMV.set(y)
