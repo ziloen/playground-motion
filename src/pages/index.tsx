@@ -6,7 +6,7 @@ import routes from '~react-pages'
 const itemVariants: Variants = {
   initial: {
     opacity: 0,
-    z: '-3em',
+    z: '-1em',
   },
   animate: {
     opacity: 1,
@@ -18,7 +18,7 @@ export default function Index() {
   const flattenedRoutes = useMemo(() => {
     return (
       flatRoutes(routes)
-        .filter(route => !['*', '/', ':'].includes(route[0]))
+        .filter((route) => !['*', '/', ':'].includes(route[0]))
         // eslint-disable-next-line @typescript-eslint/unbound-method
         .toSorted(new Intl.Collator('en').compare)
     )
@@ -39,27 +39,28 @@ export default function Index() {
             perspective: '1000px',
             perspectiveOrigin: 'center 50%',
           }}
-          transition={{ staggerChildren: 0.1 }}
+          transition={{ staggerChildren: 0.05 }}
           initial="initial"
           animate="animate"
         >
-          {flattenedRoutes.map((route, i) => (
+          {flattenedRoutes.map((route) => (
             <motion.div
               key={route}
               variants={itemVariants}
               style={{ transformOrigin: 'center bottom' }}
               transition={{
-                type: 'tween',
-                ease: 'easeInOut',
                 opacity: {
-                  duration: 0.4,
+                  type: 'tween',
+                  duration: 0.15,
+                  ease: 'easeOut',
                 },
                 z: {
-                  duration: 0.5,
+                  type: 'spring',
+                  damping: 10,
                 },
               }}
             >
-              <NavLink key={route} to={route}>
+              <NavLink key={route} to={route} className="text-lg">
                 {route}
               </NavLink>
             </motion.div>
@@ -71,7 +72,7 @@ export default function Index() {
 }
 
 function flatRoutes(routes: RouteObject[], parentPath: string = ''): string[] {
-  return routes.flatMap(route => {
+  return routes.flatMap((route) => {
     if (typeof route.path !== 'string') return []
     const path = parentPath ? `${parentPath}/${route.path}` : route.path
 

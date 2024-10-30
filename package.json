@@ -14,7 +14,7 @@
     "@wai-ri/core": "^0.0.103",
     "@wai-ri/react": "^0.0.103",
     "ahooks": "^3.8.1",
-    "antd": "^5.21.5",
+    "antd": "^5.21.6",
     "axios": "1.7.7",
     "clsx": "^2.1.1",
     "framer-motion": "11.11.10",
@@ -26,7 +26,7 @@
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.4",
     "@iconify-json/fluent-emoji": "^1.2.1",
-    "@iconify/json": "2.2.264",
+    "@iconify/json": "2.2.265",
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "@types/react": "^18.3.12",
