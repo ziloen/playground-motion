@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { MotionConfig } from 'framer-motion'
+import { MotionConfig } from 'motion/react'
 import { Suspense } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import routes from '~react-pages'

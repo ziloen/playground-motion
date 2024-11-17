@@ -1,4 +1,4 @@
-import { useAnimation } from 'framer-motion'
+import { useAnimation } from 'motion/react'
 import type { PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
@@ -6,7 +6,11 @@ type Props = PropsWithChildren<{
   innerClassName?: string
 }>
 
-export function AutoHeightPanel({ children, className, innerClassName }: Props) {
+export function AutoHeightPanel({
+  children,
+  className,
+  innerClassName,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null!)
   const controls = useAnimation()
 

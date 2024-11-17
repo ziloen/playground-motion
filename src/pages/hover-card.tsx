@@ -1,4 +1,4 @@
-import { useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useMotionValue, useSpring, useTransform } from 'motion/react'
 
 export default function HoverCard() {
   const ref = useRef<HTMLDivElement>(null)

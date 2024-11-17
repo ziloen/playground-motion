@@ -64,7 +64,7 @@ export default defineConfig(({ command, mode }) => {
               'NavLink',
               'useRoutes',
             ],
-            'framer-motion': ['motion', 'AnimatePresence'],
+            'motion/react': ['motion', 'AnimatePresence'],
           },
         ],
         dts: 'src/types/auto-imports.d.ts',
@@ -91,7 +91,7 @@ export default defineConfig(({ command, mode }) => {
 
     optimizeDeps: {
       include: [
-        'framer-motion',
+        'motion',
         'ahooks',
         'ahooks/lib/utils/domTarget',
         'ahooks/lib/utils/useEffectWithTarget',
