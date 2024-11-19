@@ -91,10 +91,11 @@ export default defineConfig(({ command, mode }) => {
 
     optimizeDeps: {
       include: [
-        'motion',
         'ahooks',
         'ahooks/lib/utils/domTarget',
         'ahooks/lib/utils/useEffectWithTarget',
+        'clsx',
+        'motion',
       ],
     },
   }
