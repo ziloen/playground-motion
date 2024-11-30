@@ -56,6 +56,7 @@ export default function Index() {
                 },
                 z: {
                   type: 'spring',
+                  duration: 0.15,
                   damping: 10,
                 },
               }}
