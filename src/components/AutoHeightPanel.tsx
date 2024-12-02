@@ -41,3 +41,8 @@ export function AutoHeightPanel({
     </motion.div>
   )
 }
+
+/**
+ * TODO:With dependency
+ */
+function TransitionHeight() {}

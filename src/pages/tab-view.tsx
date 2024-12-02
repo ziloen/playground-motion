@@ -78,7 +78,7 @@ export default function TabView() {
           layoutDependency={col}
           className="absolute size-full bg-dark-gray-50"
           onLayoutAnimationComplete={onAnimationEnd}
-          transition={{ type: 'tween', duration: 0.15, ease: 'easeInOut' }}
+          transition={{ type: 'spring', duration: 0.15, bounce: 0.1 }}
           style={{
             gridColumn: col,
             gridRow: '1 / span 1',

@@ -20,12 +20,16 @@ export default function Docs() {
       >
         <div className="col-[title]">type:</div>
         {['inertia', 'just', 'keyframes', 'spring', 'tween'].map((v) => (
-          <span className="col-[input]">{v}</span>
+          <span className="col-[input]" key={v}>
+            {v}
+          </span>
         ))}
 
         <div className="col-[title]">mode:</div>
         {['mass', 'duration'].map((v) => (
-          <span className="col-[input]">{v}</span>
+          <span className="col-[input]" key={v}>
+            {v}
+          </span>
         ))}
 
         <div className="col-[title]">ease:</div>
