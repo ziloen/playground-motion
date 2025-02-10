@@ -10,7 +10,6 @@ declare global {
   const Fragment: typeof import('react')['Fragment']
   const NavLink: typeof import('react-router-dom')['NavLink']
   const Suspense: typeof import('react')['Suspense']
-  const forwardRef: typeof import('react')['forwardRef']
   const motion: typeof import('motion/react')['motion']
   const useCallback: typeof import('react')['useCallback']
   const useEffect: typeof import('react')['useEffect']
