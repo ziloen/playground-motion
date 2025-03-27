@@ -16,10 +16,11 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
   const abortControllerRef = useRef<AbortController | null>(null)
 
   useInsertionEffect(() => {
-    if (!ref.current) return
+    const el = ref.current
+    if (!el) return
     size.current = {
-      width: ref.current.offsetWidth,
-      height: ref.current.offsetHeight,
+      width: el.offsetWidth,
+      height: el.offsetHeight,
     }
   }, [layoutDependency])
 
@@ -29,7 +30,7 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
 
     if (size.current) {
       const animating = abortControllerRef.current
-      const ac = new AbortController()
+      const ac = (abortControllerRef.current = new AbortController())
 
       if (animating) {
         animating.abort()
@@ -38,11 +39,11 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
         controls.set(size.current)
       }
 
-      abortControllerRef.current = ac
-
       controls.start({ width: newWidth, height: newHeight }).then(() => {
         if (ac.signal.aborted) return
         abortControllerRef.current = null
+
+        // FIXME: Not working sometimes
         controls.set({ width: '100%', height: '100%' })
       })
     }
@@ -59,6 +60,7 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
       layout="position"
       layoutDependency={layoutDependency}
       ref={ref}
+      test-id="layout-no-scale"
       className="size-full"
     >
       <motion.div
