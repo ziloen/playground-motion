@@ -1,6 +1,6 @@
 import type { Transition } from 'motion/react'
 import { useAnimation } from 'motion/react'
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren, RefCallback } from 'react'
 
 type Props = PropsWithChildren<{
   className?: string
@@ -14,10 +14,11 @@ export function AutoHeightPanel({
   innerClassName,
   transition,
 }: Props) {
-  const ref = useRef<HTMLDivElement>(null!)
   const controls = useAnimation()
 
-  useEffect(() => {
+  const ref = useCallback<RefCallback<HTMLElement>>((el) => {
+    if (!el) return
+
     const ro = new ResizeObserver(([entry]) => {
       const size = entry.contentBoxSize[0]
       if (!size) return
@@ -27,7 +28,7 @@ export function AutoHeightPanel({
       })
     })
 
-    ro.observe(ref.current)
+    ro.observe(el)
 
     return () => ro.disconnect()
   }, [])
