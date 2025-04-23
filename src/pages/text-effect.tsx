@@ -1,4 +1,3 @@
-
 export default function TextEffext() {
   return (
     <motion.div
@@ -26,12 +25,12 @@ export default function TextEffext() {
   )
 }
 
-const t1 = 'Hello'.split('').map(l => ({
+const t1 = 'Hello'.split('').map((l) => ({
   id: crypto.randomUUID(),
   letter: l,
 }))
 
-const t2 = 'World'.split('').map(l => ({
+const t2 = 'World'.split('').map((l) => ({
   id: crypto.randomUUID(),
   letter: l,
 }))

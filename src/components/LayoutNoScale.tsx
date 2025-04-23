@@ -40,11 +40,13 @@ export function LayoutNoScale({ children, layoutDependency }: Props) {
       }
 
       controls.start({ width: newWidth, height: newHeight }).then(() => {
-        if (ac.signal.aborted) return
-        abortControllerRef.current = null
+        // FIXME: Not working sometimes if set immediately
+        requestAnimationFrame(() => {
+          if (ac.signal.aborted) return
+          abortControllerRef.current = null
 
-        // FIXME: Not working sometimes
-        controls.set({ width: '100%', height: '100%' })
+          controls.set({ width: '100%', height: '100%' })
+        })
       })
     }
 

@@ -15,11 +15,15 @@ export default function DND() {
       style={{ scale }}
       dragConstraints={useRef(document.body)}
       dragElastic={1}
-      onWheel={e => {
+      onWheel={(e) => {
         if (e.deltaY > 0) {
-          setScale(scale => Math.min(Math.max(scale - SCALE_STEP, MIN_SCALE), MAX_SCALE))
+          setScale((scale) =>
+            Math.min(Math.max(scale - SCALE_STEP, MIN_SCALE), MAX_SCALE),
+          )
         } else {
-          setScale(scale => Math.min(Math.max(scale + SCALE_STEP, MIN_SCALE), MAX_SCALE))
+          setScale((scale) =>
+            Math.min(Math.max(scale + SCALE_STEP, MIN_SCALE), MAX_SCALE),
+          )
         }
       }}
       className="size-[100px] rounded-full bg-green-700"

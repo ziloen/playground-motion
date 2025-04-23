@@ -40,7 +40,7 @@ export default function HoverCard() {
             'url(https://w.wallhaven.cc/full/d6/wallhaven-d6y12l.jpg)',
           backgroundSize: '200% auto',
           backgroundPosition: useTransform(
-            () => `calc(50% + ${dx.get()}px) calc(50% + ${dy.get()}px)`
+            () => `calc(50% + ${dx.get()}px) calc(50% + ${dy.get()}px)`,
           ),
         }}
       >

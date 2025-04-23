@@ -1,4 +1,8 @@
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import type { Post } from '~/api/post'
 import { getPostListApi } from '~/api/post'
 
@@ -22,8 +26,9 @@ export default function ListView() {
   }, [isFetching])
 
   function deletePost(id: number) {
-    queryClient.setQueryData(['postList', { page }], (data: Post[] | undefined) =>
-      data?.filter(post => post.id !== id)
+    queryClient.setQueryData(
+      ['postList', { page }],
+      (data: Post[] | undefined) => data?.filter((post) => post.id !== id),
     )
   }
 
@@ -36,9 +41,12 @@ export default function ListView() {
     >
       <NavLink to="/">← Home</NavLink>
 
-      <div className="flex h-full flex-col overflow-y-auto overflow-x-hidden" key={listKey}>
+      <div
+        className="flex h-full flex-col overflow-y-auto overflow-x-hidden"
+        key={listKey}
+      >
         <AnimatePresence initial={false}>
-          {data.map(post => (
+          {data.map((post) => (
             <motion.div
               key={post.id}
               layout

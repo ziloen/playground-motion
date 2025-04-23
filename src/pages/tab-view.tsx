@@ -98,7 +98,7 @@ export default function TabView() {
               key={tabName}
               className={clsx(
                 'z-0 flex cursor-pointer select-none items-center gap-1 px-2 py-1 transition-colors',
-                isActive ? 'text-violet-100' : 'hover:text-violet-100'
+                isActive ? 'text-violet-100' : 'hover:text-violet-100',
               )}
               onClick={() => !isActive && onChange(i)}
             >

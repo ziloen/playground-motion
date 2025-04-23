@@ -16,17 +16,17 @@ function validate(data: unknown, schema: ZodTypeAny | undefined) {
   }
 }
 
-request.interceptors.request.use(config => {
-  validate(config.data, config.requestZod)
+request.interceptors.request.use((config) => {
+  validate(config.data, config.requestSchema)
   return config
 })
 
 request.interceptors.response.use(
-  value => {
-    validate(value.data, value.config.responseZod)
+  (value) => {
+    validate(value.data, value.config.responseSchema)
     return value
   },
   (error: Error) => {
     throw error
-  }
+  },
 )

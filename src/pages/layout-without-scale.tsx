@@ -51,7 +51,7 @@ export default function LayoutWithoutScale() {
         </motion.div>
       </div>
 
-      <button className="btn" onClick={() => setShow(s => !s)}>
+      <button className="btn" onClick={() => setShow((s) => !s)}>
         Toggle
       </button>
 
