@@ -1,0 +1,11 @@
+@import "@ziloen/tailwind-config/preset.css";
+
+@import "tailwindcss/preflight.css" layer(base);
+
+/* 
+`[data-theme=dark]`, `:host([data-theme=dark])`
+*/
+@custom-variant dark (&:where([data-theme=dark],
+    [data-theme=dark] *,
+    :host([data-theme=dark]),
+    :host([data-theme=dark]) *));

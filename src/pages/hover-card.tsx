@@ -44,7 +44,7 @@ export default function HoverCard() {
           ),
         }}
       >
-        <div className="absolute -z-1 h-full w-full bg-gradient-to-b from-black/80 to-transparent"></div>
+        <div className="absolute -z-1 size-full bg-gradient-to-b from-black/80 to-transparent"></div>
         <p className="mx-2 mt-2 text-orange-500">
           Lorem ipsum, dolor consectetur.
         </p>

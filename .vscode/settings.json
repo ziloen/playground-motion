@@ -21,5 +21,6 @@
     ".vscode/emmet"
   ],
   "eslint.format.enable": false,
-  "prettier.enable": true
+  "prettier.enable": true,
+  "tailwindCSS.experimental.configFile": "src/styles/tailwind.css"
 }

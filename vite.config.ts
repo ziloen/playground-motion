@@ -1,7 +1,8 @@
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
+import browserslistToEsbuild from 'browserslist-to-esbuild'
+import { Features } from 'lightningcss'
 import { resolve as r } from 'node:path'
-import PostcssPresetEnv from 'postcss-preset-env'
-import tailwindcss from 'tailwindcss'
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import { defineConfig, loadEnv } from 'vite'
@@ -17,6 +18,8 @@ export default defineConfig(({ command, mode }) => {
     const slashIndex = process.env.GITHUB_REPOSITORY.indexOf('/')
     base = process.env.GITHUB_REPOSITORY.slice(slashIndex)
   }
+
+  const target = '> 0.5%, last 2 versions, Firefox ESR, not dead'
 
   return {
     base,
@@ -69,23 +72,27 @@ export default defineConfig(({ command, mode }) => {
         ],
         dts: 'src/types/auto-imports.d.ts',
       }),
+
+      tailwindcss(),
     ],
 
+    build: {
+      // disable inline base64
+      assetsInlineLimit: 0,
+      cssMinify: 'lightningcss',
+      target: browserslistToEsbuild(target),
+    },
+
     css: {
-      postcss: {
-        plugins: [
-          PostcssPresetEnv({
-            stage: 0,
-            features: {
-              // do not transform logical properties
-              'float-clear-logical-values': false,
-              'logical-overflow': false,
-              'logical-overscroll-behavior': false,
-              'logical-properties-and-values': false,
-            },
-          }),
-          tailwindcss(),
-        ],
+      transformer: 'lightningcss',
+      lightningcss: {
+        // https://lightningcss.dev/transpilation.html#feature-flags
+        include: Features.Colors | Features.Nesting | Features.MediaRangeSyntax,
+        exclude: Features.LogicalProperties,
+      },
+      devSourcemap: true,
+      modules: {
+        generateScopedName: '[hash:base64:8]',
       },
     },
 

@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./tailwind.css" reference;
 
 html,
 body,
@@ -17,14 +15,15 @@ body,
 
 html {
   @apply font-sans;
-  background: light-dark(white, #121212);
-  color: light-dark(black, theme("colors.light-gray.100"));
+  background-color: light-dark(white, #121212);
+  color: light-dark(black, --theme(--color-light-gray-100));
 }
 
 html[data-theme="dark"] {
   color-scheme: dark;
 }
 
+html,
 html[data-theme="auto"] {
   color-scheme: dark light;
 }
