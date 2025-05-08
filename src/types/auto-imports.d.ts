@@ -8,7 +8,7 @@ export {}
 declare global {
   const AnimatePresence: typeof import('motion/react')['AnimatePresence']
   const Fragment: typeof import('react')['Fragment']
-  const NavLink: typeof import('react-router-dom')['NavLink']
+  const NavLink: typeof import('react-router')['NavLink']
   const Suspense: typeof import('react')['Suspense']
   const motion: typeof import('motion/react')['motion']
   const useCallback: typeof import('react')['useCallback']
@@ -18,9 +18,9 @@ declare global {
   const useInsertionEffect: typeof import('react')['useInsertionEffect']
   const useLayoutEffect: typeof import('react')['useLayoutEffect']
   const useMemo: typeof import('react')['useMemo']
-  const useNavigate: typeof import('react-router-dom')['useNavigate']
-  const useParams: typeof import('react-router-dom')['useParams']
+  const useNavigate: typeof import('react-router')['useNavigate']
+  const useParams: typeof import('react-router')['useParams']
   const useRef: typeof import('react')['useRef']
-  const useRoutes: typeof import('react-router-dom')['useRoutes']
+  const useRoutes: typeof import('react-router')['useRoutes']
   const useState: typeof import('react')['useState']
 }

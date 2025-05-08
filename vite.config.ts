@@ -61,7 +61,7 @@ export default defineConfig(({ command, mode }) => {
               'useRef',
               'useState',
             ],
-            'react-router-dom': [
+            'react-router': [
               'useNavigate',
               'useParams',
               'NavLink',

@@ -1,6 +1,6 @@
 import type { Variants } from 'motion/react'
-import type { RouteObject } from 'react-router-dom'
-import { NavLink } from 'react-router-dom'
+import type { RouteObject } from 'react-router'
+import { NavLink } from 'react-router'
 import routes from '~react-pages'
 
 const itemVariants: Variants = {
