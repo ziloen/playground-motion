@@ -19,16 +19,16 @@
     "react": "^19.1.0",
     "react-dom": "19.1.0",
     "react-router": "7.6.0",
-    "zod": "3.25.7"
+    "zod": "3.25.20"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.8",
     "@iconify-json/fluent-emoji": "^1.2.3",
-    "@iconify/json": "2.2.339",
+    "@iconify/json": "2.2.340",
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "@tailwindcss/vite": "4.1.7",
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react-swc": "^3.9.0",
     "@ziloen/eslint-config": "^0.1.63",

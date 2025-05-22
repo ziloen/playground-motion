@@ -11,10 +11,14 @@ export default function DND() {
   return (
     <motion.div
       drag
+      // 释放时是否有惯性效果
       dragMomentum={false}
-      style={{ scale }}
+      // 是否允许拖拽出边界时，超出边界后会回弹到范围内
+      // false: 不允许拖拽出边界
+      dragElastic={0.5}
+      // 拖拽限制范围
       dragConstraints={useRef(document.body)}
-      dragElastic={1}
+      style={{ scale }}
       onWheel={(e) => {
         if (e.deltaY > 0) {
           setScale((scale) =>
