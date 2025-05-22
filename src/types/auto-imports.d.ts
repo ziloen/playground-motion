@@ -18,9 +18,11 @@ declare global {
   const useInsertionEffect: typeof import('react')['useInsertionEffect']
   const useLayoutEffect: typeof import('react')['useLayoutEffect']
   const useMemo: typeof import('react')['useMemo']
+  const useMotionValue: typeof import('motion/react')['useMotionValue']
   const useNavigate: typeof import('react-router')['useNavigate']
   const useParams: typeof import('react-router')['useParams']
   const useRef: typeof import('react')['useRef']
   const useRoutes: typeof import('react-router')['useRoutes']
+  const useSpring: typeof import('motion/react')['useSpring']
   const useState: typeof import('react')['useState']
 }
