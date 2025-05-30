@@ -3,32 +3,37 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router'
 import type { Post } from '~/api/post'
 import { getPostListApi } from '~/api/post'
 
 export default function ListView() {
+  const [searchParams, setSearchParams] = useSearchParams({ page: '1' })
   const [searchVal, setSearchVal] = useState()
-  const [page, setPage] = useState(1)
-  const [listKey, setListKey] = useState('')
   const queryClient = useQueryClient()
 
-  const { data = [], isFetching } = useQuery({
-    queryKey: ['postList', { page }],
-    queryFn: () => getPostListApi({ page: page, pageSize: 10 }),
-    placeholderData: keepPreviousData,
-    staleTime: Infinity,
-  })
+  const page = Number(searchParams.get('page')) || 1
 
-  useLayoutEffect(() => {
-    if (!isFetching) {
-      setListKey(crypto.randomUUID())
-    }
-  }, [isFetching])
+  const { data: { data, dataPage } = { data: [], dataPage: 0 }, isFetching } =
+    useQuery({
+      queryKey: ['postList', { page }],
+      queryFn: () => {
+        return getPostListApi({ page: page, pageSize: 10 }).then((res) => ({
+          data: res,
+          dataPage: page,
+        }))
+      },
+      placeholderData: keepPreviousData,
+      staleTime: Infinity,
+    })
 
   function deletePost(id: number) {
     queryClient.setQueryData(
       ['postList', { page }],
-      (data: Post[] | undefined) => data?.filter((post) => post.id !== id),
+      (data: { data: Post[]; dataPage: number }) => ({
+        ...data,
+        data: data.data.filter((post: Post) => post.id !== id),
+      }),
     )
   }
 
@@ -41,11 +46,8 @@ export default function ListView() {
     >
       <NavLink to="/">← Home</NavLink>
 
-      <div
-        className="flex h-full flex-col overflow-y-auto overflow-x-hidden"
-        key={listKey}
-      >
-        <AnimatePresence initial={false}>
+      <div className="flex h-full flex-col overflow-x-hidden overflow-y-auto">
+        <AnimatePresence key={dataPage} initial={false}>
           {data.map((post) => (
             <motion.div
               key={post.id}
@@ -59,7 +61,7 @@ export default function ListView() {
                 // history.push(`/detail-view/${post.id}`)
               }}
             >
-              <h1 className="text-lg font-bold">{post.title}</h1>
+              <h2 className="text-lg font-bold">{post.title}</h2>
               <p className="text-dark-gray-400">{post.body}</p>
             </motion.div>
           ))}
@@ -70,15 +72,17 @@ export default function ListView() {
         {page}
         <button
           onClick={() => {
-            setPage(page === 1 ? 1 : page - 1)
+            setSearchParams({ page: String(page === 1 ? 1 : page - 1) })
           }}
+          disabled={isFetching || page === 1}
         >
           Prev
         </button>
         <button
           onClick={() => {
-            setPage(page + 1)
+            setSearchParams({ page: String(page + 1) })
           }}
+          disabled={isFetching}
         >
           Next
         </button>
