@@ -18,7 +18,7 @@
     "esModuleInterop": true,
     "incremental": true,
     "skipLibCheck": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "noUnusedLocals": false,
     "forceConsistentCasingInFileNames": true,
@@ -28,10 +28,10 @@
       "DOM.Iterable"
     ],
     "types": [
-      "vite/client",
-      "vite-plugin-pages/client-react",
       "ts-lib-enhance",
-      "unplugin-icons/types/react"
+      "unplugin-icons/types/react",
+      "vite-plugin-pages/client-react",
+      "vite/client",
     ],
     "paths": {
       "~/*": [
