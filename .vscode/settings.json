@@ -22,5 +22,5 @@
   ],
   "eslint.format.enable": false,
   "prettier.enable": true,
-  "tailwindCSS.experimental.configFile": "src/styles/tailwind.css"
+  "tailwindCSS.experimental.configFile": "src/styles/tailwind.css",
 }

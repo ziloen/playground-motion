@@ -66,7 +66,7 @@ export default function TabView() {
       <NavLink to="/">← Home</NavLink>
 
       <div
-        className="relative grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full bg-dark-gray-500 p-1 scrollbar-none"
+        className="bg-dark-gray-500 scrollbar-none relative grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full p-1"
         // change vertical scroll to horizontal scroll
         onWheel={onScroll}
         // TODO: add drag to scroll x axis
@@ -76,7 +76,7 @@ export default function TabView() {
         <motion.div
           layout
           layoutDependency={col}
-          className="absolute size-full bg-dark-gray-50"
+          className="bg-dark-gray-50 absolute size-full"
           onLayoutAnimationComplete={onAnimationEnd}
           transition={{ type: 'spring', duration: 0.15, bounce: 0.1 }}
           style={{
@@ -97,7 +97,7 @@ export default function TabView() {
             <div
               key={tabName}
               className={clsx(
-                'z-0 flex cursor-pointer select-none items-center gap-1 px-2 py-1 transition-colors',
+                'z-0 flex cursor-pointer items-center gap-1 px-2 py-1 transition-colors select-none',
                 isActive ? 'text-violet-100' : 'hover:text-violet-100',
               )}
               onClick={() => !isActive && onChange(i)}
@@ -116,13 +116,13 @@ export default function TabView() {
             <motion.div
               // set key to force remount trigger animation
               key={index}
-              className="flex-col gap-2 bg-black/25 py-4 flex-center"
+              className="flex-center flex-col gap-2 bg-black/25 py-4"
               initial={{ opacity: 0, y: 200 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
-              <div className="whitespace-nowrap writing-vertical-lr">
+              <div className="writing-vertical-lr whitespace-nowrap">
                 {currentTabName}
               </div>
             </motion.div>
