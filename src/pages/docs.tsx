@@ -7,7 +7,7 @@ export default function Docs() {
       <motion.div
         transition={{
           type: 'tween',
-          ease: '',
+          ease: 'easeInOut',
         }}
       />
 
