@@ -13,11 +13,12 @@ export default function PopoverPage() {
           <Dialog.Backdrop className="fixed inset-0 bg-black/20" />
 
           <AnimatePresence>
-            <Dialog.Popup className="fixed inset-0 m-auto flex size-fit max-w-[500px] flex-col gap-2">
+            <Dialog.Popup className="fixed inset-0 m-auto flex size-fit max-w-[500px] flex-col gap-3">
               <motion.div
                 className="grid grid-flow-col"
                 initial={{ scale: 1.1 }}
                 animate={{ scale: 1 }}
+                transition={{ duration: 0.2 }}
               >
                 <motion.div
                   className="min-h-[100px] w-[8px] border border-white/20"
@@ -28,7 +29,7 @@ export default function PopoverPage() {
                   }}
                 />
 
-                <div className="overflow-hidden">
+                <div className="overflow-clip">
                   <motion.div
                     initial={{ x: '-100%', opacity: 0 }}
                     animate={{
@@ -41,7 +42,8 @@ export default function PopoverPage() {
                         bounce: 0,
                       },
                     }}
-                    exit={{ x: '-100%' }}
+                    // TODO: exit animation
+                    // exit={{ x: '-100%' }}
                     transition={{
                       opacity: { duration: 0.1 },
                       x: { duration: 0.2 },
@@ -70,10 +72,10 @@ export default function PopoverPage() {
                     duration: 0.3,
                   },
                 }}
-                className="flex gap-2 self-end"
+                className="flex gap-3 self-end"
               >
                 <Dialog.Close render={<Button>Close</Button>} />
-                <Dialog.Close render={<Button>Close</Button>} />
+                <Dialog.Close render={<Button>OK</Button>} />
               </motion.div>
             </Dialog.Popup>
           </AnimatePresence>
@@ -116,7 +118,7 @@ function getBorderStyle(
   return {
     borderImageSource: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-0.5 -0.5 101 101' width='101' height='101'%3E%3Cpolygon points='0,0 100,0 100,${100 - size} ${100 - size},100 0,100' fill='${encodeURIComponent(fill)}' stroke='${encodeURIComponent(stroke)}' stroke-width='1'%3E%3C/polygon%3E%3C/svg%3E")`,
     borderColor: 'transparent',
-    borderImageRepeat: 'stretch',
+    borderImageRepeat: 'repeat',
     borderImageSlice: `${size + 1} fill`,
     borderWidth: `${size + 1}px`,
     borderStyle: 'solid',
