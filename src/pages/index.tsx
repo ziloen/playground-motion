@@ -1,4 +1,4 @@
-import type { Variants } from 'motion/react'
+import { stagger, type Variants } from 'motion/react'
 import type { RouteObject } from 'react-router'
 import { NavLink } from 'react-router'
 import routes from '~react-pages'
@@ -39,7 +39,9 @@ export default function Index() {
             perspective: '1000px',
             perspectiveOrigin: 'center 50%',
           }}
-          transition={{ staggerChildren: 0.05 }}
+          transition={{
+            delayChildren: stagger(0.05, { startDelay: 0.3 }),
+          }}
           initial="initial"
           animate="animate"
         >
