@@ -1,7 +1,8 @@
 import { Dialog } from '@base-ui-components/react/dialog'
 import clsx from 'clsx'
 
-// https://x.com/jh3yy/status/1940550813455376755
+// https://x.com/jh3yy/status/1940806147784823184
+// https://codepen.io/jh3y/pen/yyNWGNG
 
 export default function PopoverPage() {
   return (
@@ -21,7 +22,7 @@ export default function PopoverPage() {
                 transition={{ duration: 0.2 }}
               >
                 <motion.div
-                  className="min-h-[100px] w-[8px] border border-white/20"
+                  className="z-1 min-h-[100px] w-[8px] border border-white/20"
                   initial={{ backgroundColor: '#111' }}
                   animate={{
                     backgroundColor: '#fff',
@@ -31,6 +32,7 @@ export default function PopoverPage() {
 
                 <div className="overflow-clip">
                   <motion.div
+                    className="backdrop-blur-lg"
                     initial={{ x: '-100%', opacity: 0 }}
                     animate={{
                       x: 0,
@@ -49,7 +51,7 @@ export default function PopoverPage() {
                       x: { duration: 0.2 },
                     }}
                     style={{
-                      ...getBorderStyle(14, 'white', '#000'),
+                      ...getBorderStyle(14, 'white', 'transparent'),
                     }}
                   >
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
