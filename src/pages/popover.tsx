@@ -15,33 +15,30 @@ export default function PopoverPage() {
 
           <AnimatePresence>
             <Dialog.Popup className="fixed inset-0 m-auto flex size-fit max-w-[500px] flex-col gap-3">
-              <motion.div
-                className="grid grid-flow-col"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.2 }}
-              >
+              <div className="grid grid-flow-col">
                 <motion.div
-                  className="z-1 min-h-[100px] w-[8px] border border-white/20"
-                  initial={{ backgroundColor: '#111' }}
+                  className="z-1 min-h-[100px] w-[8px] border border-white bg-white/60"
+                  initial={{ opacity: 0, x: '-100%', y: 0 }}
                   animate={{
-                    backgroundColor: '#fff',
-                    transition: { duration: 0.4, ease: 'easeOut' },
+                    opacity: 1,
+                    x: 2,
+                    y: 0,
+                    transition: { duration: 0.2, ease: 'easeOut' },
                   }}
                 />
 
                 <div className="overflow-clip">
                   <motion.div
-                    className="backdrop-blur-lg"
+                    className="backdrop-blur-sm"
                     initial={{ x: '-100%', opacity: 0 }}
                     animate={{
                       x: 0,
                       opacity: 1,
                       transition: {
-                        delay: 0.2,
-                        type: 'spring',
-                        visualDuration: 0.3,
-                        bounce: 0,
+                        type: 'tween',
+                        delay: 0.22,
+                        ease: 'easeInOut',
+                        duration: 0.26,
                       },
                     }}
                     // TODO: exit animation
@@ -60,18 +57,17 @@ export default function PopoverPage() {
                     quaerat corrupti consequatur cupiditate vero placeat.
                   </motion.div>
                 </div>
-              </motion.div>
+              </div>
 
               <motion.div
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: -24 }}
                 animate={{
                   opacity: 1,
                   x: 0,
                   transition: {
-                    delay: 0.7,
-                    type: 'spring',
-                    bounce: 0,
-                    duration: 0.3,
+                    delay: 0.5,
+                    ease: 'easeOut',
+                    duration: 0.1,
                   },
                 }}
                 className="flex gap-3 self-end"
