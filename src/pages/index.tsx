@@ -64,7 +64,14 @@ export default function Index() {
               }}
             >
               <NavLink key={route} to={route} className="text-lg">
-                {route}
+                {({ isPending }) => (
+                  <>
+                    <span>{route}</span>
+                    {isPending && (
+                      <span className="ms-2 opacity-30">{'Loading...'}</span>
+                    )}
+                  </>
+                )}
               </NavLink>
             </motion.div>
           ))}

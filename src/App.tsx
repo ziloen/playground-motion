@@ -1,27 +1,25 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MotionConfig } from 'motion/react'
 import { Suspense } from 'react'
-import { BrowserRouter } from 'react-router'
+import { createBrowserRouter, RouterProvider } from 'react-router'
 import routes from '~react-pages'
 
-function Routes() {
-  return useRoutes(routes)
-}
+const router = createBrowserRouter(routes, {
+  basename: import.meta.env.BASE_URL,
+})
 
 const queryClient = new QueryClient()
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <MotionConfig transition={{ type: 'tween' }}>
-          <Suspense>
-            <AnimatePresence mode="wait" initial={false}>
-              <Routes />
-            </AnimatePresence>
-          </Suspense>
-        </MotionConfig>
-      </BrowserRouter>
+      <MotionConfig transition={{ type: 'tween' }}>
+        <Suspense>
+          <AnimatePresence mode="wait" initial={false}>
+            <RouterProvider router={router} />
+          </AnimatePresence>
+        </Suspense>
+      </MotionConfig>
     </QueryClientProvider>
   )
 }
