@@ -14,13 +14,21 @@
     "source.sortImports",
     // remove unused imports & sort imports
     // "source.organizeImports",
-    "source.fixAll.eslint",
+    // "source.fixAll.eslint",
   ],
   // add @container & @media snippet
   "emmet.extensionsPath": [
     ".vscode/emmet"
   ],
   "eslint.format.enable": false,
+  "javascript.preferences.autoImportSpecifierExcludeRegexes": [
+    "^node:console$",
+    "^typescript$",
+  ],
   "prettier.enable": true,
   "tailwindCSS.experimental.configFile": "src/styles/tailwind.css",
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+    "^node:console$",
+    "^typescript$",
+  ]
 }
