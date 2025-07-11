@@ -12,6 +12,7 @@ let basename = env.VITE_BASE_URL
 if (process.env.GITHUB_REPOSITORY) {
   const slashIndex = process.env.GITHUB_REPOSITORY.indexOf('/')
   basename = process.env.GITHUB_REPOSITORY.slice(slashIndex) + "/"
+  basename.endsWith('/') || (basename += '/')
 }
 
 /**

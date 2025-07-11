@@ -16,6 +16,7 @@ export default defineConfig(({ command, mode }) => {
   if (process.env.GITHUB_REPOSITORY) {
     const slashIndex = process.env.GITHUB_REPOSITORY.indexOf('/')
     base = process.env.GITHUB_REPOSITORY.slice(slashIndex)
+    base.endsWith('/') || (base += '/')
   }
 
   const target = '> 0.5%, last 2 versions, Firefox ESR, not dead'
