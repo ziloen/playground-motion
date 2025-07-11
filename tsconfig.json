@@ -4,6 +4,10 @@
     "baseUrl": ".",
     "module": "ESNext",
     "target": "ESNext",
+    "rootDirs": [
+      ".",
+      "./.react-router/types"
+    ],
     // type checking
     "strict": true,
     "noImplicitAny": true,
@@ -30,7 +34,6 @@
     "types": [
       "ts-lib-enhance",
       "unplugin-icons/types/react",
-      "vite-plugin-pages/client-react",
       "vite/client",
     ],
     "paths": {
@@ -40,7 +43,8 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    ".react-router/types/**/*"
   ],
   "exclude": [
     "dist",

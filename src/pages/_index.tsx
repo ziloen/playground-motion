@@ -1,7 +1,8 @@
+import { isNotNil } from 'es-toolkit'
 import { stagger, type Variants } from 'motion/react'
+import { useContext } from 'react'
 import type { RouteObject } from 'react-router'
-import { NavLink } from 'react-router'
-import routes from '~react-pages'
+import { NavLink, UNSAFE_FrameworkContext } from 'react-router'
 
 const itemVariants: Variants = {
   initial: {
@@ -15,14 +16,20 @@ const itemVariants: Variants = {
 }
 
 export default function Index() {
+  const framework = useContext(UNSAFE_FrameworkContext)
+
   const flattenedRoutes = useMemo(() => {
+    if (!framework) return []
+
+    const routes = Object.values(framework.manifest.routes).filter(isNotNil)
+
     return (
       flatRoutes(routes)
         .filter((route) => !['*', '/', ':'].includes(route[0]))
         // eslint-disable-next-line @typescript-eslint/unbound-method
         .toSorted(new Intl.Collator('en').compare)
     )
-  }, [])
+  }, [framework])
 
   return (
     <motion.div
