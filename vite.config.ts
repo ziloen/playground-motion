@@ -100,9 +100,5 @@ export default defineConfig(({ command, mode }) => {
     optimizeDeps: {
       include: ['clsx', 'motion'],
     },
-
-    experimental: {
-      enableNativePlugin: true,
-    },
   }
 })

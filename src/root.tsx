@@ -1,8 +1,8 @@
-import { MotionConfig } from 'motion/react'
 import './styles/main.css'
 import './styles/tailwind.css'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { MotionConfig } from 'motion/react'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 
 const queryClient = new QueryClient()
