@@ -66,7 +66,7 @@ export default function TabView() {
       <NavLink to="/">← Home</NavLink>
 
       <div
-        className="bg-dark-gray-500 scrollbar-none relative grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full p-1"
+        className="relative scrollbar-none grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full bg-dark-gray-500 p-1"
         // change vertical scroll to horizontal scroll
         onWheel={onScroll}
         // TODO: add drag to scroll x axis
@@ -76,7 +76,7 @@ export default function TabView() {
         <motion.div
           layout
           layoutDependency={col}
-          className="bg-dark-gray-50 absolute size-full"
+          className="absolute size-full bg-dark-gray-50"
           onLayoutAnimationComplete={onAnimationEnd}
           transition={{ type: 'spring', duration: 0.15, bounce: 0.1 }}
           style={{
@@ -122,7 +122,7 @@ export default function TabView() {
               exit={{ opacity: 0, y: -200 }}
             >
               <div className={currentTabName}></div>
-              <div className="writing-vertical-lr whitespace-nowrap">
+              <div className="whitespace-nowrap writing-vertical-lr">
                 {currentTabName}
               </div>
             </motion.div>

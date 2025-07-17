@@ -12,7 +12,7 @@ export default function LayoutWithoutScale() {
     >
       <NavLink to="/">← Home</NavLink>
       <div
-        className="bg-dark-gray-300 resizable grid h-[400px] w-[700px] gap-[12px]"
+        className="grid h-[400px] w-[700px] resizable gap-[12px] bg-dark-gray-300"
         style={{
           gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
           gridTemplateRows: 'minmax(0, 1fr)',
@@ -56,7 +56,7 @@ export default function LayoutWithoutScale() {
       </button>
 
       <div
-        className="bg-dark-gray-50 resizable relative grid h-[400px] w-[700px] gap-[12px]"
+        className="relative grid h-[400px] w-[700px] resizable gap-[12px] bg-dark-gray-50"
         style={{
           gridTemplateColumns: 'minmax(0, 1fr)',
           gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr)',

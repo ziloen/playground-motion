@@ -34,7 +34,7 @@ export default function HoverCard() {
           dxMV.set(0)
           dyMV.set(0)
         }}
-        className="clear-fix relative isolate h-[100px] w-[300px] rounded-2xl bg-red-50 bg-no-repeat"
+        className="relative isolate clear-fix h-[100px] w-[300px] rounded-2xl bg-red-50 bg-no-repeat"
         style={{
           backgroundImage:
             'url(https://w.wallhaven.cc/full/d6/wallhaven-d6y12l.jpg)',

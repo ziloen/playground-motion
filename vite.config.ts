@@ -1,5 +1,5 @@
-import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react-oxc'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
 import { Features } from 'lightningcss'
 import { resolve as r } from 'node:path'
@@ -30,8 +30,7 @@ export default defineConfig(({ command, mode }) => {
     },
 
     plugins: [
-      // https://reactrouter.com/
-      !process.env.VITEST && reactRouter(),
+      react(),
 
       Icons({
         /* options */
