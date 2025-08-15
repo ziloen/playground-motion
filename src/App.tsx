@@ -50,13 +50,19 @@ const router = createBrowserRouter(routes, {
   basename: import.meta.env.BASE_URL,
 })
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MotionConfig transition={{ type: 'tween' }}>
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           <RouterProvider router={router} />
         </AnimatePresence>
       </MotionConfig>

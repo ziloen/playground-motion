@@ -9,3 +9,10 @@
     [data-theme=dark] *,
     :host([data-theme=dark]),
     :host([data-theme=dark]) *));
+
+
+@theme {
+  --text-color-neutral-secondary: light-dark(--theme(--color-dark-gray-500),
+      --theme(--color-light-gray-300));
+  --text-color-neutral-tertiary: light-dark(--theme(--color-dark-gray-300), --theme(--color-light-gray-500));
+}

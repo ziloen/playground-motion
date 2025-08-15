@@ -88,7 +88,8 @@ export default defineConfig(({ command, mode }) => {
       lightningcss: {
         // https://lightningcss.dev/transpilation.html#feature-flags
         include: Features.Colors | Features.Nesting | Features.MediaRangeSyntax,
-        exclude: Features.LogicalProperties,
+
+        exclude: Features.LogicalProperties | Features.LightDark,
       },
       devSourcemap: true,
       modules: {

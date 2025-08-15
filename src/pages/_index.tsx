@@ -1,4 +1,5 @@
-import { stagger, type Variants } from 'motion/react'
+import type { Variants } from 'motion/react'
+import { stagger } from 'motion/react'
 import type { RouteObject } from 'react-router'
 import { NavLink } from 'react-router'
 import { routes } from '../App'

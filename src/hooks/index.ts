@@ -1,0 +1,2 @@
+export { useMemoizedFn } from './useMemoizedFn'
+
