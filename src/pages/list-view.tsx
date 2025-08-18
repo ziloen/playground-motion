@@ -14,7 +14,7 @@ export default function ListView() {
 
   const page = Number(searchParams.get('page')) || 1
 
-  const { data: { data, dataPage } = { data: [], dataPage: 0 }, isFetching } =
+  const { data: { data, dataPage } = { data: null, dataPage: 0 }, isFetching } =
     useQuery({
       queryKey: ['postList', { page }],
       queryFn: () => {
@@ -48,7 +48,7 @@ export default function ListView() {
 
       <div className="flex h-full flex-col overflow-x-hidden overflow-y-auto">
         <AnimatePresence key={dataPage} initial={false}>
-          {data.map((post) => (
+          {data?.posts.map((post) => (
             <motion.div
               key={post.id}
               layout
