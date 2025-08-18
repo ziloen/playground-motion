@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { ZodType } from 'zod'
 
 export const request = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: 'https://dummyjson.com',
   // 30s timeout
   timeout: 30_000,
   adapter: 'fetch',

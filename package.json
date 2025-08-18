@@ -35,7 +35,7 @@
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react-oxc": "0.4.0",
-    "@ziloen/eslint-config": "^0.1.69",
+    "@ziloen/eslint-config": "^0.1.70",
     "@ziloen/tailwind-config": "2.0.8",
     "browserslist-to-esbuild": "2.1.1",
     "eslint": "9.33.0",

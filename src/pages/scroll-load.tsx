@@ -1,3 +1,4 @@
+import { switchLatest } from '@wai-ri/core'
 import clsx from 'clsx'
 import type { Variants } from 'motion/react'
 import { stagger } from 'motion/react'
@@ -6,6 +7,16 @@ import type { Post } from '~/api/post'
 import { getPostListApi } from '~/api/post'
 import { useGetState, useMemoizedFn } from '~/hooks'
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
+
+const getPostListLatest = switchLatest(getPostListApi)
+
+const containerVariants: Variants = {
+  animate: {
+    transition: {
+      delayChildren: /* #__PURE__ */ stagger(0.12),
+    },
+  },
+}
 
 const itemVariants: Variants = {
   initial: { opacity: 0 },
@@ -19,6 +30,7 @@ export default function ScrollLoad() {
   const [userId, setUserId, getUserId] = useGetState<number | undefined>(
     undefined,
   )
+  const [searchText, setSearchText, getSearchText] = useGetState('')
   // #endregion
 
   // #region useRef
@@ -38,28 +50,36 @@ export default function ScrollLoad() {
     const pageSize = 7
 
     setIsLoading(true)
-    getPostListApi({ page: pageRef.current, pageSize, userId: getUserId() })
+    getPostListLatest({
+      page: pageRef.current,
+      pageSize,
+      query: getSearchText(),
+      userId: getUserId(),
+    })
       .then((res) => {
-        if (res.length < pageSize) {
+        if (res.posts.length < pageSize) {
           hasMoreRef.current = false
         } else {
           pageRef.current += 1
         }
 
         setList((list) => {
-          return [...list, ...res]
+          return [...list, ...res.posts]
         })
+      })
+      .catch(() => {
+        hasMoreRef.current = false
       })
       .finally(() => {
         setIsLoading(false)
       })
   })
 
-  const onUserIdChange = useMemoizedFn((id: number | undefined) => {
-    setUserId(id)
+  const resetAndLoad = useMemoizedFn(() => {
     pageRef.current = 1
     hasMoreRef.current = true
     setList([])
+    setIsLoading(false)
     loadMore()
   })
   // #endregion
@@ -101,9 +121,12 @@ export default function ScrollLoad() {
         <select
           value={userId}
           onChange={(e) => {
-            onUserIdChange(
-              e.currentTarget.value === '' ? undefined : Number(e.target.value),
+            setUserId(
+              e.currentTarget.value === ''
+                ? undefined
+                : Number(e.currentTarget.value),
             )
+            resetAndLoad()
           }}
         >
           <option value="">All Users</option>
@@ -112,6 +135,16 @@ export default function ScrollLoad() {
           <option value="3">User 3</option>
           <option value="100">User 100</option>
         </select>
+
+        <input
+          type="text"
+          className="bg-[field]"
+          value={searchText}
+          onChange={(e) => {
+            setSearchText(e.currentTarget.value)
+            resetAndLoad()
+          }}
+        />
       </div>
 
       <div className="overflow-y-auto pt-4">
@@ -120,13 +153,7 @@ export default function ScrollLoad() {
         {list.length > 0 && (
           <motion.div
             className="flex flex-col gap-6 px-4"
-            variants={{
-              animate: {
-                transition: {
-                  delayChildren: stagger(0.12),
-                },
-              },
-            }}
+            variants={containerVariants}
             initial="initial"
             animate="animate"
           >

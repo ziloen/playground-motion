@@ -6,32 +6,47 @@ const postSchema = z.object({
   id: z.number(),
   title: z.string(),
   body: z.string(),
+  views: z.number(),
+  tags: z.array(z.string()),
 })
 
-const postListSchema = z.array(postSchema)
+const postListSchema = z.object({
+  posts: z.array(postSchema),
+  total: z.number(),
+  skip: z.number(),
+  limit: z.number(),
+})
 
 export type Post = z.infer<typeof postSchema>
+
+type PostListResponse = z.infer<typeof postListSchema>
 
 export async function getPostListApi(params: {
   page: number
   pageSize: number
   userId?: number
+  query?: string
 }) {
-  const start = (params.page - 1) * params.pageSize
-  const limit = params.pageSize
-
   const search = new URLSearchParams({
-    _start: String(start),
-    _limit: String(limit),
+    skip: String((params.page - 1) * params.pageSize),
+    limit: String(params.pageSize),
   })
+
+  let endpoint = `/posts`
 
   if (params.userId !== undefined) {
-    search.append('userId', String(params.userId))
+    endpoint = `/posts/user/${params.userId}`
   }
 
-  const { data } = await request.get<Post[]>(`/posts?${search.toString()}`, {
-    responseSchema: postListSchema,
-  })
+  if (params.query) {
+    endpoint = `/posts/search`
+    search.set('q', params.query)
+  }
+
+  const { data } = await request.get<PostListResponse>(
+    `${endpoint}?${search.toString()}`,
+    { responseSchema: postListSchema },
+  )
 
   return data
 }
