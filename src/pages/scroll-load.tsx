@@ -15,7 +15,7 @@ const itemVariants: Variants = {
 export default function ScrollLoad() {
   // #region useState, useHookState
   const [list, setList] = useState<Post[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading, getIsLoading] = useGetState(false)
   const [userId, setUserId, getUserId] = useGetState<number | undefined>(
     undefined,
   )
@@ -31,11 +31,11 @@ export default function ScrollLoad() {
 
   // #region functions, useImperativeHandle
   const loadMore = useMemoizedFn(async () => {
-    if (isLoading || !hasMoreRef.current) {
+    if (getIsLoading() || !hasMoreRef.current) {
       return
     }
 
-    const pageSize = 10
+    const pageSize = 7
 
     setIsLoading(true)
     getPostListApi({ page: pageRef.current, pageSize, userId: getUserId() })
@@ -65,6 +65,12 @@ export default function ScrollLoad() {
   // #endregion
 
   // #region useHookEffect, useEffect
+
+  // initial load
+  useLayoutEffect(() => {
+    loadMore()
+  }, [])
+
   const trackIntersection = useMemoizedFn<RefCallback<Element>>((el) => {
     if (!el) return
 
@@ -104,11 +110,11 @@ export default function ScrollLoad() {
           <option value="1">User 1</option>
           <option value="2">User 2</option>
           <option value="3">User 3</option>
+          <option value="100">User 100</option>
         </select>
       </div>
 
       <div className="overflow-y-auto pt-4">
-        {/* FIXME: 初始页面不应该有这个 */}
         {!isLoading && list.length === 0 && <div>No posts available.</div>}
 
         {list.length > 0 && (
