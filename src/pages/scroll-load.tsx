@@ -79,6 +79,8 @@ export default function ScrollLoad() {
           setErrorText(e.message)
         } else if (Error.isError(e)) {
           setErrorText(e.message)
+        } else if (typeof e === 'string') {
+          setErrorText(e)
         } else {
           setErrorText('Unknown error')
         }
@@ -92,6 +94,7 @@ export default function ScrollLoad() {
     setPage(1)
     setHasMore(true)
     setList([])
+    setErrorText(null)
     setIsLoading(false)
     loadMore()
   })
