@@ -1,4 +1,5 @@
 import { switchLatest } from '@wai-ri/core'
+import { isAxiosError } from 'axios'
 import clsx from 'clsx'
 import type { Variants } from 'motion/react'
 import { stagger } from 'motion/react'
@@ -6,6 +7,7 @@ import type { RefCallback } from 'react'
 import type { Post } from '~/api/post'
 import { getPostListApi } from '~/api/post'
 import { useGetState, useMemoizedFn } from '~/hooks'
+import CarbonReset from '~icons/carbon/reset'
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
 
 const getPostListLatest = switchLatest(getPostListApi)
@@ -33,6 +35,9 @@ export default function ScrollLoad() {
   const [searchText, setSearchText, getSearchText] = useGetState('')
   const [hasMore, setHasMore, getHasMore] = useGetState(true)
   const [page, setPage, getPage] = useGetState(1)
+  const [errorText, setErrorText, getErrorText] = useGetState<string | null>(
+    null,
+  )
   // #endregion
 
   // #region useRef
@@ -51,6 +56,7 @@ export default function ScrollLoad() {
     const pageSize = 7
 
     setIsLoading(true)
+    setErrorText(null)
     getPostListLatest({
       page: getPage(),
       pageSize,
@@ -68,8 +74,14 @@ export default function ScrollLoad() {
           return [...list, ...res.posts]
         })
       })
-      .catch(() => {
-        setHasMore(false)
+      .catch((e: unknown) => {
+        if (isAxiosError(e)) {
+          setErrorText(e.message)
+        } else if (Error.isError(e)) {
+          setErrorText(e.message)
+        } else {
+          setErrorText('Unknown error')
+        }
       })
       .finally(() => {
         setIsLoading(false)
@@ -98,7 +110,9 @@ export default function ScrollLoad() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          loadMore()
+          if (getErrorText() === null) {
+            loadMore()
+          }
         }
       },
       {
@@ -149,7 +163,9 @@ export default function ScrollLoad() {
       </div>
 
       <div className="overflow-y-auto pt-4">
-        {!isLoading && list.length === 0 && <div>No posts available.</div>}
+        {!isLoading && errorText === null && list.length === 0 && (
+          <div>No posts available.</div>
+        )}
 
         {list.length > 0 && (
           <motion.div
@@ -182,11 +198,23 @@ export default function ScrollLoad() {
 
         <div className="flex-center py-2">
           {hasMore ? (
-            <LineMdLoadingTwotoneLoop
-              width={40}
-              height={40}
-              className={clsx(!isLoading && 'invisible opacity-0')}
-            />
+            errorText === null ? (
+              <LineMdLoadingTwotoneLoop
+                width={40}
+                height={40}
+                className={clsx(!isLoading && 'invisible opacity-0')}
+              />
+            ) : (
+              <div className="flex-center min-h-10 gap-2 text-red-400">
+                <span>{errorText}</span>
+                <CarbonReset
+                  className="cursor-pointer"
+                  onClick={() => {
+                    loadMore()
+                  }}
+                />
+              </div>
+            )
           ) : (
             <div className="min-h-10">{'Showing all posts.'}</div>
           )}

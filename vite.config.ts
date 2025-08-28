@@ -33,10 +33,9 @@ export default defineConfig(({ command, mode }) => {
       react(),
 
       Icons({
-        /* options */
         jsx: 'react',
         compiler: 'jsx',
-        autoInstall: true,
+        scale: 1,
       }),
 
       // https://github.com/antfu/unplugin-auto-import

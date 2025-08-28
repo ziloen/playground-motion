@@ -1,6 +1,20 @@
-@import "@ziloen/tailwind-config/preset.css";
+@import "@ziloen/tailwind-config/preset.css" theme(inline);
 
-@import "tailwindcss/preflight.css" layer(base);
+/* @import "tailwindcss/preflight.css" layer(base); */
+
+@layer base {
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+}
 
 /* 
 `[data-theme=dark]`, `:host([data-theme=dark])`

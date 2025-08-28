@@ -24,8 +24,6 @@
     "zod": "4.1.4"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "^1.2.13",
-    "@iconify-json/fluent-emoji": "^1.2.6",
     "@iconify/json": "2.2.379",
     "@prettier/plugin-oxc": "0.0.4",
     "@svgr/core": "8.1.0",
