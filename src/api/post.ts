@@ -34,7 +34,7 @@ export async function getPostListApi(params: {
 
   let endpoint = `/posts`
 
-  if (params.userId !== undefined) {
+  if (typeof params.userId === 'number') {
     endpoint = `/posts/user/${params.userId}`
   }
 

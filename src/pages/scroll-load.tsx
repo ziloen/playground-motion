@@ -31,11 +31,12 @@ export default function ScrollLoad() {
     undefined,
   )
   const [searchText, setSearchText, getSearchText] = useGetState('')
+  const [hasMore, setHasMore, getHasMore] = useGetState(true)
+  const [page, setPage, getPage] = useGetState(1)
   // #endregion
 
   // #region useRef
-  const pageRef = useRef(1)
-  const hasMoreRef = useRef(true)
+
   // #endregion
 
   // #region useMemo
@@ -43,7 +44,7 @@ export default function ScrollLoad() {
 
   // #region functions, useImperativeHandle
   const loadMore = useMemoizedFn(async () => {
-    if (getIsLoading() || !hasMoreRef.current) {
+    if (getIsLoading() || !getHasMore()) {
       return
     }
 
@@ -51,16 +52,16 @@ export default function ScrollLoad() {
 
     setIsLoading(true)
     getPostListLatest({
-      page: pageRef.current,
+      page: getPage(),
       pageSize,
       query: getSearchText(),
       userId: getUserId(),
     })
       .then((res) => {
         if (res.posts.length < pageSize) {
-          hasMoreRef.current = false
+          setHasMore(false)
         } else {
-          pageRef.current += 1
+          setPage(getPage() + 1)
         }
 
         setList((list) => {
@@ -68,7 +69,7 @@ export default function ScrollLoad() {
         })
       })
       .catch(() => {
-        hasMoreRef.current = false
+        setHasMore(false)
       })
       .finally(() => {
         setIsLoading(false)
@@ -76,8 +77,8 @@ export default function ScrollLoad() {
   })
 
   const resetAndLoad = useMemoizedFn(() => {
-    pageRef.current = 1
-    hasMoreRef.current = true
+    setPage(1)
+    setHasMore(true)
     setList([])
     setIsLoading(false)
     loadMore()
@@ -180,11 +181,15 @@ export default function ScrollLoad() {
         {!isLoading && <div ref={trackIntersection} />}
 
         <div className="flex-center py-2">
-          <LineMdLoadingTwotoneLoop
-            width={40}
-            height={40}
-            className={clsx(!isLoading && 'invisible opacity-0')}
-          />
+          {hasMore ? (
+            <LineMdLoadingTwotoneLoop
+              width={40}
+              height={40}
+              className={clsx(!isLoading && 'invisible opacity-0')}
+            />
+          ) : (
+            <div className="min-h-10">{'Showing all posts.'}</div>
+          )}
         </div>
       </div>
     </div>
