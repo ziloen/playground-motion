@@ -34,7 +34,7 @@ export default function ScrollLoad() {
   )
   const [searchText, setSearchText, getSearchText] = useGetState('')
   const [hasMore, setHasMore, getHasMore] = useGetState(true)
-  const [page, setPage, getPage] = useGetState(1)
+  const [nextPage, setNextPage, getNextPage] = useGetState(1)
   const [errorText, setErrorText, getErrorText] = useGetState<string | null>(
     null,
   )
@@ -58,7 +58,7 @@ export default function ScrollLoad() {
     setIsLoading(true)
     setErrorText(null)
     getPostListLatest({
-      page: getPage(),
+      page: getNextPage(),
       pageSize,
       query: getSearchText(),
       userId: getUserId(),
@@ -67,7 +67,7 @@ export default function ScrollLoad() {
         if (res.posts.length < pageSize) {
           setHasMore(false)
         } else {
-          setPage(getPage() + 1)
+          setNextPage(getNextPage() + 1)
         }
 
         setList((list) => {
@@ -91,7 +91,7 @@ export default function ScrollLoad() {
   })
 
   const resetAndLoad = useMemoizedFn(() => {
-    setPage(1)
+    setNextPage(1)
     setHasMore(true)
     setList([])
     setErrorText(null)
