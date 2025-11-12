@@ -31,13 +31,13 @@ export default function Tarot() {
 
     requestAnimationFrame(() => {
       Flip.from(state, {
-        duration: 1,
-        ease: 'sine.inOut',
+        duration: 2,
+        ease: 'power4.inOut',
         stagger: -0.005,
         absolute: false,
         scale: false,
         targets: elementsRef.current,
-        motionPath: [],
+        // motionPath: [],
       })
     })
   })
@@ -118,10 +118,10 @@ export default function Tarot() {
             ))}
           </motion.div>
 
-          <div className="col-[1/2] row-[1/2] grid size-full">
-            <ScrollMask className="">
+          <div className="pointer-events-none col-[1/2] row-[1/2] grid size-full">
+            <ScrollMask className="pointer-events-none">
               <div
-                className="relative grid auto-cols-max grid-flow-col"
+                className="pointer-events-auto relative grid auto-cols-max grid-flow-col"
                 onPointerLeave={() => setHoveredIndex(null)}
               >
                 <div
