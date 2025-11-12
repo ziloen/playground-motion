@@ -29,4 +29,9 @@
   --text-color-neutral-secondary: light-dark(--theme(--color-dark-gray-500),
       --theme(--color-light-gray-300));
   --text-color-neutral-tertiary: light-dark(--theme(--color-dark-gray-300), --theme(--color-light-gray-500));
+
+
+  --ease-spring: linear(0, 0.007, 0.026, 0.059 4.5%, 0.106 6.3%, 0.209 9.5%, 0.558 19.3%, 0.658,
+      0.742, 0.812, 0.87, 0.918, 0.957, 0.986 41.6%, 1.007 45.3%, 1.021 49.4%,
+      1.027 54% 60.9%, 1.007 83.2%, 1);
 }

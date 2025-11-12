@@ -31,3 +31,16 @@ html {
     color-scheme: light;
   }
 }
+
+
+@property --animatable-color-1 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+@property --animatable-color-2 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
