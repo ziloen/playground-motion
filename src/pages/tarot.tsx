@@ -2,42 +2,43 @@ import './tarot.css'
 
 import clsx from 'clsx'
 import { range } from 'es-toolkit'
-import { gsap } from 'gsap'
-import Draggable from 'gsap/Draggable'
-import { Flip } from 'gsap/Flip'
-import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useMotionValueEvent, useScroll } from 'motion/react'
-import { useMemoizedFn } from '~/hooks'
+import { Activity } from 'react'
+import { useMemoizedFn, useNextLayoutEffect } from '~/hooks'
+import { flipFrom } from '~/utils'
 
-gsap.registerPlugin(Draggable, Flip, MotionPathPlugin)
+const CARD_COUNT = 200
 
-const CARD_COUNT = 78
+const CARDS = range(CARD_COUNT)
 
 export default function Tarot() {
   const [state, setState] = useState(true)
 
-  const elementsRef = useRef<(HTMLElement | null)[]>([])
+  const elementsRef = useRef(new Map<number, HTMLDivElement>())
 
-  const setElementRef = useMemoizedFn(
-    (el: HTMLDivElement | null, i: number) => {
-      elementsRef.current[i] = el
-    },
-  )
+  const nextLayoutEffect = useNextLayoutEffect()
+
+  const [animating, setAnimating] = useState(false)
 
   const handleClick = useMemoizedFn(() => {
-    const state = Flip.getState(elementsRef.current)
+    if (animating) return
 
+    const prevPositions = elementsRef.current
+      .values()
+      .map((el) => el.getBoundingClientRect())
+      .toArray()
+
+    setAnimating(true)
     setState((s) => !s)
 
-    requestAnimationFrame(() => {
-      Flip.from(state, {
-        duration: 2,
-        ease: 'power4.inOut',
-        stagger: -0.005,
-        absolute: false,
-        scale: false,
-        targets: elementsRef.current,
-        // motionPath: [],
+    nextLayoutEffect(() => {
+      flipFrom(prevPositions, {
+        targets: Array.from(elementsRef.current.values()),
+        duration: 2_000,
+        easing: 'cubic-bezier(0.83, 0, 0.17, 1)',
+        stagger: -5,
+      }).then(() => {
+        setAnimating(false)
       })
     })
   })
@@ -46,16 +47,17 @@ export default function Tarot() {
     null,
   )
 
-  const onSelectCard = useMemoizedFn((i: number) => {
-    setSelectedCardIndex(i)
-    setHoveredIndex(null)
-  })
+  const onSelectCard = useMemoizedFn((e: React.MouseEvent, i: number) => {
+    const rect = e.currentTarget.getBoundingClientRect()
 
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+    setSelectedCardIndex(i)
+
+    nextLayoutEffect(() => {})
+  })
 
   return (
     <>
-      {state && (
+      <Activity mode={state ? 'visible' : 'hidden'}>
         <div className="grid size-full place-content-center place-items-center gap-4">
           <motion.div
             onClick={handleClick}
@@ -76,24 +78,27 @@ export default function Tarot() {
               gridTemplateColumns: `repeat(${CARD_COUNT - 1},3px) 200px`,
             }}
           >
-            {range(CARD_COUNT).map((i) => (
+            {CARDS.map((i) => (
               <div
                 key={i}
                 data-flip-id={`card-${i}`}
-                className="aspect-[3/4] w-[200px]"
+                className="aspect-[3/4] w-[100px]"
                 style={{
                   zIndex: 1,
                 }}
-                ref={(el) => setElementRef(el, i)}
+                ref={(el) => {
+                  if (el) elementsRef.current.set(i, el)
+                  else elementsRef.current.delete(i)
+                }}
               >
                 <div className="size-full rounded-lg border border-light-gray-900 bg-[#2c3036] shadow"></div>
               </div>
             ))}
           </div>
         </div>
-      )}
+      </Activity>
 
-      {!state && (
+      <Activity mode={state ? 'hidden' : 'visible'}>
         <div className="relative grid size-full auto-cols-fr p-4">
           <motion.div
             initial={{ y: -50, opacity: 0 }}
@@ -120,64 +125,30 @@ export default function Tarot() {
 
           <div className="pointer-events-none col-[1/2] row-[1/2] grid size-full">
             <ScrollMask className="pointer-events-none">
-              <div
-                className="pointer-events-auto relative grid auto-cols-max grid-flow-col"
-                onPointerLeave={() => setHoveredIndex(null)}
-              >
+              <div className="group/card-deck pointer-events-auto relative grid auto-cols-max grid-flow-col">
                 <div
                   className="absolute inset-0 z-2 m-auto size-1 snap-center bg-red"
-                  ref={(el) => {
-                    if (el) {
-                      requestAnimationFrame(() => {
-                        el.style.display = 'none'
-                      })
-                    }
-                  }}
-                ></div>
+                  ref={hideOnBush}
+                />
 
-                {range(CARD_COUNT)
-                  .filter((i) => i !== selectedCardIndex)
-                  .map((v, i, a) => (
-                    <motion.div
-                      key={i}
-                      className="z-1 overflow-visible not-last:max-w-[22px] last:max-w-[200px]"
-                      whileHover={{
-                        maxWidth: i === a.length - 1 ? undefined : '120px',
+                {CARDS.filter((i) => i !== selectedCardIndex).map((v) => (
+                  <div
+                    key={v}
+                    className="group/card peer z-1 transition-transform duration-300 ease-spring not-last:w-[22px] group-hover/card-deck:delay-0 peer-hover:translate-x-10 last:w-fit hover:-translate-x-10 has-[~_.peer:hover]:-translate-x-10"
+                  >
+                    <div
+                      className="aspect-[3/4] w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10"
+                      ref={(el) => {
+                        if (el) elementsRef.current.set(v, el)
+                        else elementsRef.current.delete(v)
                       }}
-                    >
-                      <motion.div
-                        key={i}
-                        drag
-                        dragConstraints={{
-                          left: 0,
-                          right: 0,
-                          top: 0,
-                          bottom: 0,
-                        }}
-                        dragElastic={1}
-                        layoutId={`card-${i}`}
-                        data-flip-id={`card-${i}`}
-                        className="aspect-[3/4] w-[200px]"
-                        style={{
-                          zIndex: 1,
-                        }}
-                        ref={(el) => setElementRef(el, i)}
-                        onClick={() => {
-                          onSelectCard(i)
-                        }}
-                      >
-                        <div className="size-full cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] shadow transition-transform hover:-translate-y-10"></div>
-                      </motion.div>
-                    </motion.div>
-                  ))}
+                      onClick={(e) => {
+                        onSelectCard(e, v)
+                      }}
+                    />
+                  </div>
+                ))}
               </div>
-              {/* <div
-                className="scrollbar-none grid w-full snap-x snap-mandatory items-end justify-safe-center overflow-x-scroll px-10"
-                style={{
-                  maskImage: `linear-gradient(to right,transparent 0%,#000 30%,#000 70%,transparent 100%)`,
-                }}
-              >
-              </div> */}
             </ScrollMask>
           </div>
 
@@ -210,7 +181,10 @@ export default function Tarot() {
                       },
                     }}
                     className="relative z-2 aspect-[3/4] w-[400px] backface-visible transform-3d"
-                    ref={(el) => setElementRef(el, selectedCardIndex)}
+                    ref={(el) => {
+                      if (el) elementsRef.current.set(selectedCardIndex, el)
+                      else elementsRef.current.delete(selectedCardIndex)
+                    }}
                   >
                     <div className="absolute z-0 size-full cursor-pointer rounded-lg border border-light-gray-900 bg-[#46afa4] shadow">
                       Back of Card
@@ -225,9 +199,17 @@ export default function Tarot() {
             )}
           </AnimatePresence>
         </div>
-      )}
+      </Activity>
     </>
   )
+}
+
+function hideOnBush(el: HTMLElement | null) {
+  if (!el) return
+
+  requestAnimationFrame(() => {
+    el.style.display = 'none'
+  })
 }
 
 function ScrollMask({
@@ -254,7 +236,7 @@ function ScrollMask({
   return (
     <div className={clsx('relative grid w-full items-end', className)}>
       <div
-        className="scrollbar-none grid size-full snap-x snap-mandatory items-end justify-safe-center overflow-x-auto px-10 transition-[--animatable-color-1,--animatable-color-2] duration-500"
+        className="scrollbar-none grid size-full snap-x snap-mandatory items-end justify-center-safe overflow-x-auto px-10 transition-[--animatable-color-1,--animatable-color-2] duration-500"
         style={{
           '--animatable-color-1': isAtStart ? '#000' : 'transparent',
           '--animatable-color-2': isAtEnd ? '#000' : 'transparent',
