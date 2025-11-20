@@ -1,20 +1,25 @@
 import './tarot.css'
 
 import clsx from 'clsx'
-import { range } from 'es-toolkit'
+import { range, shuffle } from 'es-toolkit'
 import { useMotionValueEvent, useScroll } from 'motion/react'
 import { Activity } from 'react'
 import { useMemoizedFn, useNextLayoutEffect } from '~/hooks'
 import { flipFrom } from '~/utils'
 
-const CARD_COUNT = 200
-
-const CARDS = range(CARD_COUNT)
+const CARDS = shuffle(
+  Object.entries(
+    import.meta.glob('../assets/*Prex*.png', {
+      eager: true,
+      import: 'default',
+    }),
+  ).map(([, path]) => path as string),
+)
 
 export default function Tarot() {
   const [state, setState] = useState(true)
 
-  const elementsRef = useRef(new Map<number, HTMLDivElement>())
+  const elementsRef = useRef(new Map<string, HTMLDivElement>())
 
   const nextLayoutEffect = useNextLayoutEffect()
 
@@ -43,14 +48,12 @@ export default function Tarot() {
     })
   })
 
-  const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(
-    null,
-  )
+  const [selectedCard, setSelectedCard] = useState<string | null>(null)
 
-  const onSelectCard = useMemoizedFn((e: React.MouseEvent, i: number) => {
+  const onSelectCard = useMemoizedFn((e: React.MouseEvent, i: string) => {
     const rect = e.currentTarget.getBoundingClientRect()
 
-    setSelectedCardIndex(i)
+    setSelectedCard(i)
 
     nextLayoutEffect(() => {})
   })
@@ -75,23 +78,23 @@ export default function Tarot() {
           <div
             className="grid grid-flow-col"
             style={{
-              gridTemplateColumns: `repeat(${CARD_COUNT - 1},3px) 200px`,
+              gridTemplateColumns: `repeat(${CARDS.length - 1},3px) 200px`,
             }}
           >
-            {CARDS.map((i) => (
+            {CARDS.map((path, i) => (
               <div
-                key={i}
-                data-flip-id={`card-${i}`}
-                className="aspect-[3/4] w-[100px]"
+                key={path}
+                data-flip-id={`card-${path}`}
+                className="aspect-1/2 w-[100px]"
                 style={{
                   zIndex: 1,
                 }}
                 ref={(el) => {
-                  if (el) elementsRef.current.set(i, el)
-                  else elementsRef.current.delete(i)
+                  if (el) elementsRef.current.set(path, el)
+                  else elementsRef.current.delete(path)
                 }}
               >
-                <div className="size-full rounded-lg border border-light-gray-900 bg-[#2c3036] shadow"></div>
+                <div className="size-full rounded-lg border border-light-gray-900 bg-[#2c3036]"></div>
               </div>
             ))}
           </div>
@@ -118,7 +121,7 @@ export default function Tarot() {
             {range(3).map((i) => (
               <div
                 key={i}
-                className="aspect-[3/4] w-[200px] rounded-lg border border-light-gray-900 bg-[#2c3036] shadow"
+                className="aspect-1/2 w-[200px] rounded-lg border border-light-gray-900 bg-[#2c3036] shadow"
               />
             ))}
           </motion.div>
@@ -131,13 +134,13 @@ export default function Tarot() {
                   ref={hideOnBush}
                 />
 
-                {CARDS.filter((i) => i !== selectedCardIndex).map((v) => (
+                {CARDS.filter((p) => p !== selectedCard).map((v) => (
                   <div
                     key={v}
                     className="group/card peer z-1 transition-transform duration-300 ease-spring not-last:w-[22px] group-hover/card-deck:delay-0 peer-hover:translate-x-10 last:w-fit hover:-translate-x-10 has-[~_.peer:hover]:-translate-x-10"
                   >
                     <div
-                      className="aspect-[3/4] w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10"
+                      className="aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10"
                       ref={(el) => {
                         if (el) elementsRef.current.set(v, el)
                         else elementsRef.current.delete(v)
@@ -153,7 +156,7 @@ export default function Tarot() {
           </div>
 
           <AnimatePresence>
-            {selectedCardIndex !== null && (
+            {selectedCard !== null && (
               <div className="fixed z-1">
                 <motion.div
                   className="fixed inset-0 bg-light-gray-50/20 backdrop-blur-[10px]"
@@ -161,14 +164,14 @@ export default function Tarot() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => {
-                    setSelectedCardIndex(null)
+                    setSelectedCard(null)
                   }}
                 />
 
                 <div className="fixed inset-0 m-auto flex-center size-fit perspective-[1300px]">
                   <motion.div
-                    data-flip-id={`card-${selectedCardIndex}`}
-                    layoutId={`card-${selectedCardIndex}`}
+                    data-flip-id={`card-${selectedCard}`}
+                    layoutId={`card-${selectedCard}`}
                     initial={{
                       rotateY: 0,
                     }}
@@ -180,19 +183,21 @@ export default function Tarot() {
                         type: 'spring',
                       },
                     }}
-                    className="relative z-2 aspect-[3/4] w-[400px] backface-visible transform-3d"
+                    className="relative z-2 aspect-1/2 w-[400px] transform-3d"
                     ref={(el) => {
-                      if (el) elementsRef.current.set(selectedCardIndex, el)
-                      else elementsRef.current.delete(selectedCardIndex)
+                      if (el) elementsRef.current.set(selectedCard, el)
+                      else elementsRef.current.delete(selectedCard)
                     }}
                   >
-                    <div className="absolute z-0 size-full cursor-pointer rounded-lg border border-light-gray-900 bg-[#46afa4] shadow">
+                    <div className="absolute z-0 size-full cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] shadow backface-hidden">
                       Back of Card
                     </div>
 
-                    <div className="absolute z-1 size-full translate-z-0.5 cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] shadow">
-                      Front of Card
-                    </div>
+                    <img
+                      src={selectedCard}
+                      className="absolute z-1 aspect-[1/2_auto] size-full w-full rotate-y-180 cursor-pointer backface-hidden"
+                      alt="Prex Card"
+                    />
                   </motion.div>
                 </div>
               </div>
