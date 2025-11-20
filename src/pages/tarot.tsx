@@ -128,7 +128,12 @@ export default function Tarot() {
 
           <div className="pointer-events-none col-[1/2] row-[1/2] grid size-full">
             <ScrollMask className="pointer-events-none">
-              <div className="group/card-deck pointer-events-auto relative grid auto-cols-max grid-flow-col">
+              <div
+                className="group/card-deck pointer-events-auto relative grid auto-cols-max grid-flow-col"
+                style={{
+                  gridTemplateColumns: `repeat(${CARDS.length - 1},22px) max-content`,
+                }}
+              >
                 <div
                   className="absolute inset-0 z-2 m-auto size-1 snap-center bg-red"
                   ref={hideOnBush}
@@ -137,7 +142,7 @@ export default function Tarot() {
                 {CARDS.filter((p) => p !== selectedCard).map((v) => (
                   <div
                     key={v}
-                    className="group/card peer z-1 transition-transform duration-300 ease-spring not-last:w-[22px] group-hover/card-deck:delay-0 peer-hover:translate-x-10 last:w-fit hover:-translate-x-10 has-[~_.peer:hover]:-translate-x-10"
+                    className="group/card peer z-1 w-fit transition-transform duration-300 ease-spring peer-hover:translate-x-10 hover:-translate-x-10 has-[~_.peer:hover]:-translate-x-10"
                   >
                     <div
                       className="aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10"
