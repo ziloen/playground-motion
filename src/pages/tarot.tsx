@@ -142,7 +142,7 @@ export default function Tarot() {
                 {CARDS.filter((p) => p !== selectedCard).map((v) => (
                   <div
                     key={v}
-                    className="group/card peer z-1 w-fit transition-transform duration-300 ease-spring peer-hover:translate-x-10 hover:-translate-x-10 has-[~_.peer:hover]:-translate-x-10"
+                    className="group/card z-1 w-fit transition-transform duration-300 ease-spring hover:-translate-x-10 hover:preceding:-translate-x-10 hover:following:translate-x-10"
                   >
                     <div
                       className="aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10"
