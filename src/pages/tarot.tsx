@@ -246,11 +246,11 @@ function ScrollMask({
   return (
     <div className={clsx('relative grid w-full items-end', className)}>
       <div
-        className="scrollbar-none grid size-full snap-x snap-mandatory items-end justify-center-safe overflow-x-auto px-10 transition-[--animatable-color-1,--animatable-color-2] duration-500"
+        className="scrollbar-none grid size-full snap-x snap-mandatory items-end justify-center-safe overflow-x-auto px-10 transition-[--color-1,--color-2] duration-500"
         style={{
-          '--animatable-color-1': isAtStart ? '#000' : 'transparent',
-          '--animatable-color-2': isAtEnd ? '#000' : 'transparent',
-          maskImage: `linear-gradient(to right,var(--animatable-color-1),#000 30%,#000 70%,var(--animatable-color-2))`,
+          '--color-1': isAtStart ? '#000' : 'transparent',
+          '--color-2': isAtEnd ? '#000' : 'transparent',
+          maskImage: `linear-gradient(to right,var(--color-1),#000 30%,#000 70%,var(--color-2))`,
         }}
         ref={containerRef}
       >
