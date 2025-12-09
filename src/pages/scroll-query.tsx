@@ -1,16 +1,12 @@
-import { switchLatest } from '@wai-ri/core'
-import { isAxiosError } from 'axios'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import type { Variants } from 'motion/react'
 import { stagger } from 'motion/react'
 import type { RefCallback } from 'react'
-import type { Post } from '~/api/post'
 import { getPostListApi } from '~/api/post'
-import { useGetState, useMemoizedFn } from '~/hooks'
+import { useLatest, useMemoizedFn } from '~/hooks'
 import CarbonReset from '~icons/carbon/reset'
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop'
-
-const getPostListLatest = switchLatest(getPostListApi)
 
 const containerVariants: Variants = {
   animate: {
@@ -25,102 +21,60 @@ const itemVariants: Variants = {
   animate: { opacity: 1 },
 }
 
+const PAGE_SIZE = 7
+
 export default function ScrollLoad() {
-  // #region useState, useHookState
-  const [list, setList] = useState<Post[]>([])
-  const [isFetching, setIsFetching, getIsFetching] = useGetState(false)
-  const [userId, setUserId, getUserId] = useGetState<number | undefined>(
-    undefined,
-  )
-  const [searchText, setSearchText, getSearchText] = useGetState('')
-  const [hasNextPage, setHasNextPage, getHasNextPage] = useGetState(true)
-  const [nextPage, setNextPage, getNextPage] = useGetState(1)
-  const [error, setError, getError] = useGetState<Error | null>(null)
-  // #endregion
+  const [userId, setUserId] = useState<number | undefined>(undefined)
+  const [searchText, setSearchText] = useState('')
 
-  // #region useRef
-
-  // #endregion
-
-  // #region useMemo
-  // #endregion
-
-  // #region functions, useImperativeHandle
-  const fetchNextPage = useMemoizedFn(async () => {
-    if (getIsFetching() || !getHasNextPage()) {
-      return
-    }
-
-    const pageSize = 7
-
-    setIsFetching(true)
-    setError(null)
-    getPostListLatest({
-      page: getNextPage(),
-      pageSize,
-      query: getSearchText(),
-      userId: getUserId(),
-    })
-      .then((res) => {
-        if (res.posts.length < pageSize) {
-          setHasNextPage(false)
-        } else {
-          setNextPage(getNextPage() + 1)
-        }
-
-        setList((list) => {
-          return [...list, ...res.posts]
+  const { data, hasNextPage, isFetching, isError, fetchNextPage, error } =
+    useInfiniteQuery({
+      queryKey: ['posts', userId, searchText],
+      initialPageParam: 1,
+      queryFn: async ({ pageParam }) => {
+        const res = await getPostListApi({
+          page: pageParam,
+          pageSize: PAGE_SIZE,
+          query: searchText,
+          userId: userId,
         })
-      })
-      .catch((e: unknown) => {
-        if (isAxiosError(e)) {
-          setError(e)
-        } else if (Error.isError(e)) {
-          setError(e)
-        } else if (typeof e === 'string') {
-          setError(new Error(e))
-        } else {
-          setError(new Error('Unknown error'))
+        return res
+      },
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.posts.length < PAGE_SIZE) {
+          return undefined
         }
-      })
-      .finally(() => {
-        setIsFetching(false)
-      })
-  })
 
-  const resetAndFetch = useMemoizedFn(() => {
-    setNextPage(1)
-    setHasNextPage(true)
-    setList([])
-    setError(null)
-    setIsFetching(false)
-    fetchNextPage()
-  })
-  // #endregion
+        const total = lastPage.total
+        const loaded = allPages.reduce(
+          (sum, page) => sum + page.posts.length,
+          0,
+        )
 
-  // #region useHookEffect, useEffect
+        if (loaded < total) {
+          return allPages.length + 1
+        }
 
-  // initial load
-  useLayoutEffect(() => {
-    fetchNextPage()
-  }, [])
+        return undefined
+      },
+    })
+
+  const isErrorLatest = useLatest(isError)
+
+  const list = useMemo(() => {
+    return data?.pages.flatMap((page) => page.posts) ?? []
+  }, [data])
 
   const trackIntersection = useMemoizedFn<RefCallback<Element>>((el) => {
     if (!el) return
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          if (getError() === null) {
-            fetchNextPage()
-          }
+      ([entry]) => {
+        if (entry.isIntersecting && !isErrorLatest.current) {
+          fetchNextPage()
         }
       },
-      {
-        root: null,
-        rootMargin: '10px',
-        threshold: 1,
-      },
+      { root: null, rootMargin: '10px', threshold: 1 },
     )
 
     observer.observe(el)
@@ -129,7 +83,6 @@ export default function ScrollLoad() {
       observer.disconnect()
     }
   })
-  // #endregion
 
   return (
     <div className="flex max-h-full flex-col">
@@ -142,7 +95,6 @@ export default function ScrollLoad() {
                 ? undefined
                 : Number(e.currentTarget.value),
             )
-            resetAndFetch()
           }}
         >
           <option value="">All Users</option>
@@ -158,13 +110,12 @@ export default function ScrollLoad() {
           value={searchText}
           onChange={(e) => {
             setSearchText(e.currentTarget.value)
-            resetAndFetch()
           }}
         />
       </div>
 
       <div className="overflow-y-auto pt-4">
-        {!isFetching && !error && list.length === 0 && (
+        {!isFetching && !isError && list.length === 0 && (
           <div>No posts available.</div>
         )}
 
@@ -199,7 +150,7 @@ export default function ScrollLoad() {
 
         <div className="flex-center py-2">
           {hasNextPage ? (
-            error ? (
+            isError ? (
               <div className="flex-center min-h-10 gap-2 text-red-400">
                 <span>{error?.message}</span>
                 <CarbonReset
