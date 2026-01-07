@@ -1,9 +1,0 @@
-.group:hover .hover-card {
-  animation: set backwards 0.2s;
-}
-
-@keyframes set {
-  0% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-}

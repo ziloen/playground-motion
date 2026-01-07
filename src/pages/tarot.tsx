@@ -1,5 +1,3 @@
-import './tarot.css'
-
 import clsx from 'clsx/lite'
 import { range, shuffle } from 'es-toolkit'
 import { useMotionValueEvent, useScroll } from 'motion/react'
@@ -214,7 +212,7 @@ function HoverCard({ src }: { src: string }) {
             'rotateY(calc(var(--number-1) * 15deg))',
           willChange: 'transform',
         }}
-        className="hover-card z-1 aspect-[1/2_auto] w-[400px] origin-center align-middle transition-transform backface-hidden transform-3d group-hover:transform-(--transform) group-hover:duration-0"
+        className="z-1 aspect-[1/2_auto] w-[400px] origin-center align-middle transition-transform backface-hidden transform-3d group-hover:transform-(--transform) group-hover:animate-[set-translate-xy_0.2s_backwards] group-hover:duration-0"
         alt="Prex Card"
       />
     </div>
