@@ -1,6 +1,6 @@
 import './tarot.css'
 
-import clsx from 'clsx'
+import clsx from 'clsx/lite'
 import { range, shuffle } from 'es-toolkit'
 import { useMotionValueEvent, useScroll } from 'motion/react'
 import { Activity } from 'react'
@@ -64,7 +64,7 @@ export default function Tarot() {
         <div className="grid size-full place-content-center place-items-center gap-4">
           <motion.div
             onClick={handleClick}
-            className="max-w-[600px]"
+            className="max-w-[min(600px,100%)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -135,7 +135,7 @@ export default function Tarot() {
                 }}
               >
                 <div
-                  className="absolute inset-0 z-2 m-auto size-1 snap-center bg-red"
+                  className="absolute inset-0 z-2 m-auto size-1 snap-center"
                   ref={hideOnBush}
                 />
 
@@ -173,44 +173,51 @@ export default function Tarot() {
                   }}
                 />
 
-                <div className="fixed inset-0 m-auto flex-center size-fit perspective-[1300px]">
-                  <motion.div
-                    data-flip-id={`card-${selectedCard}`}
-                    layoutId={`card-${selectedCard}`}
-                    initial={{
-                      rotateY: 0,
-                    }}
-                    animate={{
-                      rotateY: 180,
-                      transition: {
-                        delay: 0.3,
-                        duration: 0.5,
-                        type: 'spring',
-                      },
-                    }}
-                    className="relative z-2 aspect-1/2 w-[400px] transform-3d"
-                    ref={(el) => {
-                      if (el) elementsRef.current.set(selectedCard, el)
-                      else elementsRef.current.delete(selectedCard)
-                    }}
-                  >
-                    <div className="absolute z-0 size-full cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] shadow backface-hidden">
-                      Back of Card
-                    </div>
-
-                    <img
-                      src={selectedCard}
-                      className="absolute z-1 aspect-[1/2_auto] size-full w-full rotate-y-180 cursor-pointer backface-hidden"
-                      alt="Prex Card"
-                    />
-                  </motion.div>
-                </div>
+                <HoverCard src={selectedCard} />
               </div>
             )}
           </AnimatePresence>
         </div>
       </Activity>
     </>
+  )
+}
+
+// 参考 https://codepen.io/jh3y/pen/EaVNNxa
+function HoverCard({ src }: { src: string }) {
+  return (
+    <div
+      onPointerMove={(e) => {
+        const { x, y } = e.nativeEvent
+        const rect = e.currentTarget.getBoundingClientRect()
+
+        const ratioX = ((x - rect.x) / rect.width - 0.5) * 2
+        const ratioY = (0.5 - (y - rect.y) / rect.height) * 2
+
+        e.currentTarget.style.setProperty('--number-1', ratioX.toFixed(2))
+        e.currentTarget.style.setProperty('--number-2', ratioY.toFixed(2))
+      }}
+      className="group fixed inset-0 m-auto size-fit"
+      style={{
+        '--number-1': '0',
+        '--number-2': '0',
+      }}
+    >
+      <img
+        src={src}
+        style={{
+          '--number-1': 'inherit',
+          '--number-2': 'inherit',
+          '--transform':
+            'perspective(1300px) ' +
+            'rotateX(calc(var(--number-2) * 12deg)) ' +
+            'rotateY(calc(var(--number-1) * 15deg))',
+          willChange: 'transform',
+        }}
+        className="hover-card z-1 aspect-[1/2_auto] w-[400px] origin-center align-middle transition-transform backface-hidden transform-3d group-hover:transform-(--transform) group-hover:duration-0"
+        alt="Prex Card"
+      />
+    </div>
   )
 }
 

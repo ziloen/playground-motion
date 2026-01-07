@@ -43,3 +43,21 @@ html {
   inherits: false;
   initial-value: transparent;
 }
+
+@property --percentage-1 {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --number-1 {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --number-2 {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
