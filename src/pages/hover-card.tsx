@@ -1,5 +1,8 @@
 import { useMotionValue, useSpring, useTransform } from 'motion/react'
 
+// 参考 https://github.com/simeydotme/pokemon-cards-css
+// 参考 https://codepen.io/jh3y/pen/EaVNNxa
+
 export default function HoverCard() {
   const ref = useRef<HTMLDivElement>(null)
   const enterX = useRef(0)

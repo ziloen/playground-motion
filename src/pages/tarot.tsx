@@ -1,5 +1,6 @@
 import clsx from 'clsx/lite'
 import { range, shuffle } from 'es-toolkit'
+import { useControls } from 'leva'
 import { useMotionValueEvent, useScroll } from 'motion/react'
 import { Activity } from 'react'
 import { useMemoizedFn, useNextLayoutEffect } from '~/hooks'
@@ -183,6 +184,23 @@ export default function Tarot() {
 
 // 参考 https://codepen.io/jh3y/pen/EaVNNxa
 function HoverCard({ src }: { src: string }) {
+  const { xRotate, yRotate } = useControls({
+    xRotate: {
+      value: 8,
+      min: 0,
+      max: 45,
+      step: 1,
+      label: 'X (deg)',
+    },
+    yRotate: {
+      value: 10,
+      min: 0,
+      max: 45,
+      step: 1,
+      label: 'Y (deg)',
+    },
+  })
+
   return (
     <div
       onPointerMove={(e) => {
@@ -190,8 +208,13 @@ function HoverCard({ src }: { src: string }) {
         const rect = e.currentTarget.getBoundingClientRect()
 
         const ratioX = ((x - rect.x) / rect.width - 0.5) * 2
-        const ratioY = (0.5 - (y - rect.y) / rect.height) * 2
+        const ratioY = ((y - rect.y) / rect.height - 0.5) * 2
 
+        //     │
+        //     │    x
+        // ────┼────►
+        //     │
+        //     ▼ y
         e.currentTarget.style.setProperty('--number-1', ratioX.toFixed(2))
         e.currentTarget.style.setProperty('--number-2', ratioY.toFixed(2))
       }}
@@ -201,20 +224,37 @@ function HoverCard({ src }: { src: string }) {
         '--number-2': '0',
       }}
     >
-      <img
-        src={src}
+      <div
+        className="relative isolate z-1 origin-center overflow-hidden rounded-[20px] transition-transform duration-500 backface-hidden transform-3d group-hover:transform-(--transform) group-hover:animate-[set-translate-xy_0.5s_backwards] group-hover:duration-0"
         style={{
           '--number-1': 'inherit',
           '--number-2': 'inherit',
           '--transform':
             'perspective(1300px) ' +
-            'rotateX(calc(var(--number-2) * 12deg)) ' +
-            'rotateY(calc(var(--number-1) * 15deg))',
+            `rotateX(calc(var(--number-2) * -${xRotate}deg)) ` +
+            `rotateY(calc(var(--number-1) * ${yRotate}deg))`,
           willChange: 'transform',
         }}
-        className="z-1 aspect-[1/2_auto] w-[400px] origin-center align-middle transition-transform backface-hidden transform-3d group-hover:transform-(--transform) group-hover:animate-[set-translate-xy_0.2s_backwards] group-hover:duration-0"
-        alt="Prex Card"
-      />
+      >
+        <img
+          src={src}
+          className="aspect-[1/2_auto] w-[400px] align-middle"
+          alt="Prex Card"
+        />
+
+        {/* light */}
+        <div
+          className="absolute inset-0 m-auto size-60 rounded-full bg-white opacity-0 blur-3xl transition-opacity group-hover:opacity-20"
+          style={{
+            '--number-1': 'inherit',
+            '--number-2': 'inherit',
+            mixBlendMode: 'overlay',
+            transform:
+              'translateX(calc(var(--number-1) * 180px)) ' +
+              'translateY(calc(var(--number-2) * 360px))',
+          }}
+        />
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Dialog } from '@base-ui-components/react/dialog'
+import { Dialog } from '@base-ui/react'
 import clsx from 'clsx'
 
 // https://x.com/jh3yy/status/1940806147784823184
@@ -103,7 +103,7 @@ function Button({
       type="button"
       {...rest}
     >
-      <span className="leading-trim-both leading-none">{children}</span>
+      <span className="leading-none leading-trim-both">{children}</span>
     </button>
   )
 }
