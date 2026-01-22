@@ -1,16 +1,78 @@
+import {
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from 'motion/react'
+
 export default function FixedHeader() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollY } = useScroll({ container: containerRef })
+
+  const scrollVelocity = useVelocity(scrollY)
+  const smoothVelocity = useSpring(scrollVelocity, {
+    bounce: 0,
+    visualDuration: 0.35,
+  })
+
+  const headerTop = useMotionValue(0)
+
+  useMotionValueEvent(scrollY, 'change', (v) => {
+    const prev = scrollY.getPrevious() ?? 0
+
+    const delta = v - prev
+
+    const top = headerTop.get()
+    let newTop = top - delta
+
+    if (newTop > 0) newTop = 0
+    if (newTop < -40) newTop = -40
+
+    headerTop.set(newTop)
+  })
+
+  const textShadow = useTransform(smoothVelocity, (v) => {
+    const absV = Math.abs(v)
+    const maxOffset = 10
+
+    const sensitivityFactor = 1_000
+
+    const val = Math.atan(absV / sensitivityFactor)
+
+    const shift = val * (maxOffset / (Math.PI / 2))
+
+    const direction = v === 0 ? -1 : v > 0 ? -1 : 1
+
+    const shiftY = shift * direction
+
+    return `0 ${shiftY / 1.5}px 0 #1f8adb, 0 ${shiftY}px 0 #f52a8c`
+  })
+
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       className="h-full overflow-auto"
     >
-      <div>I Am Fixed Header</div>
+      <motion.div
+        className="sticky top-0 flex h-10 items-center gap-4 border-b border-white/20 bg-white/10 px-4 backdrop-blur-sm backdrop-brightness-50"
+        style={{ top: headerTop }}
+      >
+        <NavLink to="/">← Home</NavLink>
+        Fixed Header
+      </motion.div>
 
-      <NavLink to="/">← Home</NavLink>
+      <motion.div
+        className="fixed font-mono text-4xl font-extrabold"
+        style={{ textShadow }}
+      >
+        TEXT
+      </motion.div>
 
-      <div className="mx-auto flex max-w-[900px] flex-col gap-4">
+      <div className="mx-auto mt-10 flex max-w-[80ch] flex-col gap-4">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non
           magna sit amet nisi ullamcorper interdum vitae ac lectus. Morbi ut
