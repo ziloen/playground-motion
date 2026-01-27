@@ -1,9 +1,12 @@
+import styles from './tarot.module.css'
+
 import clsx from 'clsx/lite'
 import { range, shuffle } from 'es-toolkit'
 import { useControls } from 'leva'
 import { useMotionValueEvent, useScroll } from 'motion/react'
 import { Activity } from 'react'
-import { useMemoizedFn, useNextLayoutEffect } from '~/hooks'
+import { flushSync } from 'react-dom'
+import { useGetState, useMemoizedFn, useNextLayoutEffect } from '~/hooks'
 import { flipFrom } from '~/utils'
 
 const CARDS = shuffle(
@@ -22,10 +25,10 @@ export default function Tarot() {
 
   const nextLayoutEffect = useNextLayoutEffect()
 
-  const [animating, setAnimating] = useState(false)
+  const [animating, setAnimating, getAnimating] = useGetState(false)
 
-  const handleClick = useMemoizedFn(() => {
-    if (animating) return
+  const handleClick = useMemoizedFn(async () => {
+    if (getAnimating()) return
 
     const prevPositions = elementsRef.current
       .values()
@@ -35,26 +38,33 @@ export default function Tarot() {
     setAnimating(true)
     setState((s) => !s)
 
-    nextLayoutEffect(() => {
-      flipFrom(prevPositions, {
-        targets: Array.from(elementsRef.current.values()),
-        duration: 2_000,
-        easing: 'cubic-bezier(0.83, 0, 0.17, 1)',
-        stagger: -5,
-      }).then(() => {
-        setAnimating(false)
-      })
+    await nextLayoutEffect()
+
+    // TODO: ::view-transition-group(.class) 无法读取到 CSS 变量，导致无法实现 stagger 效果
+    await flipFrom(prevPositions, {
+      targets: Array.from(elementsRef.current.values()),
+      duration: 2_000,
+      easing: 'cubic-bezier(0.83, 0, 0.17, 1)',
+      stagger: -5,
     })
+
+    setAnimating(false)
   })
 
   const [selectedCard, setSelectedCard] = useState<string | null>(null)
 
-  const onSelectCard = useMemoizedFn((e: React.MouseEvent, i: string) => {
-    const rect = e.currentTarget.getBoundingClientRect()
+  const onSelectCard = useMemoizedFn(async (e: React.MouseEvent, i: string) => {
+    if (getAnimating()) return
 
-    setSelectedCard(i)
+    setAnimating(true)
 
-    nextLayoutEffect(() => {})
+    await document.startViewTransition(() => {
+      flushSync(() => {
+        setSelectedCard(i)
+      })
+    }).finished
+
+    setAnimating(false)
   })
 
   return (
@@ -84,9 +94,12 @@ export default function Tarot() {
               <div
                 key={path}
                 data-flip-id={`card-${path}`}
-                className="aspect-1/2 w-[100px]"
+                className={clsx('aspect-1/2 w-[100px]', styles.card)}
                 style={{
                   zIndex: 1,
+                  '--index': i,
+                  '--total': CARDS.length,
+                  viewTransitionName: CSS.escape(`card-${path}`),
                 }}
                 ref={(el) => {
                   if (el) elementsRef.current.set(path, el)
@@ -138,16 +151,28 @@ export default function Tarot() {
                   ref={hideOnBush}
                 />
 
-                {CARDS.filter((p) => p !== selectedCard).map((v) => (
+                {CARDS.filter((p) => p !== selectedCard).map((v, i) => (
                   <div
                     key={v}
-                    className="group/card z-1 w-fit transition-transform duration-300 ease-spring hover:-translate-x-10 hover:preceding:-translate-x-10 hover:following:translate-x-10"
+                    className={clsx(
+                      'group/card z-1 w-fit transition-transform duration-300 ease-out',
+                      !animating &&
+                        'hover:-translate-x-6 hover:preceding:-translate-x-6 hover:following:translate-x-6',
+                    )}
                   >
                     <div
-                      className="aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10"
+                      className={clsx(
+                        'aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10',
+                        styles.card,
+                      )}
                       ref={(el) => {
                         if (el) elementsRef.current.set(v, el)
                         else elementsRef.current.delete(v)
+                      }}
+                      style={{
+                        viewTransitionName: CSS.escape(`card-${v}`),
+                        '--index': i,
+                        '--total': CARDS.length,
                       }}
                       onClick={(e) => {
                         onSelectCard(e, v)
@@ -238,7 +263,13 @@ function HoverCard({ src }: { src: string }) {
       >
         <img
           src={src}
-          className="aspect-[1/2_auto] w-[400px] align-middle"
+          className={clsx(
+            'aspect-[1/2_auto] w-[400px] align-middle',
+            styles.card,
+          )}
+          style={{
+            viewTransitionName: CSS.escape(`card-${src}`),
+          }}
           alt="Prex Card"
         />
 

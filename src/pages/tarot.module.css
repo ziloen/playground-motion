@@ -1,0 +1,10 @@
+.card {
+  view-transition-class: card-transition;
+}
+
+::view-transition-group(.card-transition) {
+  animation-duration: .5s;
+  /* FIXME: 无法读取到 --total 和 --index */
+  animation-delay: calc((var(--total, 1) - 1 - var(--index, 0)) * 5ms);
+  animation-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
+}
