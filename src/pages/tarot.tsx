@@ -58,10 +58,13 @@ export default function Tarot() {
 
     setAnimating(true)
 
-    await document.startViewTransition(() => {
-      flushSync(() => {
-        setSelectedCard(i)
-      })
+    await document.startViewTransition({
+      update: () => {
+        flushSync(() => {
+          setSelectedCard(i)
+        })
+      },
+      types: ['draw-card'],
     }).finished
 
     setAnimating(false)
@@ -170,11 +173,13 @@ export default function Tarot() {
                         else elementsRef.current.delete(v)
                       }}
                       style={{
-                        viewTransitionName: CSS.escape(`card-${v}`),
                         '--index': i,
                         '--total': CARDS.length,
                       }}
                       onClick={(e) => {
+                        e.currentTarget.style.viewTransitionName = CSS.escape(
+                          `card-${v}`,
+                        )
                         onSelectCard(e, v)
                       }}
                     />
@@ -243,10 +248,11 @@ function HoverCard({ src }: { src: string }) {
         e.currentTarget.style.setProperty('--number-1', ratioX.toFixed(2))
         e.currentTarget.style.setProperty('--number-2', ratioY.toFixed(2))
       }}
-      className="group fixed inset-0 m-auto size-fit"
+      className={clsx('group fixed inset-0 m-auto size-fit', styles.card)}
       style={{
         '--number-1': '0',
         '--number-2': '0',
+        viewTransitionName: CSS.escape(`card-${src}`),
       }}
     >
       <div
@@ -263,13 +269,7 @@ function HoverCard({ src }: { src: string }) {
       >
         <img
           src={src}
-          className={clsx(
-            'aspect-[1/2_auto] w-[400px] align-middle',
-            styles.card,
-          )}
-          style={{
-            viewTransitionName: CSS.escape(`card-${src}`),
-          }}
+          className="aspect-[1/2_auto] w-[400px] align-middle"
           alt="Prex Card"
         />
 
