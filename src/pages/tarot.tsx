@@ -64,7 +64,7 @@ export default function Tarot() {
           setSelectedCard(i)
         })
       },
-      types: ['draw-card'],
+      types: [styles['draw-card']],
     }).finished
 
     setAnimating(false)
@@ -158,21 +158,24 @@ export default function Tarot() {
                   <div
                     key={v}
                     className={clsx(
-                      'group/card z-1 w-fit transition-transform duration-300 ease-out',
+                      'group/card z-1 w-fit',
                       !animating &&
-                        'hover:-translate-x-6 hover:preceding:-translate-x-6 hover:following:translate-x-6',
+                        'transition-transform duration-300 ease-out hover:-translate-x-6 hover:preceding:-translate-x-6 hover:following:translate-x-6',
                     )}
                   >
                     <div
                       className={clsx(
-                        'aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036] transition-transform group-hover/card:-translate-y-10',
+                        'aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036]',
                         styles.card,
+                        !animating &&
+                          'transition-transform group-hover/card:-translate-y-10',
                       )}
                       ref={(el) => {
                         if (el) elementsRef.current.set(v, el)
                         else elementsRef.current.delete(v)
                       }}
                       style={{
+                        // viewTransitionName: CSS.escape(`card-${v}`),
                         '--index': i,
                         '--total': CARDS.length,
                       }}
@@ -189,23 +192,33 @@ export default function Tarot() {
             </ScrollMask>
           </div>
 
-          <AnimatePresence>
-            {selectedCard !== null && (
-              <div className="fixed z-1">
-                <motion.div
-                  className="fixed inset-0 bg-light-gray-50/20 backdrop-blur-[10px]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => {
-                    setSelectedCard(null)
-                  }}
-                />
+          {selectedCard !== null && (
+            <div
+              className="fixed z-1"
+              onClick={async () => {
+                setAnimating(true)
 
-                <HoverCard src={selectedCard} />
-              </div>
-            )}
-          </AnimatePresence>
+                await document.startViewTransition({
+                  update: () => {
+                    flushSync(() => {
+                      setSelectedCard(null)
+                    })
+                  },
+                  types: [styles['draw-card']],
+                }).finished
+
+                setAnimating(false)
+              }}
+            >
+              <div
+                className={clsx(
+                  'fixed inset-0 bg-light-gray-50/20 opacity-100 backdrop-blur-[10px] transition-opacity starting:opacity-0',
+                )}
+              />
+
+              <HoverCard src={selectedCard} />
+            </div>
+          )}
         </div>
       </Activity>
     </>

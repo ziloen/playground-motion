@@ -46,8 +46,12 @@ export function flipFrom(
       targets
         // 分离读写操作
         .map((target, i) => {
+          if (!prev[i]) {
+            return { target, transform: 'none' }
+          }
+
           const rect = target.getBoundingClientRect()
-          const transform = getFlipTransform(prev[i]!, rect)
+          const transform = getFlipTransform(prev[i], rect)
 
           return { target, transform }
         })

@@ -1,4 +1,6 @@
 import clsx from 'clsx'
+import { clamp, inRange } from 'es-toolkit'
+import { useMotionValueEvent } from 'motion/react'
 import { AutoHeightPanel } from '~/components'
 import EmojiBlackCat from '~icons/fluent-emoji/black-cat'
 import EmojiCat from '~icons/fluent-emoji/cat'
@@ -20,6 +22,20 @@ export default function TabView() {
   const [col, setCol] = useState(`${index + 1} / span 1`)
   const isAnimatingRef = useRef(false)
 
+  const tabBarRef = useRef<HTMLDivElement>(null)
+  const scrollLeftMV = useMotionValue(0)
+  const scrollLeftSpring = useSpring(scrollLeftMV, {
+    bounce: 0,
+    stiffness: 300,
+    damping: 30,
+  })
+
+  useMotionValueEvent(scrollLeftSpring, 'change', (value) => {
+    const tabBar = tabBarRef.current
+    if (!tabBar) return
+    tabBar.scrollLeft = value
+  })
+
   function onChange(nextIndex: number) {
     isAnimatingRef.current = true
     const start = Math.min(nextIndex, index) + 1
@@ -35,9 +51,9 @@ export default function TabView() {
   }
 
   function onScroll(e: React.WheelEvent<HTMLDivElement>) {
-    const isVertical = !e.shiftKey && e.deltaY !== 0
-
-    if (!isVertical) return
+    if (e.shiftKey || e.deltaY === 0) {
+      return
+    }
 
     const target = e.currentTarget
 
@@ -48,12 +64,18 @@ export default function TabView() {
       return
     }
 
-    const delta = e.deltaY
-
     e.preventDefault()
 
     // FIXME: scroll not smooth like native
-    target.scrollLeft += delta
+    target.scrollBy({ left: e.deltaY, behavior: 'smooth' })
+
+    if (scrollLeftSpring.getVelocity()) {
+      const newScrollLeft = clamp(
+        scrollLeftMV.get() + e.deltaY,
+        0,
+        target.scrollWidth,
+      )
+    }
   }
 
   return (
@@ -69,6 +91,7 @@ export default function TabView() {
         className="relative scrollbar-none grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full bg-dark-gray-500 p-1"
         // change vertical scroll to horizontal scroll
         onWheel={onScroll}
+        ref={tabBarRef}
         // TODO: add drag to scroll x axis
       >
         {/* Active indicator */}
