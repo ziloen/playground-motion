@@ -27,6 +27,12 @@ export default function Tarot() {
 
   const [animating, setAnimating, getAnimating] = useGetState(false)
 
+  const [
+    viewTransitioningCard,
+    setViewTransitioningCard,
+    getViewTransitioningCard,
+  ] = useGetState<string | null>(null)
+
   const handleClick = useMemoizedFn(async () => {
     if (getAnimating()) return
 
@@ -53,22 +59,28 @@ export default function Tarot() {
 
   const [selectedCard, setSelectedCard] = useState<string | null>(null)
 
-  const onSelectCard = useMemoizedFn(async (e: React.MouseEvent, i: string) => {
-    if (getAnimating()) return
+  const onSelectCard = useMemoizedFn(
+    async (e: React.MouseEvent, card: string) => {
+      if (getAnimating()) return
 
-    setAnimating(true)
+      setAnimating(true)
+      setViewTransitioningCard(card)
 
-    await document.startViewTransition({
-      update: () => {
-        flushSync(() => {
-          setSelectedCard(i)
-        })
-      },
-      types: [styles['draw-card']],
-    }).finished
-
-    setAnimating(false)
-  })
+      try {
+        await document.startViewTransition({
+          update: () => {
+            flushSync(() => {
+              setSelectedCard(card)
+            })
+          },
+          types: [styles['draw-card']],
+        }).finished
+      } finally {
+        setAnimating(false)
+        setViewTransitioningCard(null)
+      }
+    },
+  )
 
   return (
     <>
@@ -175,14 +187,14 @@ export default function Tarot() {
                         else elementsRef.current.delete(v)
                       }}
                       style={{
-                        // viewTransitionName: CSS.escape(`card-${v}`),
+                        viewTransitionName:
+                          v === viewTransitioningCard
+                            ? CSS.escape(`card-${v}`)
+                            : undefined,
                         '--index': i,
                         '--total': CARDS.length,
                       }}
                       onClick={(e) => {
-                        e.currentTarget.style.viewTransitionName = CSS.escape(
-                          `card-${v}`,
-                        )
                         onSelectCard(e, v)
                       }}
                     />
@@ -197,22 +209,27 @@ export default function Tarot() {
               className="fixed z-1"
               onClick={async () => {
                 setAnimating(true)
+                setViewTransitioningCard(selectedCard)
 
-                await document.startViewTransition({
-                  update: () => {
-                    flushSync(() => {
-                      setSelectedCard(null)
-                    })
-                  },
-                  types: [styles['draw-card']],
-                }).finished
-
-                setAnimating(false)
+                try {
+                  await document.startViewTransition({
+                    update: () => {
+                      flushSync(() => {
+                        setSelectedCard(null)
+                      })
+                    },
+                    types: [styles['draw-card']],
+                  }).finished
+                } finally {
+                  setAnimating(false)
+                  setViewTransitioningCard(null)
+                }
               }}
             >
               <div
+                // FIXME: backdrop-blur 在 view transition 中无法生效
                 className={clsx(
-                  'fixed inset-0 bg-light-gray-50/20 opacity-100 backdrop-blur-[10px] transition-opacity starting:opacity-0',
+                  'fixed inset-0 bg-light-gray-50/20 backdrop-blur-[10px] transition-opacity starting:opacity-0',
                 )}
               />
 

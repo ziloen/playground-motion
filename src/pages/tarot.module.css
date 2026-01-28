@@ -1,19 +1,39 @@
 .card {
-  view-transition-class: card-transition;
+  view-transition-class: card;
 }
 
-/* FIXME: type not working */
 :active-view-transition-type(draw-card) {
-  &::view-transition-group(.card-transition) {
+  &::view-transition-group(.card) {
     animation-duration: .5s;
     /* FIXME: 无法读取到 --total 和 --index */
-    animation-delay: calc((var(--total, 1) - 1 - var(--index, 0)) * 5ms);
+    /* animation-delay: calc((var(--total, 1) - 1 - var(--index, 0)) * 5ms); */
     animation-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
+    perspective: 1000px;
   }
 
-  &::view-transition-old(.card-transition):only-child {
-    animation-duration: 0s;
+  &::view-transition-old(.card),
+  &::view-transition-new(.card) {
     animation: none;
-    display: none;
+
+    &:only-child {
+      display: none;
+    }
+  }
+
+  &::view-transition-image-pair(.card) {
+    transform-style: preserve-3d;
+    isolation: auto;
+    animation: flip-in .5s cubic-bezier(0.83, 0, 0.17, 1) both;
+    animation-delay: .6s;
+  }
+
+  &::view-transition-new(.card) {
+    backface-visibility: hidden;
+  }
+}
+
+@keyframes flip-in {
+  from {
+    transform: rotateY(180deg);
   }
 }
