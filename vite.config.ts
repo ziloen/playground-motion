@@ -80,6 +80,7 @@ export default defineConfig(({ command, mode }) => {
       assetsInlineLimit: 0,
       cssMinify: 'lightningcss',
       target: browserslistToEsbuild(target),
+      reportCompressedSize: false,
     },
 
     css: {
