@@ -1,2 +1,1 @@
 export { flipFrom } from './flipFrom'
-

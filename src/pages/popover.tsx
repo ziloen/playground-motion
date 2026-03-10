@@ -48,6 +48,7 @@ export default function PopoverPage() {
                       x: { duration: 0.2 },
                     }}
                     style={{
+                      // TODO: 使用 corner-shape: bevel;
                       ...getBorderStyle(14, 'white', 'transparent'),
                     }}
                   >

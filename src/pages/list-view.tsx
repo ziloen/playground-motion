@@ -4,7 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router'
-import type { Post } from '~/api/post'
+import type { PostListResponse } from '~/api/post'
 import { getPostListApi } from '~/api/post'
 
 export default function ListView() {
@@ -28,12 +28,19 @@ export default function ListView() {
     })
 
   function deletePost(id: number) {
-    queryClient.setQueryData(
+    queryClient.setQueryData<{ data: PostListResponse; dataPage: number }>(
       ['postList', { page }],
-      (data: { data: Post[]; dataPage: number }) => ({
-        ...data,
-        data: data.data.filter((post: Post) => post.id !== id),
-      }),
+      (data) => {
+        if (!data) return data
+
+        return {
+          ...data,
+          data: {
+            ...data.data,
+            posts: data.data.posts.filter((post) => post.id !== id),
+          },
+        }
+      },
     )
   }
 

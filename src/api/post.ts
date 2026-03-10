@@ -19,7 +19,7 @@ const postListSchema = z.object({
 
 export type Post = z.infer<typeof postSchema>
 
-type PostListResponse = z.infer<typeof postListSchema>
+export type PostListResponse = z.infer<typeof postListSchema>
 
 export async function getPostListApi(params: {
   page: number
