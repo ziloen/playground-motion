@@ -3,10 +3,15 @@ import styles from './tarot.module.css'
 import clsx from 'clsx/lite'
 import { range, shuffle } from 'es-toolkit'
 import { useControls } from 'leva'
-import { useMotionValueEvent, useScroll } from 'motion/react'
+import { useScroll } from 'motion/react'
 import { Activity } from 'react'
 import { flushSync } from 'react-dom'
-import { useGetState, useMemoizedFn, useNextLayoutEffect } from '~/hooks'
+import {
+  useGetState,
+  useMemoizedFn,
+  useNextLayoutEffect,
+  useTransformState,
+} from '~/hooks'
 import { flipFrom } from '~/utils'
 
 const CARDS = shuffle(
@@ -336,18 +341,15 @@ function ScrollMask({
   children?: React.ReactNode
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const [isAtStart, setIsAtStart] = useState(true)
-  const [isAtEnd, setIsAtEnd] = useState(true)
 
-  const { scrollX, scrollXProgress } = useScroll({
-    container: containerRef,
-  })
+  const { scrollX, scrollXProgress } = useScroll({ container: containerRef })
 
-  useMotionValueEvent(scrollXProgress, 'change', (v) => {
-    setIsAtStart(v <= 0 || scrollX.get() === 0)
-    // 在容器宽度为单数的情况下，会有精度问题，滚动到最后未必能精确到 1
-    setIsAtEnd(v >= 0.99)
-  })
+  const isAtStart = useTransformState(
+    () => scrollXProgress.get() <= 0 || scrollX.get() === 0,
+  )
+
+  // 在容器宽度为单数的情况下，会有精度问题，滚动到最后未必能精确到 1
+  const isAtEnd = useTransformState(() => scrollXProgress.get() >= 0.99)
 
   return (
     <div className={clsx('relative grid w-full items-end', className)}>

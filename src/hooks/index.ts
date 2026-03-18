@@ -1,4 +1,6 @@
 export { useGetState } from './useGetState'
 export { useLatest } from './useLatest'
 export { useMemoizedFn } from './useMemoizedFn'
+export { useMotionValueState } from './useMotionValueState'
 export { useNextEffect, useNextLayoutEffect } from './useNextEffect'
+export { useTransformState } from './useTransformState'
