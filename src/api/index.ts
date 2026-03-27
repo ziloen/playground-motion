@@ -3,8 +3,7 @@ import type { ZodType } from 'zod'
 
 export const request = axios.create({
   baseURL: 'https://dummyjson.com',
-  // 30s timeout
-  timeout: 30_000,
+  timeout: 2 * 60_000,
   adapter: 'fetch',
 })
 

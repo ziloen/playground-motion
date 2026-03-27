@@ -116,18 +116,12 @@ export default function ScrollLoad() {
           }
         }
       },
-      {
-        root: null,
-        rootMargin: '10px',
-        threshold: 1,
-      },
+      { rootMargin: '10px' },
     )
 
     observer.observe(el)
 
-    return () => {
-      observer.disconnect()
-    }
+    return () => observer.disconnect()
   })
   // #endregion
 

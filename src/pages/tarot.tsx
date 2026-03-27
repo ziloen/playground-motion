@@ -344,6 +344,8 @@ function ScrollMask({
 
   const { scrollX, scrollXProgress } = useScroll({ container: containerRef })
 
+  // TODO: 直接使用 CSS scroll-state queries
+  // FIXME: 在 rtl 布局下不正确
   const isAtStart = useTransformState(
     () => scrollXProgress.get() <= 0 || scrollX.get() === 0,
   )
