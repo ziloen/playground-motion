@@ -17,6 +17,9 @@
   // ],
   "eslint.format.enable": false,
   "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
+    "^console$",
+    "^motion/react-client$",
+    "^motion/react-m$",
     "^node:console$",
     "^typescript$",
     "^zod/locales",
