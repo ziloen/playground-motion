@@ -1,0 +1,14 @@
+::view-transition-group(.masonry-scroll-item) {
+  /* animation-duration: 2s; */
+  animation-duration: .5s;
+  animation-timing-function: ease-in-out;
+}
+
+
+::view-transition-old(.logo-preview) {
+  animation: none;
+}
+
+::view-transition-new(.logo-preview) {
+  animation: none;
+}

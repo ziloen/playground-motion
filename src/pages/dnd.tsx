@@ -1,14 +1,13 @@
+import { clamp } from 'es-toolkit'
+
 const MAX_SCALE = 10
 const MIN_SCALE = 0.3
 const SCALE_STEP = 0.5
 
 export default function DND() {
   const scale = useMotionValue(1)
-  const scaleSpring = useSpring(scale, {
-    bounce: 0,
-  })
-
-  // scale from mouse position
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
 
   return (
     <motion.div
@@ -20,15 +19,22 @@ export default function DND() {
       dragElastic={0.5}
       // 拖拽限制范围
       dragConstraints={useRef(document.body)}
-      style={{ scale: scaleSpring }}
+      style={{ x, y, scale }}
       onWheel={(e) => {
         if (e.deltaY === 0) return
-        scale.set(
-          Math.min(
-            Math.max(scale.get() - Math.sign(e.deltaY) * SCALE_STEP, MIN_SCALE),
-            MAX_SCALE,
-          ),
+        const oldScale = scale.get()
+        const newScale = clamp(
+          oldScale - Math.sign(e.deltaY) * SCALE_STEP,
+          MIN_SCALE,
+          MAX_SCALE,
         )
+        const rect = e.currentTarget.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+        const ratio = 1 - newScale / oldScale
+        x.set(x.get() + (e.clientX - centerX) * ratio)
+        y.set(y.get() + (e.clientY - centerY) * ratio)
+        scale.set(newScale)
       }}
       className="size-[100px] rounded-full bg-green-700"
     />

@@ -7,7 +7,7 @@ import { useSyncExternalStore } from 'react'
  * @example
  * ```tsx
  * const x = useMotionValue(0) // MotionValue<number>
- * const xState = useMotionValueState(x) // number
+ * const xMVState = useMotionValueState(x) // number
  * ```
  */
 export function useMotionValueState<T>(motionValue: MotionValue<T>): T {

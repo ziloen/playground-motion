@@ -1,6 +1,7 @@
 import type { Transition } from 'motion/react'
-import { useAnimation } from 'motion/react'
+import { motion, useAnimation } from 'motion/react'
 import type { PropsWithChildren, RefCallback } from 'react'
+import { useCallback } from 'react'
 
 type Props = PropsWithChildren<{
   className?: string

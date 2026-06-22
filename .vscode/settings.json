@@ -26,5 +26,6 @@
     "^zod/v4/locales",
   ],
   "prettier.enable": true,
-  "tailwindCSS.experimental.configFile": "src/styles/tailwind.css"
+  "tailwindCSS.experimental.configFile": "src/styles/tailwind.css",
+  "typescript.native-preview.tsdk": "node_modules\\@typescript\\native-preview"
 }
