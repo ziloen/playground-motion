@@ -1,6 +1,8 @@
 import './masonry-scroll.css'
 
 import { useVirtualizer } from '@tanstack/react-virtual'
+import { clsx } from 'clsx'
+import { startTransition } from 'react'
 import { flushSync } from 'react-dom'
 
 const IMAGE_SIZES = [
@@ -50,13 +52,11 @@ export default function MasonryScroll() {
   const [lanes, setLanes] = useState(3)
   const images = IMAGE_LIST
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
-    null,
-  )
-
-  const GAP_X = 8
-  const GAP_Y = 8
-  const ITEM_WIDTH = `calc((100% - ${(lanes - 1) * GAP_X}px) / ${lanes})`
+  const [selectedImage, setSelectedImage] = useState<{
+    index: number
+    image: (typeof images)[number]
+    lane: number
+  } | null>(null)
 
   const virtualizer = useVirtualizer({
     count: images.length,
@@ -65,7 +65,7 @@ export default function MasonryScroll() {
     lanes: lanes,
     overscan: 5,
     // FIXME: 在非起始滚动位置进行 resize 导致 lanes 变化时，可能会导致 item 的 lane 计算不正确
-    // 例如：滚动到最后，拖动窗口大小（lanes 改变），再进行上下滚动，有些列很长，有些列很短
+    // 例如：在 lane = 2 时滚动到最后，拖动窗口大小（lanes 改变），再进行上下滚动，有些列很长，有些列很短
     // 原因是虚拟列表，只有可视区域附近的 item 会被测量并更新
     // 解决办法1：放弃动态宽度，使用固定列宽，这样缓存的高度就不会因为宽度变化而不准确。
     // 解决办法2: 如果 item 的宽高比已知且固定，关闭 tanstack virtual 的 observeElementRect，手动在 resize 时进行 virtualizer.measure()
@@ -91,6 +91,10 @@ export default function MasonryScroll() {
     return () => ro.disconnect()
   }, [])
 
+  useEffect(() => {
+    virtualizer.measure()
+  }, [lanes])
+
   return (
     <div ref={scrollElementRef} className="h-full overflow-y-auto">
       <div className="py-2 text-2xl">
@@ -101,90 +105,127 @@ export default function MasonryScroll() {
       </div>
 
       <div
-        style={{
-          height: `${virtualizer.getTotalSize()}px`,
-          width: '100%',
-          position: 'relative',
-        }}
+        className="flex w-full gap-2"
+        style={{ minHeight: `${virtualizer.getTotalSize()}px` }}
       >
-        {virtualizer.getVirtualItems().map((v) => {
-          if (v.index === selectedImageIndex) {
-            return null
-          }
+        {virtualizer
+          .getVirtualItems()
+          .reduce(
+            (acc, v) => {
+              const image = images[v.index]
 
-          const image = images[v.index]
+              const delay = selectedImage
+                ? getDelay(
+                    v.index,
+                    v.lane,
+                    selectedImage.index,
+                    selectedImage.lane,
+                  )
+                : 0
 
-          const yOffset =
-            selectedImageIndex === null
-              ? 0
-              : selectedImageIndex === v.index
-                ? 0
-                : selectedImageIndex < v.index
-                  ? 1000
-                  : -1000
+              acc[v.lane].start = Math.min(acc[v.lane].start, v.start)
+              acc[v.lane].children.push(
+                <div
+                  key={v.key}
+                  data-index={v.index}
+                  data-masonry-index={v.index}
+                  ref={virtualizer.measureElement}
+                  className={clsx(
+                    'flex pb-2 transition-transform duration-400',
+                    v.index === selectedImage?.index && 'opacity-0',
+                  )}
+                  style={{
+                    viewTransitionClass: 'masonry-scroll-item',
+                    transitionDelay: `${delay}s`,
+                    transform:
+                      selectedImage === null || v.index === selectedImage.index
+                        ? 'translateY(0)'
+                        : `translateY(${v.index - selectedImage.index > 0 ? 'calc(100% + 100vh)' : 'calc(-100% - 100vh)'})`,
+                  }}
+                  onClick={async (e) => {
+                    const target = e.currentTarget
 
-          return (
+                    target.style.viewTransitionName = `masonry-scroll-item-${v.index}`
+
+                    await document.startViewTransition(() => {
+                      flushSync(() => {
+                        setSelectedImage({
+                          image: image,
+                          index: v.index,
+                          lane: v.lane,
+                        })
+                      })
+
+                      target.style.viewTransitionName = ''
+                    }).finished
+                  }}
+                >
+                  <img
+                    src={image.url}
+                    alt={image.label}
+                    decoding="async"
+                    loading="lazy"
+                    className="h-auto w-full object-cover object-center"
+                    style={{
+                      contentVisibility: 'auto',
+                      aspectRatio: `${image.width}/${image.height} auto`,
+                    }}
+                  />
+                </div>,
+              )
+
+              return acc
+            },
+            Array.from({ length: lanes }, () => ({
+              start: Number.MAX_SAFE_INTEGER,
+              children: [] as React.ReactNode[],
+            })),
+          )
+          .map((v, i) => (
             <div
-              key={v.key}
-              data-index={v.index}
-              ref={virtualizer.measureElement}
-              className="to-0 absolute flex"
+              key={i}
+              className="flex flex-1 shrink-0 flex-col"
               style={{
-                left: `calc(${v.lane} * (100% + ${GAP_X}px) / ${lanes})`,
-                width: ITEM_WIDTH,
-                transform: `translateY(${v.start + yOffset}px)`,
-                paddingBottom: `${GAP_Y}px`,
-                transition:
-                  selectedImageIndex === null
-                    ? 'none'
-                    : 'transform .5s ease-in',
-                transitionDelay:
-                  selectedImageIndex === null
-                    ? '0s'
-                    : `${Math.abs(v.index - selectedImageIndex) * 0.05}s`,
-                viewTransitionClass: 'masonry-scroll-item',
-                // viewTransitionName: `masonry-scroll-item-${v.index}`,
-              }}
-              onClick={async (e) => {
-                e.currentTarget.style.viewTransitionName = `masonry-scroll-item-${v.index}`
-
-                document.startViewTransition(() => {
-                  flushSync(() => {
-                    setSelectedImageIndex(v.index)
-                  })
-                })
+                paddingTop: `${v.start}px`,
               }}
             >
-              <img
-                src={image.url}
-                alt={image.label}
-                decoding="async"
-                loading="lazy"
-                className="h-fit w-stretch object-cover object-center"
-                style={{
-                  contentVisibility: 'auto',
-                  aspectRatio: `${image.width}/${image.height} auto`,
-                }}
-              />
-
-              <div className="absolute top-0 left-0 bg-[canvas] whitespace-pre-wrap">
-                {v.index}
-              </div>
+              {v.children}
             </div>
-          )
-        })}
+          ))}
       </div>
 
-      {selectedImageIndex !== null && (
+      {selectedImage !== null && (
         <div
           className="fixed inset-0 grid place-items-center bg-black/50"
-          onClick={() => setSelectedImageIndex(null)}
+          onClick={async () => {
+            let vtTarget: HTMLDivElement | null = null
+
+            await document
+              .startViewTransition(() => {
+                flushSync(() => {
+                  setSelectedImage(null)
+                })
+                vtTarget = document.querySelector(
+                  `[data-masonry-index="${selectedImage.index}"]`,
+                )
+                if (vtTarget) {
+                  vtTarget.style.viewTransitionName = `masonry-scroll-item-${selectedImage.index}`
+                }
+              })
+              .finished.finally(() => {
+                if (vtTarget) {
+                  vtTarget.style.viewTransitionName = ''
+                }
+              })
+          }}
         >
           <img
-            src={images[selectedImageIndex].url}
+            src={selectedImage.image.url}
+            decoding="async"
+            loading="lazy"
             style={{
               viewTransitionClass: 'masonry-scroll-item',
-              viewTransitionName: `masonry-scroll-item-${selectedImageIndex}`,
+              viewTransitionName: `masonry-scroll-item-${selectedImage.index}`,
             }}
             className="max-h-[min(800px,85%)] max-w-[min(1000px,85%)] object-contain object-center select-none"
           />
@@ -192,4 +233,20 @@ export default function MasonryScroll() {
       )}
     </div>
   )
+}
+
+function getDelay(
+  itemIndex: number,
+  lane: number,
+  centerIndex: number,
+  centerLane: number,
+) {
+  const tMax = 1 // 最大延迟
+  const k = 0.5 // 衰减系数
+  const weight = 2.5 // 列权重
+
+  const dist =
+    Math.abs(itemIndex - centerIndex) + weight * Math.abs(lane - centerLane)
+
+  return tMax * Math.exp(-k * dist)
 }
