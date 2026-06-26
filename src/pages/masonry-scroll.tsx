@@ -2,6 +2,7 @@ import './masonry-scroll.css'
 
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { clsx } from 'clsx'
+import { clamp } from 'es-toolkit'
 import { startTransition } from 'react'
 import { flushSync } from 'react-dom'
 
@@ -79,11 +80,8 @@ export default function MasonryScroll() {
     const ro = new ResizeObserver(([entry]) => {
       const width = entry.borderBoxSize[0].inlineSize
 
-      if (width >= 536) {
-        setLanes(3)
-      } else {
-        setLanes(2)
-      }
+      const lanes = clamp(~~(width / 180), 2, 6)
+      setLanes(lanes)
     })
 
     ro.observe(el)
@@ -105,7 +103,7 @@ export default function MasonryScroll() {
       </div>
 
       <div
-        className="flex w-full gap-2"
+        className="flex w-full gap-2 overflow-clip"
         style={{ minHeight: `${virtualizer.getTotalSize()}px` }}
       >
         {virtualizer
@@ -142,12 +140,12 @@ export default function MasonryScroll() {
                         ? 'translateY(0)'
                         : `translateY(${v.index - selectedImage.index > 0 ? 'calc(100% + 100vh)' : 'calc(-100% - 100vh)'})`,
                   }}
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     const target = e.currentTarget
 
                     target.style.viewTransitionName = `masonry-scroll-item-${v.index}`
 
-                    await document.startViewTransition(() => {
+                    document.startViewTransition(() => {
                       flushSync(() => {
                         setSelectedImage({
                           image: image,
@@ -157,7 +155,7 @@ export default function MasonryScroll() {
                       })
 
                       target.style.viewTransitionName = ''
-                    }).finished
+                    })
                   }}
                 >
                   <img
@@ -197,10 +195,10 @@ export default function MasonryScroll() {
       {selectedImage !== null && (
         <div
           className="fixed inset-0 grid place-items-center bg-black/50"
-          onClick={async () => {
+          onClick={() => {
             let vtTarget: HTMLDivElement | null = null
 
-            await document
+            document
               .startViewTransition(() => {
                 flushSync(() => {
                   setSelectedImage(null)
