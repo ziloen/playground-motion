@@ -3,7 +3,7 @@ import './masonry-scroll.css'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { clsx } from 'clsx'
 import { clamp } from 'es-toolkit'
-import { startTransition } from 'react'
+import { type RefCallback } from 'react'
 import { flushSync } from 'react-dom'
 
 const IMAGE_SIZES = [
@@ -65,6 +65,7 @@ export default function MasonryScroll() {
     estimateSize: () => 200,
     lanes: lanes,
     overscan: 5,
+    gap: 8,
     // FIXME: 在非起始滚动位置进行 resize 导致 lanes 变化时，可能会导致 item 的 lane 计算不正确
     // 例如：在 lane = 2 时滚动到最后，拖动窗口大小（lanes 改变），再进行上下滚动，有些列很长，有些列很短
     // 原因是虚拟列表，只有可视区域附近的 item 会被测量并更新
@@ -73,9 +74,12 @@ export default function MasonryScroll() {
     laneAssignmentMode: 'measured',
   })
 
-  useEffect(() => {
-    const el = scrollElementRef.current
+  const observeRef = useRef<RefCallback<HTMLDivElement>>((el) => {
+    scrollElementRef.current = el
+
     if (!el) return
+
+    setLanes(clamp(~~(el.offsetWidth / 180), 2, 6))
 
     const ro = new ResizeObserver(([entry]) => {
       const width = entry.borderBoxSize[0].inlineSize
@@ -87,14 +91,14 @@ export default function MasonryScroll() {
     ro.observe(el)
 
     return () => ro.disconnect()
-  }, [])
+  }).current
 
   useEffect(() => {
     virtualizer.measure()
   }, [lanes])
 
   return (
-    <div ref={scrollElementRef} className="h-full overflow-y-auto">
+    <div ref={observeRef} className="h-full overflow-y-auto">
       <div className="py-2 text-2xl">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore,
         laboriosam! Minima quisquam tempora sit. Officiis ipsa sunt dolor quasi
@@ -129,7 +133,7 @@ export default function MasonryScroll() {
                   data-masonry-index={v.index}
                   ref={virtualizer.measureElement}
                   className={clsx(
-                    'flex pb-2 transition-transform duration-400',
+                    'flex transition-transform duration-400',
                     v.index === selectedImage?.index && 'opacity-0',
                   )}
                   style={{
@@ -182,7 +186,7 @@ export default function MasonryScroll() {
           .map((v, i) => (
             <div
               key={i}
-              className="flex flex-1 shrink-0 flex-col"
+              className="flex flex-1 shrink-0 flex-col gap-2"
               style={{
                 paddingTop: `${v.start}px`,
               }}
