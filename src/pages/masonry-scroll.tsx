@@ -198,7 +198,7 @@ export default function MasonryScroll() {
 
       {selectedImage !== null && (
         <div
-          className="fixed inset-0 grid place-items-center bg-black/50"
+          className="fixed inset-0 grid place-items-center bg-black/50 transition-colors starting:bg-transparent"
           onClick={() => {
             let vtTarget: HTMLDivElement | null = null
 
