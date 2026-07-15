@@ -2,7 +2,7 @@ import { useTransform } from 'motion/react'
 import { useMotionValueState } from './useMotionValueState'
 
 /**
- * Same as `useTransform`, but returns the state of the transformed value instead of a MotionValue.
+ * Same as motion/react `useTransform`, but returns the state of the transformed value instead of a MotionValue.
  *
  * @example
  * ```tsx
@@ -11,6 +11,6 @@ import { useMotionValueState } from './useMotionValueState'
  * const doubledState = useTransformState(() => x * 2) // number
  * ```
  */
-export function useTransformState<T>(transformer: () => T): T {
-  return useMotionValueState(useTransform(transformer))
+export function useTransformState<T>(compute: () => T): T {
+  return useMotionValueState(useTransform(compute))
 }

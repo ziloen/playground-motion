@@ -108,12 +108,17 @@ export default function ScrollLoad() {
   const trackIntersection = useMemoizedFn<RefCallback<Element>>((el) => {
     if (!el) return
 
+    let wasIntersecting = true
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          if (getError() === null) {
-            fetchNextPage()
-          }
+        const isIntersecting = entries[0]!.isIntersecting
+        const isReentered = !wasIntersecting && isIntersecting
+        wasIntersecting = isIntersecting
+
+        // If error, only fetch on reenter to prevent error -> refetch -> error loop
+        if (isIntersecting && (getError() === null || isReentered)) {
+          fetchNextPage()
         }
       },
       { rootMargin: '10px' },
@@ -189,7 +194,7 @@ export default function ScrollLoad() {
           </motion.div>
         )}
 
-        {!isFetching && <div ref={trackIntersection} />}
+        <div ref={isFetching ? undefined : trackIntersection} />
 
         <div className="flex-center py-2">
           {hasNextPage ? (

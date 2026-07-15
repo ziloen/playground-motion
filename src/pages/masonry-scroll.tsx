@@ -27,8 +27,8 @@ const IMAGE_COLORS = [
 ]
 
 const IMAGE_LIST = Array.from({ length: 100 }, (_, index) => {
-  const size = IMAGE_SIZES[index % IMAGE_SIZES.length]
-  const colors = IMAGE_COLORS[index % IMAGE_COLORS.length]
+  const size = IMAGE_SIZES[index % IMAGE_SIZES.length]!
+  const colors = IMAGE_COLORS[index % IMAGE_COLORS.length]!
   const id = index + 1
 
   return {
@@ -82,7 +82,7 @@ export default function MasonryScroll() {
     setLanes(clamp(~~(el.offsetWidth / 180), 2, 6))
 
     const ro = new ResizeObserver(([entry]) => {
-      const width = entry.borderBoxSize[0].inlineSize
+      const width = entry!.borderBoxSize[0]!.inlineSize
 
       const lanes = clamp(~~(width / 180), 2, 6)
       setLanes(lanes)
@@ -114,7 +114,7 @@ export default function MasonryScroll() {
           .getVirtualItems()
           .reduce(
             (acc, v) => {
-              const image = images[v.index]
+              const image = images[v.index]!
 
               const delay = selectedImage
                 ? getDelay(
@@ -125,8 +125,8 @@ export default function MasonryScroll() {
                   )
                 : 0
 
-              acc[v.lane].start = Math.min(acc[v.lane].start, v.start)
-              acc[v.lane].children.push(
+              acc[v.lane]!.start = Math.min(acc[v.lane]!.start, v.start)
+              acc[v.lane]!.children.push(
                 <div
                   key={v.key}
                   data-index={v.index}

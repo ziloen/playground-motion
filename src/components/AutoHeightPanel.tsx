@@ -21,7 +21,7 @@ export function AutoHeightPanel({
     if (!el) return
 
     const ro = new ResizeObserver(([entry]) => {
-      const size = entry.contentBoxSize[0]
+      const size = entry!.contentBoxSize[0]
       if (!size) return
 
       controls.start({

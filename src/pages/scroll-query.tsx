@@ -70,7 +70,7 @@ export default function ScrollLoad() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !isErrorLatest.current) {
+        if (entry!.isIntersecting && !isErrorLatest.current) {
           fetchNextPage()
         }
       },

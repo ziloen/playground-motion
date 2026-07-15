@@ -1,5 +1,5 @@
 import type { MotionValue } from 'motion/react'
-import { useSyncExternalStore } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 
 /**
  * Sync a MotionValue to React state.
@@ -11,9 +11,14 @@ import { useSyncExternalStore } from 'react'
  * ```
  */
 export function useMotionValueState<T>(motionValue: MotionValue<T>): T {
-  return useSyncExternalStore<T>(
-    (onStoreChange) => motionValue.on('change', onStoreChange),
-    () => motionValue.get(),
-    () => motionValue.get(),
+  const subscribe = useCallback(
+    (onStoreChange: () => void): (() => void) => {
+      return motionValue.on('change', onStoreChange)
+    },
+    [motionValue],
   )
+
+  const getSnapshot = useCallback(() => motionValue.get(), [motionValue])
+
+  return useSyncExternalStore<T>(subscribe, getSnapshot, getSnapshot)
 }

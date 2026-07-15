@@ -18,7 +18,7 @@ const tabNames = [
 
 export default function TabView() {
   const [index, setIndex] = useState(0)
-  const currentTabName = tabNames[index][0]
+  const currentTabName = tabNames[index]![0]
   const [col, setCol] = useState(`${index + 1} / span 1`)
   const isAnimatingRef = useRef(false)
 
@@ -88,7 +88,7 @@ export default function TabView() {
       <NavLink to="/">← Home</NavLink>
 
       <div
-        className="relative scrollbar-none grid w-fit max-w-full auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full bg-dark-gray-500 p-1"
+        className="relative grid w-fit max-w-full scrollbar-none auto-cols-max grid-flow-col gap-2 overflow-x-auto rounded-full bg-dark-gray-500 p-1"
         // change vertical scroll to horizontal scroll
         onWheel={onScroll}
         ref={tabBarRef}

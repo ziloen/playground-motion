@@ -78,7 +78,7 @@ export default function Tarot() {
               setSelectedCard(card)
             })
           },
-          types: [styles['draw-card']],
+          types: [styles['draw-card']!],
         }).finished
       } finally {
         setAnimating(false)
@@ -177,7 +177,13 @@ export default function Tarot() {
                     className={clsx(
                       'group/card z-1 w-fit',
                       !animating &&
-                        'transition-transform duration-300 ease-out hover:-translate-x-6 hover:preceding:-translate-x-6 hover:following:translate-x-6',
+                        'transition-transform duration-300 ease-out',
+
+                      !animating &&
+                        'hover:-translate-x-6 hover:preceding:-translate-x-6 hover:following:translate-x-6',
+
+                      !animating &&
+                        'rtl:hover:translate-x-6 rtl:hover:preceding:translate-x-6 rtl:hover:following:-translate-x-6',
                     )}
                   >
                     <div
@@ -223,7 +229,7 @@ export default function Tarot() {
                         setSelectedCard(null)
                       })
                     },
-                    types: [styles['draw-card']],
+                    types: [styles['draw-card']!],
                   }).finished
                 } finally {
                   setAnimating(false)
@@ -345,7 +351,6 @@ function ScrollMask({
   const { scrollX, scrollXProgress } = useScroll({ container: containerRef })
 
   // TODO: 直接使用 CSS scroll-state queries
-  // FIXME: 在 rtl 布局下不正确
   const isAtStart = useTransformState(
     () => scrollXProgress.get() <= 0 || scrollX.get() === 0,
   )
@@ -356,50 +361,67 @@ function ScrollMask({
   return (
     <div className={clsx('relative grid w-full items-end', className)}>
       <div
-        className="scrollbar-none grid size-full snap-x snap-mandatory items-end justify-center-safe overflow-x-auto px-10 transition-[--color-1,--color-2] duration-500"
+        className={clsx(
+          'grid size-full snap-x snap-mandatory scrollbar-none items-end justify-center-safe overflow-x-auto px-10 transition-[--color-1,--color-2] duration-500',
+          '[--left:var(--color-1)] [--right:var(--color-2)] rtl:[--left:var(--color-2)] rtl:[--right:var(--color-1)]',
+        )}
         style={{
           '--color-1': isAtStart ? '#000' : 'transparent',
           '--color-2': isAtEnd ? '#000' : 'transparent',
-          maskImage: `linear-gradient(to right,var(--color-1),#000 30%,#000 70%,var(--color-2))`,
+          maskImage: `linear-gradient(to right,var(--left),#000 30%,#000 70%,var(--right))`,
         }}
         ref={containerRef}
       >
         {children}
       </div>
 
-      <AnimatePresence>
-        {!isAtStart && (
-          <motion.button
-            key="start"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed bottom-14 left-5 z-1 size-[44px] rounded-full border bg-dark-gray-300"
-            onClick={() => {
-              if (!containerRef.current) return
-              containerRef.current.scrollBy({ left: -200, behavior: 'smooth' })
-            }}
-          >
-            ←
-          </motion.button>
+      <button
+        key="left"
+        style={{
+          '--op-ltr': isAtStart ? 0 : 1,
+          '--op-rtl': isAtEnd ? 0 : 1,
+          '--pe-ltr': isAtStart ? 'none' : 'auto',
+          '--pe-rtl': isAtEnd ? 'none' : 'auto',
+        }}
+        className={clsx(
+          'fixed bottom-14 left-5 size-[44px] rounded-full border bg-dark-gray-300 transition-opacity duration-300 hover:bg-dark-gray-500',
+          '[pointer-events:var(--pe-ltr)] opacity-(--op-ltr)',
+          'rtl:[pointer-events:var(--pe-rtl)] rtl:opacity-(--op-rtl)',
         )}
+        onClick={() => {
+          if (!containerRef.current) return
+          containerRef.current.scrollBy({
+            left: -200,
+            behavior: 'smooth',
+          })
+        }}
+      >
+        ←
+      </button>
 
-        {!isAtEnd && (
-          <motion.button
-            key="end"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed right-5 bottom-14 z-1 size-[44px] rounded-full border bg-dark-gray-300"
-            onClick={() => {
-              if (!containerRef.current) return
-              containerRef.current.scrollBy({ left: 200, behavior: 'smooth' })
-            }}
-          >
-            →
-          </motion.button>
+      <button
+        key="right"
+        style={{
+          '--op-ltr': isAtEnd ? 0 : 1,
+          '--op-rtl': isAtStart ? 0 : 1,
+          '--pe-ltr': isAtEnd ? 'none' : 'auto',
+          '--pe-rtl': isAtStart ? 'none' : 'auto',
+        }}
+        className={clsx(
+          'pointer-events-auto fixed right-5 bottom-14 size-[44px] rounded-full border bg-dark-gray-300 transition-opacity duration-300 hover:bg-dark-gray-500',
+          '[pointer-events:var(--pe-ltr)] opacity-(--op-ltr)',
+          'rtl:[pointer-events:var(--pe-rtl)] rtl:opacity-(--op-rtl)',
         )}
-      </AnimatePresence>
+        onClick={() => {
+          if (!containerRef.current) return
+          containerRef.current.scrollBy({
+            left: 200,
+            behavior: 'smooth',
+          })
+        }}
+      >
+        →
+      </button>
     </div>
   )
 }
