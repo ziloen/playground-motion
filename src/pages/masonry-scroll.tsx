@@ -198,7 +198,7 @@ export default function MasonryScroll() {
 
       {selectedImage !== null && (
         <div
-          className="fixed inset-0 grid place-items-center bg-black/50 transition-colors starting:bg-transparent"
+          className="@container-size fixed inset-0 grid place-items-center bg-black/50 transition-colors starting:bg-transparent"
           onClick={() => {
             let vtTarget: HTMLDivElement | null = null
 
@@ -228,8 +228,12 @@ export default function MasonryScroll() {
             style={{
               viewTransitionClass: 'masonry-scroll-item',
               viewTransitionName: `masonry-scroll-item-${selectedImage.index}`,
+              '--aspect-ratio': `${selectedImage.image.width} / ${selectedImage.image.height}`,
+              width: 'min(85cqw, calc(85cqh * var(--aspect-ratio)))',
+              height: 'auto',
+              aspectRatio: 'var(--aspect-ratio) auto',
             }}
-            className="max-h-[min(800px,85%)] max-w-[min(1000px,85%)] object-contain object-center select-none"
+            className="object-contain object-center select-none"
           />
         </div>
       )}

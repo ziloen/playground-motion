@@ -13,7 +13,7 @@
   "dependencies": {
     "@base-ui/react": "1.6.0",
     "@tanstack/react-query": "5.101.2",
-    "@tanstack/react-virtual": "3.14.5",
+    "@tanstack/react-virtual": "3.14.6",
     "@wai-ri/core": "^0.0.108",
     "@wai-ri/react": "0.0.108",
     "animejs": "4.5.0",
