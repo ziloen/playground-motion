@@ -93,7 +93,7 @@ export default function MasonryScroll() {
     return () => ro.disconnect()
   }).current
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     virtualizer.measure()
   }, [lanes])
 

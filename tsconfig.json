@@ -29,6 +29,7 @@
       "DOM.Iterable"
     ],
     "types": [
+      "react/canary",
       "ts-lib-enhance",
       "unplugin-icons/types/react",
       "vite/client",

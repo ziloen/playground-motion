@@ -8,11 +8,3 @@
 ::view-transition-new(root) {
   animation: none;
 }
-
-::view-transition-old(.logo-preview) {
-  animation: none;
-}
-
-::view-transition-new(.logo-preview) {
-  animation: none;
-}
