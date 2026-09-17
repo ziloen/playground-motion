@@ -1,10 +1,9 @@
-::view-transition-group(.masonry-scroll-item) {
-  /* animation-duration: 2s; */
-  animation-duration: .4s;
-  animation-timing-function: ease-in-out;
-}
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
+}
+
+/* 快照有独立的堆叠顺序，需要提升预览的整个过渡组。 */
+::view-transition-group(.masonry-scroll-preview) {
+  z-index: 1;
 }

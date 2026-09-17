@@ -1,10 +1,11 @@
 import './masonry-scroll.css'
 
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { clsx } from 'clsx'
 import { clamp } from 'es-toolkit'
-import { type RefCallback } from 'react'
-import { flushSync } from 'react-dom'
+import { AnimateView } from 'motion/react-animate-view'
+import { startTransition, type RefCallback } from 'react'
+
+const IMAGE_TRANSITION = { duration: 0.4, ease: 'easeInOut' as const }
 
 const IMAGE_SIZES = [
   { width: 400, height: 520 },
@@ -132,47 +133,42 @@ export default function MasonryScroll() {
                   data-index={v.index}
                   data-masonry-index={v.index}
                   ref={virtualizer.measureElement}
-                  className={clsx(
-                    'flex transition-transform duration-400',
-                    v.index === selectedImage?.index && 'opacity-0',
-                  )}
+                  className="flex"
                   style={{
-                    viewTransitionClass: 'masonry-scroll-item',
-                    transitionDelay: `${delay}s`,
-                    transform:
-                      selectedImage === null || v.index === selectedImage.index
-                        ? 'translateY(0)'
-                        : `translateY(${v.index - selectedImage.index > 0 ? 'calc(100% + 100vh)' : 'calc(-100% - 100vh)'})`,
+                    // 保留测量高度；缩略图的 AnimateView 卸载后才能与预览图进行共享过渡。
+                    aspectRatio: `${image.width}/${image.height}`,
                   }}
-                  onClick={(e) => {
-                    const target = e.currentTarget
-
-                    target.style.viewTransitionName = `masonry-scroll-item-${v.index}`
-
-                    document.startViewTransition(() => {
-                      flushSync(() => {
-                        setSelectedImage({
-                          image: image,
-                          index: v.index,
-                          lane: v.lane,
-                        })
+                  onClick={() => {
+                    startTransition(() => {
+                      setSelectedImage({
+                        image: image,
+                        index: v.index,
+                        lane: v.lane,
                       })
-
-                      target.style.viewTransitionName = ''
                     })
                   }}
                 >
-                  <img
-                    src={image.url}
-                    alt={image.label}
-                    decoding="async"
-                    loading="lazy"
-                    className="h-auto w-full object-cover object-center"
-                    style={{
-                      contentVisibility: 'auto',
-                      aspectRatio: `${image.width}/${image.height} auto`,
-                    }}
-                  />
+                  {v.index !== selectedImage?.index && (
+                    <AnimateView
+                      name={`masonry-scroll-item-${image.id}`}
+                      transition={{ ...IMAGE_TRANSITION, delay }}
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.label}
+                        decoding="async"
+                        loading="lazy"
+                        className="h-auto w-full object-cover object-center"
+                        style={{
+                          aspectRatio: `${image.width}/${image.height} auto`,
+                          transform:
+                            selectedImage === null
+                              ? 'translateY(0)'
+                              : `translateY(${v.index - selectedImage.index > 0 ? 'calc(100% + 100vh)' : 'calc(-100% - 100vh)'})`,
+                        }}
+                      />
+                    </AnimateView>
+                  )}
                 </div>,
               )
 
@@ -200,41 +196,28 @@ export default function MasonryScroll() {
         <div
           className="@container-size fixed inset-0 grid place-items-center bg-black/50 transition-colors starting:bg-transparent"
           onClick={() => {
-            let vtTarget: HTMLDivElement | null = null
-
-            document
-              .startViewTransition(() => {
-                flushSync(() => {
-                  setSelectedImage(null)
-                })
-                vtTarget = document.querySelector(
-                  `[data-masonry-index="${selectedImage.index}"]`,
-                )
-                if (vtTarget) {
-                  vtTarget.style.viewTransitionName = `masonry-scroll-item-${selectedImage.index}`
-                }
-              })
-              .finished.finally(() => {
-                if (vtTarget) {
-                  vtTarget.style.viewTransitionName = ''
-                }
-              })
+            startTransition(() => setSelectedImage(null))
           }}
         >
-          <img
-            src={selectedImage.image.url}
-            decoding="async"
-            loading="lazy"
-            style={{
-              viewTransitionClass: 'masonry-scroll-item',
-              viewTransitionName: `masonry-scroll-item-${selectedImage.index}`,
-              '--aspect-ratio': `${selectedImage.image.width} / ${selectedImage.image.height}`,
-              width: 'min(85cqw, calc(85cqh * var(--aspect-ratio)))',
-              height: 'auto',
-              aspectRatio: 'var(--aspect-ratio) auto',
-            }}
-            className="object-contain object-center select-none"
-          />
+          <AnimateView
+            name={`masonry-scroll-item-${selectedImage.image.id}`}
+            transition={IMAGE_TRANSITION}
+          >
+            <img
+              src={selectedImage.image.url}
+              alt={selectedImage.image.label}
+              decoding="async"
+              loading="lazy"
+              style={{
+                viewTransitionClass: 'masonry-scroll-preview',
+                '--aspect-ratio': `${selectedImage.image.width} / ${selectedImage.image.height}`,
+                width: 'min(85cqw, calc(85cqh * var(--aspect-ratio)))',
+                height: 'auto',
+                aspectRatio: 'var(--aspect-ratio) auto',
+              }}
+              className="object-contain object-center select-none"
+            />
+          </AnimateView>
         </div>
       )}
     </div>

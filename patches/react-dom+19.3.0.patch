@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-dom/cjs/react-dom-client.development.js b/node_modules/react-dom/cjs/react-dom-client.development.js
-index 0cc753e..0c9af46 100644
+index 4dd36a6..a6067a5 100644
 --- a/node_modules/react-dom/cjs/react-dom-client.development.js
 +++ b/node_modules/react-dom/cjs/react-dom-client.development.js
-@@ -30886,15 +30886,15 @@
+@@ -31143,15 +31143,15 @@
          -1 === navigator.userAgent.indexOf("Edge")) ||
          -1 < navigator.userAgent.indexOf("Firefox"))
      ) {
