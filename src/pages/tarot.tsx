@@ -1,6 +1,6 @@
 import styles from './tarot.module.css'
 
-import clsx from 'clsx/lite'
+import { clsx } from 'cn/lite'
 import { range, shuffle } from 'es-toolkit'
 import { useControls } from 'leva'
 import { useScroll } from 'motion/react'
@@ -16,10 +16,13 @@ import { flipFrom } from '~/utils'
 
 const CARDS = shuffle(
   Object.entries(
-    import.meta.glob('../assets/*Prex*.png', {
-      eager: true,
-      import: 'default',
-    }),
+    import.meta.glob(
+      ['../assets/*Prex*.png', '!../assets/PrexCardBacker.png'],
+      {
+        eager: true,
+        import: 'default',
+      },
+    ),
   ).map(([, path]) => path as string),
 )
 
@@ -126,7 +129,12 @@ export default function Tarot() {
                   else elementsRef.current.delete(path)
                 }}
               >
-                <div className="size-full rounded-lg border border-light-gray-900 bg-[#2c3036]"></div>
+                <div
+                  className={clsx(
+                    'size-full rounded-lg border border-light-gray-900 bg-[#2c3036]',
+                    styles['card-back'],
+                  )}
+                ></div>
               </div>
             ))}
           </div>
@@ -190,6 +198,7 @@ export default function Tarot() {
                       className={clsx(
                         'aspect-1/2 w-[200px] cursor-pointer rounded-lg border border-light-gray-900 bg-[#2c3036]',
                         styles.card,
+                        styles['card-back'],
                         !animating &&
                           'transition-transform group-hover/card:-translate-y-10',
                       )}

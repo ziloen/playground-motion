@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import clsx from 'clsx'
+import { clsx } from 'cn'
 import type { Variants } from 'motion/react'
 import { stagger } from 'motion/react'
 import type { RefCallback } from 'react'

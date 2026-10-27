@@ -98,7 +98,7 @@ export default defineConfig(({ command, mode }) => {
     },
 
     optimizeDeps: {
-      include: ['clsx', 'motion'],
+      include: ['cn', 'motion'],
     },
   }
 })

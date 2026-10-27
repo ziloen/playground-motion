@@ -2,6 +2,13 @@
   view-transition-class: card;
 }
 
+.card-back {
+  background-image: url('../assets/PrexCardBacker.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 :active-view-transition-type(draw-card) {
   &::view-transition-group(.card) {
     animation-duration: .5s;

@@ -1,6 +1,6 @@
 import { switchLatest } from '@wai-ri/core'
 import { isAxiosError } from 'axios'
-import clsx from 'clsx'
+import { clsx } from 'cn'
 import type { Variants } from 'motion/react'
 import { stagger } from 'motion/react'
 import type { RefCallback } from 'react'

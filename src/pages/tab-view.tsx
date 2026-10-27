@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { clsx } from 'cn'
 import { clamp, inRange } from 'es-toolkit'
 import { useMotionValueEvent } from 'motion/react'
 import { AutoHeightPanel } from '~/components'

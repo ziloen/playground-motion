@@ -1,5 +1,5 @@
 import { Dialog } from '@base-ui/react'
-import clsx from 'clsx'
+import { clsx } from 'cn'
 
 // https://x.com/jh3yy/status/1940806147784823184
 // https://codepen.io/jh3y/pen/yyNWGNG
