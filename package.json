@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "playground-motion",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
