@@ -12,9 +12,7 @@ import { useCallback, useSyncExternalStore } from 'react'
  */
 export function useMotionValueState<T>(motionValue: MotionValue<T>): T {
   const subscribe = useCallback(
-    (onStoreChange: () => void): (() => void) => {
-      return motionValue.on('change', onStoreChange)
-    },
+    (onStoreChange: () => void) => motionValue.on('change', onStoreChange),
     [motionValue],
   )
 

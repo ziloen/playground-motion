@@ -230,9 +230,9 @@ function getDelay(
   centerIndex: number,
   centerLane: number,
 ) {
-  const tMax = 1 // 最大延迟
-  const k = 0.5 // 衰减系数
-  const weight = 2.5 // 列权重
+  const tMax = 0.5 // 最大延迟
+  const k = 0.3 // 衰减系数
+  const weight = 1.5 // 列权重
 
   const dist =
     Math.abs(itemIndex - centerIndex) + weight * Math.abs(lane - centerLane)
